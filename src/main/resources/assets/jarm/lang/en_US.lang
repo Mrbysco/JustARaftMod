@@ -11,3 +11,6 @@ itemGroup.jarm=Just A Raft Mod
 
 #Entity names
 entity.jarm:raft.name=Raft
+
+#Raft Config
+jarm.config.title=Just Another Raft Config
