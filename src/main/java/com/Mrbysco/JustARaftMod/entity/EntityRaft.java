@@ -71,7 +71,7 @@ public class EntityRaft extends Entity{
     {
         super(worldIn);
         this.preventEntitySpawning = true;
-        this.setSize(1.375F, 0.2F);
+        this.setSize(1.375F, 0.3F);
     }
 
     public EntityRaft(World worldIn, double x, double y, double z)
@@ -139,7 +139,7 @@ public class EntityRaft extends Entity{
     @Override
     public double getMountedYOffset()
     {
-        return -0.03D;
+        return -0.025D;
     }
 
     /**
