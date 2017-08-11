@@ -15,9 +15,9 @@ public class RenderRaft extends Render<EntityRaft>
 {
 	public static final Factory FACTORY = new Factory();
 	
-    private static final ResourceLocation[] BOAT_TEXTURES = new ResourceLocation[] {new ResourceLocation("jarm:textures/entity/raft/raft_oak.png"), new ResourceLocation("jarm:textures/entity/raft/raft_spruce.png"), new ResourceLocation("jarm:textures/entity/raft/raft_birch.png"), new ResourceLocation("jarm:textures/entity/raft/raft_jungle.png"), new ResourceLocation("jarm:textures/entity/raft/raft_acacia.png"), new ResourceLocation("jarm:textures/entity/raft/raft_darkoak.png")};
+    private static final ResourceLocation[] RAFT_TEXTURES = new ResourceLocation[] {new ResourceLocation("jarm:textures/entity/raft/raft_oak.png"), new ResourceLocation("jarm:textures/entity/raft/raft_spruce.png"), new ResourceLocation("jarm:textures/entity/raft/raft_birch.png"), new ResourceLocation("jarm:textures/entity/raft/raft_jungle.png"), new ResourceLocation("jarm:textures/entity/raft/raft_acacia.png"), new ResourceLocation("jarm:textures/entity/raft/raft_darkoak.png")};
     /** instance of ModelRaft for rendering */
-    protected ModelBase modelBoat = new ModelRaft();
+    protected ModelBase modelRaft = new ModelRaft();
 
     public RenderRaft(RenderManager renderManagerIn)
     {
@@ -41,7 +41,7 @@ public class RenderRaft extends Render<EntityRaft>
             GlStateManager.enableOutlineMode(this.getTeamColor(entity));
         }
 
-        this.modelBoat.render(entity, partialTicks, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+        this.modelRaft.render(entity, partialTicks, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 
         if (this.renderOutlines)
         {
@@ -82,7 +82,7 @@ public class RenderRaft extends Render<EntityRaft>
      */
     protected ResourceLocation getEntityTexture(EntityRaft entity)
     {
-        return BOAT_TEXTURES[entity.getRaftType().ordinal()];
+        return RAFT_TEXTURES[entity.getRaftType().ordinal()];
     }
 
     /*
@@ -97,7 +97,7 @@ public class RenderRaft extends Render<EntityRaft>
         this.setupTranslation(p_188300_2_, p_188300_4_, p_188300_6_);
         this.setupRotation(p_188300_1_, p_188300_8_, p_188300_9_);
         this.bindEntityTexture(p_188300_1_);
-        ((IMultipassModel)this.modelBoat).renderMultipass(p_188300_1_, p_188300_9_, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+        ((IMultipassModel)this.modelRaft).renderMultipass(p_188300_1_, p_188300_9_, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
         GlStateManager.popMatrix();
     }
     */

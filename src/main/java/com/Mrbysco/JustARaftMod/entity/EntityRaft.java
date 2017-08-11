@@ -14,6 +14,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,11 +26,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.network.play.client.CPacketSteerBoat;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -38,11 +41,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityRaft extends Entity{
+public class EntityRaft extends EntityBoat{
     private static final DataParameter<Integer> TIME_SINCE_HIT = EntityDataManager.<Integer>createKey(EntityRaft.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> FORWARD_DIRECTION = EntityDataManager.<Integer>createKey(EntityRaft.class, DataSerializers.VARINT);
     private static final DataParameter<Float> DAMAGE_TAKEN = EntityDataManager.<Float>createKey(EntityRaft.class, DataSerializers.FLOAT);
     private static final DataParameter<Integer> RAFT_TYPE = EntityDataManager.<Integer>createKey(EntityRaft.class, DataSerializers.VARINT);
+    private static final DataParameter<Boolean>[] DATA_ID_PADDLE = new DataParameter[] {EntityDataManager.createKey(EntityRaft.class, DataSerializers.BOOLEAN), EntityDataManager.createKey(EntityRaft.class, DataSerializers.BOOLEAN)};
+
+    private final float[] paddlePositions;
     /** How much of current speed to retain. Value zero to one. */
     private float momentum;
     private float outOfControlTicks;
@@ -70,6 +76,7 @@ public class EntityRaft extends Entity{
     public EntityRaft(World worldIn)
     {
         super(worldIn);
+        this.paddlePositions = new float[2];
         this.preventEntitySpawning = true;
         this.setSize(1.375F, 0.3F);
     }
@@ -86,6 +93,23 @@ public class EntityRaft extends Entity{
         this.prevPosZ = z;
     }
 
+    public void setPaddleState(boolean left, boolean right)
+    {
+        this.dataManager.set(DATA_ID_PADDLE[0], Boolean.valueOf(left));
+        this.dataManager.set(DATA_ID_PADDLE[1], Boolean.valueOf(right));
+    }
+
+    @SideOnly(Side.CLIENT)
+    public float getRowingTime(int side, float limbSwing)
+    {
+        return this.getPaddleState(side) ? (float)MathHelper.clampedLerp((double)this.paddlePositions[side] - 0.39269909262657166D, (double)this.paddlePositions[side], (double)limbSwing) : 0.0F;
+    }
+
+    public boolean getPaddleState(int side)
+    {
+        return ((Boolean)this.dataManager.get(DATA_ID_PADDLE[side])).booleanValue() && this.getControllingPassenger() != null;
+    }
+    
     /**
      * returns if this entity triggers Block.onEntityWalking on the blocks they walk on. used for spiders and wolves to
      * prevent them from trampling crops
@@ -95,12 +119,18 @@ public class EntityRaft extends Entity{
         return false;
     }
 
+    @Override
     protected void entityInit()
     {
         this.dataManager.register(TIME_SINCE_HIT, Integer.valueOf(0));
         this.dataManager.register(FORWARD_DIRECTION, Integer.valueOf(1));
         this.dataManager.register(DAMAGE_TAKEN, Float.valueOf(0.0F));
         this.dataManager.register(RAFT_TYPE, Integer.valueOf(EntityRaft.Type.OAK.ordinal()));
+        
+        for (DataParameter<Boolean> dataparameter : DATA_ID_PADDLE)
+        {
+            this.dataManager.register(dataparameter, Boolean.valueOf(false));
+        }
     }
 
     /**
@@ -311,13 +341,17 @@ public class EntityRaft extends Entity{
 
         if (this.canPassengerSteer())
         {
-        	
+            if (this.getPassengers().isEmpty() || !(this.getPassengers().get(0) instanceof EntityPlayer))
+            {
+                this.setPaddleState(false, false);
+            }
+
             this.updateMotion();
 
             if (this.world.isRemote)
             {
-            	this.controlRaft();
-            	//this.world.sendPacketToServer(new CPacketSteerBoat());
+                this.controlRaft();
+                this.world.sendPacketToServer(new CPacketSteerBoat(this.getPaddleState(0), this.getPaddleState(1)));
             }
 
             this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
@@ -327,6 +361,31 @@ public class EntityRaft extends Entity{
             this.motionX = 0.0D;
             this.motionY = 0.0D;
             this.motionZ = 0.0D;
+        }
+
+        for (int i = 0; i <= 1; ++i)
+        {
+            if (this.getPaddleState(i))
+            {
+                if (!this.isSilent() && (double)(this.paddlePositions[i] % ((float)Math.PI * 2F)) <= (Math.PI / 4D) && ((double)this.paddlePositions[i] + 0.39269909262657166D) % (Math.PI * 2D) >= (Math.PI / 4D))
+                {
+                    SoundEvent soundevent = this.getPaddleSound();
+
+                    if (soundevent != null)
+                    {
+                        Vec3d vec3d = this.getLook(1.0F);
+                        double d0 = i == 1 ? -vec3d.z : vec3d.z;
+                        double d1 = i == 1 ? vec3d.x : -vec3d.x;
+                        this.world.playSound((EntityPlayer)null, this.posX + d0, this.posY, this.posZ + d1, soundevent, this.getSoundCategory(), 1.0F, 0.8F + 0.4F * this.rand.nextFloat());
+                    }
+                }
+
+                this.paddlePositions[i] = (float)((double)this.paddlePositions[i] + 0.39269909262657166D);
+            }
+            else
+            {
+                this.paddlePositions[i] = 0.0F;
+            }
         }
 
         this.doBlockCollisions();
@@ -403,6 +462,7 @@ public class EntityRaft extends Entity{
         }
     }
 
+    @Override
     public float getWaterLevelAbove()
     {
         AxisAlignedBB axisalignedbb = this.getEntityBoundingBox();
@@ -713,6 +773,7 @@ public class EntityRaft extends Entity{
 
             this.motionX += (double)(MathHelper.sin(-this.rotationYaw * 0.017453292F) * f);
             this.motionZ += (double)(MathHelper.cos(this.rotationYaw * 0.017453292F) * f);
+            this.setPaddleState(this.rightInputDown && !this.leftInputDown || this.forwardInputDown, this.leftInputDown && !this.rightInputDown || this.forwardInputDown);
         }
     }
     
@@ -761,7 +822,7 @@ public class EntityRaft extends Entity{
     /**
      * Applies this raft's yaw to the given entity. Used to update the orientation of its passenger.
      */
-
+    @Override
     protected void applyYawToEntity(Entity entityToUpdate)
     {
         entityToUpdate.setRenderYawOffset(this.rotationYaw);
@@ -895,6 +956,7 @@ public class EntityRaft extends Entity{
     /**
      * Gets the time since the last hit.
      */
+    @Override
     public int getTimeSinceHit()
     {
         return ((Integer)this.dataManager.get(TIME_SINCE_HIT)).intValue();
@@ -903,6 +965,7 @@ public class EntityRaft extends Entity{
     /**
      * Sets the forward direction of the entity.
      */
+    @Override
     public void setForwardDirection(int forwardDirection)
     {
         this.dataManager.set(FORWARD_DIRECTION, Integer.valueOf(forwardDirection));
@@ -945,6 +1008,7 @@ public class EntityRaft extends Entity{
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public void updateInputs(boolean left, boolean right, boolean forward, boolean back)
     {
         this.leftInputDown = left;
