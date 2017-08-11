@@ -139,7 +139,7 @@ public class EntityRaft extends Entity{
     @Override
     public double getMountedYOffset()
     {
-        return -0.01D;
+        return -0.03D;
     }
 
     /**
