@@ -71,7 +71,7 @@ public class EntityRaft extends Entity{
     {
         super(worldIn);
         this.preventEntitySpawning = true;
-        this.setSize(1.375F, 0.5625F);
+        this.setSize(1.375F, 0.2F);
     }
 
     public EntityRaft(World worldIn, double x, double y, double z)
@@ -108,6 +108,7 @@ public class EntityRaft extends Entity{
      * pushable on contact, like rafts or minecarts.
      */
     @Nullable
+    @Override
     public AxisAlignedBB getCollisionBox(Entity entityIn)
     {
         return entityIn.canBePushed() ? entityIn.getEntityBoundingBox() : null;
@@ -117,6 +118,7 @@ public class EntityRaft extends Entity{
      * Returns the collision bounding box for this entity
      */
     @Nullable
+    @Override
     public AxisAlignedBB getCollisionBoundingBox()
     {
         return this.getEntityBoundingBox();
@@ -125,6 +127,7 @@ public class EntityRaft extends Entity{
     /**
      * Returns true if this entity should push and be pushed by other entities when colliding.
      */
+    @Override
     public boolean canBePushed()
     {
         return true;
@@ -133,14 +136,16 @@ public class EntityRaft extends Entity{
     /**
      * Returns the Y offset from the entity's position for any entity riding this one.
      */
+    @Override
     public double getMountedYOffset()
     {
-        return -0.1D;
+        return -0.01D;
     }
 
     /**
      * Called when the entity is attacked.
      */
+    @Override
     public boolean attackEntityFrom(DamageSource source, float amount)
     {
         if (this.isEntityInvulnerable(source))
@@ -183,6 +188,7 @@ public class EntityRaft extends Entity{
     /**
      * Applies a velocity to the entities, to push them away from eachother.
      */
+    @Override
     public void applyEntityCollision(Entity entityIn)
     {
         if (entityIn instanceof EntityRaft)
@@ -222,6 +228,7 @@ public class EntityRaft extends Entity{
      * Setups the entity to do the hurt animation. Only used by packets in multiplayer.
      */
     @SideOnly(Side.CLIENT)
+    @Override
     public void performHurtAnimation()
     {
         this.setForwardDirection(-this.getForwardDirection());
@@ -232,6 +239,7 @@ public class EntityRaft extends Entity{
     /**
      * Returns true if other Entities should be prevented from moving through this Entity.
      */
+    @Override
     public boolean canBeCollidedWith()
     {
         return !this.isDead;
@@ -241,6 +249,7 @@ public class EntityRaft extends Entity{
      * Set the position and rotation values directly without any clamping.
      */
     @SideOnly(Side.CLIENT)
+    @Override
     public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport)
     {
         this.raftPitch = x;
@@ -255,6 +264,7 @@ public class EntityRaft extends Entity{
      * Gets the horizontal facing direction of this Entity, adjusted to take specially-treated entity types into
      * account.
      */
+    @Override
     public EnumFacing getAdjustedHorizontalFacing()
     {
         return this.getHorizontalFacing().rotateY();
@@ -263,6 +273,7 @@ public class EntityRaft extends Entity{
     /**
      * Called to update the entity's position/logic.
      */
+    @Override
     public void onUpdate()
     {
         this.previousStatus = this.status;
@@ -300,11 +311,13 @@ public class EntityRaft extends Entity{
 
         if (this.canPassengerSteer())
         {
+        	
             this.updateMotion();
 
             if (this.world.isRemote)
             {
-                this.controlRaft();
+            	this.controlRaft();
+            	//this.world.sendPacketToServer(new CPacketSteerBoat());
             }
 
             this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
@@ -702,7 +715,8 @@ public class EntityRaft extends Entity{
             this.motionZ += (double)(MathHelper.cos(this.rotationYaw * 0.017453292F) * f);
         }
     }
-
+    
+    @Override
     public void updatePassenger(Entity passenger)
     {
         if (this.isPassenger(passenger))
@@ -747,6 +761,7 @@ public class EntityRaft extends Entity{
     /**
      * Applies this raft's yaw to the given entity. Used to update the orientation of its passenger.
      */
+
     protected void applyYawToEntity(Entity entityToUpdate)
     {
         entityToUpdate.setRenderYawOffset(this.rotationYaw);
@@ -761,6 +776,7 @@ public class EntityRaft extends Entity{
      * Applies this entity's orientation (pitch/yaw) to another entity. Used to update passenger orientation.
      */
     @SideOnly(Side.CLIENT)
+    @Override
     public void applyOrientationToEntity(Entity entityToUpdate)
     {
         this.applyYawToEntity(entityToUpdate);
@@ -769,6 +785,7 @@ public class EntityRaft extends Entity{
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
+    @Override
     protected void writeEntityToNBT(NBTTagCompound compound)
     {
         compound.setString("Type", this.getRaftType().getName());
@@ -777,6 +794,7 @@ public class EntityRaft extends Entity{
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
+    @Override
     protected void readEntityFromNBT(NBTTagCompound compound)
     {
         if (compound.hasKey("Type", 8))
@@ -784,7 +802,8 @@ public class EntityRaft extends Entity{
             this.setRaftType(EntityRaft.Type.getTypeFromString(compound.getString("Type")));
         }
     }
-
+    
+    @Override
     public boolean processInitialInteract(EntityPlayer player, EnumHand hand)
     {
         if (player.isSneaking())
@@ -801,7 +820,8 @@ public class EntityRaft extends Entity{
             return true;
         }
     }
-
+    
+    @Override
     protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos)
     {
         this.lastYd = this.motionY;
@@ -905,7 +925,8 @@ public class EntityRaft extends Entity{
     {
         return EntityRaft.Type.byId(((Integer)this.dataManager.get(RAFT_TYPE)).intValue());
     }
-
+    
+    @Override
     protected boolean canFitPassenger(Entity passenger)
     {
         return this.getPassengers().size() < 2;
@@ -916,6 +937,7 @@ public class EntityRaft extends Entity{
      * Pigs, Horses, and Rafts are generally "steered" by the controlling passenger.
      */
     @Nullable
+    @Override
     public Entity getControllingPassenger()
     {
         List<Entity> list = this.getPassengers();
@@ -923,14 +945,14 @@ public class EntityRaft extends Entity{
     }
 
     @SideOnly(Side.CLIENT)
-    public void updateInputs(boolean p_184442_1_, boolean p_184442_2_, boolean p_184442_3_, boolean p_184442_4_)
+    public void updateInputs(boolean left, boolean right, boolean forward, boolean back)
     {
-        this.leftInputDown = p_184442_1_;
-        this.rightInputDown = p_184442_2_;
-        this.forwardInputDown = p_184442_3_;
-        this.backInputDown = p_184442_4_;
+        this.leftInputDown = left;
+        this.rightInputDown = right;
+        this.forwardInputDown = forward;
+        this.backInputDown = back;
     }
-
+    
     public static enum Status
     {
         IN_WATER,
