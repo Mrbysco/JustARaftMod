@@ -1,0 +1,16 @@
+[
+{
+  "modid": "jarm",
+  "name": "Just A Raft Mod",
+  "description": "Adding rafts since 2017",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Mrbysco", "svennieke"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
