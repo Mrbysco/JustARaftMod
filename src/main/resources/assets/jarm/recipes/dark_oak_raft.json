@@ -1,0 +1,20 @@
+{
+  "result": {
+    "item": "jarm:dark_oak_raft"
+  },
+  "pattern": [
+    "S S",
+    "LLL",
+    "S S"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+	"L": {
+      "item": "minecraft:log",
+	  "data": 1
+    },
+	"S": {
+      "item": "minecraft:string"
+    }
+  }
+}
