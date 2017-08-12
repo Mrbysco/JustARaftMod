@@ -18,5 +18,5 @@ public class ModEntities {
 	
 	private static ResourceLocation Name(String s) {
 			return new ResourceLocation(Reference.MOD_ID, s);
-}
+	}
 }

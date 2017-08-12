@@ -366,6 +366,7 @@ public class EntityRaft extends EntityBoat
         }
 
         this.doBlockCollisions();
+
         List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().grow(0.20000000298023224D, -0.009999999776482582D, 0.20000000298023224D), EntitySelectors.getTeamCollisionPredicate(this));
 
         if (!list.isEmpty())
@@ -390,7 +391,7 @@ public class EntityRaft extends EntityBoat
             }
         }
     }
-
+    
     @Nullable
     protected SoundEvent getPaddleSound()
     {

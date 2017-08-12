@@ -12,11 +12,8 @@ public class RaftConfigGen {
 	public static RaftSettings raftconfig = new RaftSettings();
 	
 	public static class RaftSettings{
-		@Config.Comment("If this value is true the Mundane Redstone Ore will drop a Vanilla Ore block when mined with silk touch (default: false)")
-		public boolean SilkVanilla = false;
-		
-		@Config.Comment("If this value is true the Mundane Redstone Ore will drop a Vanilla Ore block when mined with silk touch (default: false)")
-		public float OnWaterSpeed = 0.9F;
+		//@Config.Comment("If this value is true collision with a wall will break the rafts (default: false)")
+		//public boolean CollisionBreak = true;
 	}
 	
 }
