@@ -10,7 +10,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
 	"L": {
-      "item": "minecraft:log",
+      "item": "minecraft:log2",
 	  "data": 1
     },
 	"S": {
