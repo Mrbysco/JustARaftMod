@@ -377,7 +377,6 @@ public class EntityRaft extends EntityBoat
             for (int j = 0; j < list.size(); ++j)
             {
                 Entity entity = list.get(j);
-
                 if (!entity.isPassenger(this))
                 {
                     if (flag && this.getPassengers().size() < 2 && !entity.isRiding() && entity.width < this.width && entity instanceof EntityLivingBase && !(entity instanceof EntityWaterMob) && !(entity instanceof EntityPlayer))
@@ -389,6 +388,14 @@ public class EntityRaft extends EntityBoat
                         this.applyEntityCollision(entity);
                     }
                 }
+            }
+        }
+        
+        if(RaftConfigGen.raftconfig.SinkTheRaft == true)
+        {
+            if(this.getPassengers().size() > 1)
+            {
+            	this.motionY = this.motionY - 0.035;
             }
         }
     }
@@ -786,7 +793,7 @@ public class EntityRaft extends EntityBoat
             {
                 f -= 0.005F * RaftConfigGen.raftconfig.SpeedMultiplier;
             }
-
+            
             this.motionX += (double)(MathHelper.sin(-this.rotationYaw * 0.017453292F) * f);
             this.motionZ += (double)(MathHelper.cos(this.rotationYaw * 0.017453292F) * f);
             this.setPaddleState(this.rightInputDown && !this.leftInputDown || this.forwardInputDown, this.leftInputDown && !this.rightInputDown || this.forwardInputDown);

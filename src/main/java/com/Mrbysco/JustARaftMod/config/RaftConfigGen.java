@@ -22,6 +22,11 @@ public class RaftConfigGen {
 		@Config.Comment("Changing this to false makes rafts the same speed as on land while on a slippery block. (Default: true)")
 		public Boolean SlipperyFast = true;
 		
+		//@Config.Comment("Changing this to false makes other mobs unable to get in the raft with you. (Default: true)")
+		//public Boolean CatchingARide = true;
+		
+		@Config.Comment("Changing this to true makes the raft sink if theres 2 entities on it. (Default: false)")
+		public Boolean SinkTheRaft = false;
 		//Currently not implemented
 		//@Config.Comment("Changing this brings back the old boat mechanic of it breaking if hitting a block hard. (Default: false)")
 		//public Boolean DropIfCollided = false;
