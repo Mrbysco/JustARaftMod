@@ -316,7 +316,7 @@ public class EntityRaft extends EntityBoat
         this.prevPosZ = this.posZ;
         super.onUpdate();
         this.tickLerp();
-        
+
         if (this.canPassengerSteer())
         {
             if (this.getPassengers().isEmpty() || !(this.getPassengers().get(0) instanceof EntityPlayer))
@@ -549,43 +549,44 @@ public class EntityRaft extends EntityBoat
         float f = 0.0F;
         int k1 = 0;
         BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos = BlockPos.PooledMutableBlockPos.retain();
-            try
+
+        try
+        {
+            for (int l1 = i; l1 < j; ++l1)
             {
-                for (int l1 = i; l1 < j; ++l1)
+                for (int i2 = i1; i2 < j1; ++i2)
                 {
-                    for (int i2 = i1; i2 < j1; ++i2)
+                    int j2 = (l1 != i && l1 != j - 1 ? 0 : 1) + (i2 != i1 && i2 != j1 - 1 ? 0 : 1);
+
+                    if (j2 != 2)
                     {
-                        int j2 = (l1 != i && l1 != j - 1 ? 0 : 1) + (i2 != i1 && i2 != j1 - 1 ? 0 : 1);
-
-                        if (j2 != 2)
+                        for (int k2 = k; k2 < l; ++k2)
                         {
-                            for (int k2 = k; k2 < l; ++k2)
+                            if (j2 <= 0 || k2 != k && k2 != l - 1)
                             {
-                                if (j2 <= 0 || k2 != k && k2 != l - 1)
+                                blockpos$pooledmutableblockpos.setPos(l1, k2, i2);
+                                IBlockState iblockstate = this.world.getBlockState(blockpos$pooledmutableblockpos);
+                                iblockstate.addCollisionBoxToList(this.world, blockpos$pooledmutableblockpos, axisalignedbb1, list, this, false);
+
+                                if (!list.isEmpty())
                                 {
-                                    blockpos$pooledmutableblockpos.setPos(l1, k2, i2);
-                                    IBlockState iblockstate = this.world.getBlockState(blockpos$pooledmutableblockpos);
-                                    iblockstate.addCollisionBoxToList(this.world, blockpos$pooledmutableblockpos, axisalignedbb1, list, this, false);
-
-                                    if (!list.isEmpty())
-                                    {
-                                        f += iblockstate.getBlock().slipperiness;
-                                        ++k1;
-                                    }
-
-                                    list.clear();
+                                    f += iblockstate.getBlock().slipperiness;
+                                    ++k1;
                                 }
+
+                                list.clear();
                             }
                         }
                     }
                 }
             }
-            finally
-            {
-                blockpos$pooledmutableblockpos.release();
-            }
+        }
+        finally
+        {
+            blockpos$pooledmutableblockpos.release();
+        }
 
-            return f / (float)k1;
+        return f / (float)k1;
     }
 
     private boolean checkInWater()
