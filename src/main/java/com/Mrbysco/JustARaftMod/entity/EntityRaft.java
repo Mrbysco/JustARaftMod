@@ -772,7 +772,7 @@ public class EntityRaft extends EntityBoat
 
             if (this.rightInputDown != this.leftInputDown && !this.forwardInputDown && !this.backInputDown)
             {
-                f += 0.005F * RaftConfigGen.raftconfig.SpeedMultiplier;
+                f += 0.005F;
             }
 
             this.rotationYaw += (this.deltaRotation);
