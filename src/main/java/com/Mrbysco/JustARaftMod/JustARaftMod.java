@@ -3,10 +3,12 @@ package com.Mrbysco.JustARaftMod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.Mrbysco.JustARaftMod.config.RaftConfigGen;
 import com.Mrbysco.JustARaftMod.init.ModEntities;
 import com.Mrbysco.JustARaftMod.init.ModItems;
 import com.Mrbysco.JustARaftMod.proxy.CommonProxy;
 
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -35,8 +37,8 @@ public class JustARaftMod {
 	@EventHandler
 	public void PreInit(FMLPreInitializationEvent event)
 	{	
-		//logger.debug("Registering Raft Config");
-		//MinecraftForge.EVENT_BUS.register(new RaftConfigGen());
+		logger.debug("Registering Raft Config");
+		MinecraftForge.EVENT_BUS.register(new RaftConfigGen());
 		
 		logger.debug("Initializing Raft");
 		ModItems.init();

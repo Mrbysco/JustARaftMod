@@ -16,8 +16,15 @@ public class RaftConfigGen {
 	public static RaftSettings raftconfig = new RaftSettings();
 	
 	public static class RaftSettings{
-		//@Config.Comment("If this value is true collision with a wall will break the rafts (default: false)")
-		//public boolean CollisionBreak = true;
+		@Config.Comment("Adjusting this setting changes the speed of the raft. (Default: 1.0) [Lower than 1 = slower | higher than 1 = faster]")
+		public Double SpeedMultiplier = 1.0;
+		
+		@Config.Comment("Changing this to false makes rafts the same speed as on land while on a slippery block. (Default: true)")
+		public Boolean SlipperyFast = true;
+		
+		//Currently not implemented
+		//@Config.Comment("Changing this brings back the old boat mechanic of it breaking if hitting a block hard. (Default: false)")
+		//public Boolean DropIfCollided = false;
 	}
 	
 	@Mod.EventBusSubscriber(modid = Reference.MOD_ID)

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.Mrbysco.JustARaftMod.config.RaftConfigGen;
 import com.Mrbysco.JustARaftMod.init.ModItems;
 import com.google.common.collect.Lists;
 
@@ -315,7 +316,7 @@ public class EntityRaft extends EntityBoat
         this.prevPosZ = this.posZ;
         super.onUpdate();
         this.tickLerp();
-
+        
         if (this.canPassengerSteer())
         {
             if (this.getPassengers().isEmpty() || !(this.getPassengers().get(0) instanceof EntityPlayer))
@@ -338,8 +339,8 @@ public class EntityRaft extends EntityBoat
             this.motionX = 0.0D;
             this.motionY = 0.0D;
             this.motionZ = 0.0D;
-        }
-
+        }     
+        
         for (int i = 0; i <= 1; ++i)
         {
             if (this.getPaddleState(i))
@@ -535,8 +536,8 @@ public class EntityRaft extends EntityBoat
      * Decides how much the raft should be gliding on the land (based on any slippery blocks)
      */
     public float getRaftGlide()
-    {
-        AxisAlignedBB axisalignedbb = this.getEntityBoundingBox();
+    {	
+    	AxisAlignedBB axisalignedbb = this.getEntityBoundingBox();
         AxisAlignedBB axisalignedbb1 = new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY - 0.001D, axisalignedbb.minZ, axisalignedbb.maxX, axisalignedbb.minY, axisalignedbb.maxZ);
         int i = MathHelper.floor(axisalignedbb1.minX) - 1;
         int j = MathHelper.ceil(axisalignedbb1.maxX) + 1;
@@ -548,44 +549,43 @@ public class EntityRaft extends EntityBoat
         float f = 0.0F;
         int k1 = 0;
         BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos = BlockPos.PooledMutableBlockPos.retain();
-
-        try
-        {
-            for (int l1 = i; l1 < j; ++l1)
+            try
             {
-                for (int i2 = i1; i2 < j1; ++i2)
+                for (int l1 = i; l1 < j; ++l1)
                 {
-                    int j2 = (l1 != i && l1 != j - 1 ? 0 : 1) + (i2 != i1 && i2 != j1 - 1 ? 0 : 1);
-
-                    if (j2 != 2)
+                    for (int i2 = i1; i2 < j1; ++i2)
                     {
-                        for (int k2 = k; k2 < l; ++k2)
+                        int j2 = (l1 != i && l1 != j - 1 ? 0 : 1) + (i2 != i1 && i2 != j1 - 1 ? 0 : 1);
+
+                        if (j2 != 2)
                         {
-                            if (j2 <= 0 || k2 != k && k2 != l - 1)
+                            for (int k2 = k; k2 < l; ++k2)
                             {
-                                blockpos$pooledmutableblockpos.setPos(l1, k2, i2);
-                                IBlockState iblockstate = this.world.getBlockState(blockpos$pooledmutableblockpos);
-                                iblockstate.addCollisionBoxToList(this.world, blockpos$pooledmutableblockpos, axisalignedbb1, list, this, false);
-
-                                if (!list.isEmpty())
+                                if (j2 <= 0 || k2 != k && k2 != l - 1)
                                 {
-                                    f += iblockstate.getBlock().slipperiness;
-                                    ++k1;
-                                }
+                                    blockpos$pooledmutableblockpos.setPos(l1, k2, i2);
+                                    IBlockState iblockstate = this.world.getBlockState(blockpos$pooledmutableblockpos);
+                                    iblockstate.addCollisionBoxToList(this.world, blockpos$pooledmutableblockpos, axisalignedbb1, list, this, false);
 
-                                list.clear();
+                                    if (!list.isEmpty())
+                                    {
+                                        f += iblockstate.getBlock().slipperiness;
+                                        ++k1;
+                                    }
+
+                                    list.clear();
+                                }
                             }
                         }
                     }
                 }
             }
-        }
-        finally
-        {
-            blockpos$pooledmutableblockpos.release();
-        }
+            finally
+            {
+                blockpos$pooledmutableblockpos.release();
+            }
 
-        return f / (float)k1;
+            return f / (float)k1;
     }
 
     private boolean checkInWater()
@@ -721,7 +721,16 @@ public class EntityRaft extends EntityBoat
             }
             else if (this.status == EntityRaft.Status.ON_LAND)
             {
-                this.momentum = this.raftGlide;
+            	if(RaftConfigGen.raftconfig.SlipperyFast)
+            	{
+            		this.momentum = this.raftGlide;
+            	}
+            	else
+            	{
+            		this.momentum = 0f;
+            		System.out.println(this.momentum);
+            	}
+                
 
                 if (this.getControllingPassenger() instanceof EntityPlayer)
                 {
@@ -762,19 +771,19 @@ public class EntityRaft extends EntityBoat
 
             if (this.rightInputDown != this.leftInputDown && !this.forwardInputDown && !this.backInputDown)
             {
-                f += 0.005F;
+                f += 0.005F * RaftConfigGen.raftconfig.SpeedMultiplier;
             }
 
-            this.rotationYaw += this.deltaRotation;
+            this.rotationYaw += (this.deltaRotation);
 
             if (this.forwardInputDown)
             {
-                f += 0.04F;
+                f += 0.04F * RaftConfigGen.raftconfig.SpeedMultiplier;
             }
 
             if (this.backInputDown)
             {
-                f -= 0.005F;
+                f -= 0.005F * RaftConfigGen.raftconfig.SpeedMultiplier;
             }
 
             this.motionX += (double)(MathHelper.sin(-this.rotationYaw * 0.017453292F) * f);
