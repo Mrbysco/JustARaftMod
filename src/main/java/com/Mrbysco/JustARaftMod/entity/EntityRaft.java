@@ -14,7 +14,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityWaterMob;
@@ -162,7 +161,7 @@ public class EntityRaft extends EntityBoat
         {
             return false;
         }
-        else if (!this.world.isRemote && !this.isDead)
+        else if (!this.worldObj.isRemote && !this.isDead)
         {
             if (source instanceof EntityDamageSourceIndirect && source.getSourceOfDamage() != null && this.isPassenger(source.getSourceOfDamage()))
             {
@@ -178,7 +177,7 @@ public class EntityRaft extends EntityBoat
 
                 if (flag || this.getDamageTaken() > 40.0F)
                 {
-                    if (!flag && this.world.getGameRules().getBoolean("doEntityDrops"))
+                    if (!flag && this.worldObj.getGameRules().getBoolean("doEntityDrops"))
                     {
                         this.dropItemWithOffset(this.getItemBoat(), 1, 0.0F);
                     }
@@ -294,7 +293,7 @@ public class EntityRaft extends EntityBoat
             ++this.outOfControlTicks;
         }
 
-        if (!this.world.isRemote && this.outOfControlTicks >= 60.0F)
+        if (!this.worldObj.isRemote && this.outOfControlTicks >= 60.0F)
         {
             this.removePassengers();
         }
@@ -324,13 +323,13 @@ public class EntityRaft extends EntityBoat
 
             this.updateMotion();
 
-            if (this.world.isRemote)
+            if (this.worldObj.isRemote)
             {
                 this.controlRaft();
-                this.world.sendPacketToServer(new CPacketSteerBoat(this.getPaddleState(0), this.getPaddleState(1)));
+                this.worldObj.sendPacketToServer(new CPacketSteerBoat(this.getPaddleState(0), this.getPaddleState(1)));
             }
 
-            this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
+            this.moveEntity(this.motionX, this.motionY, this.motionZ);
         }
         else
         {
@@ -352,15 +351,16 @@ public class EntityRaft extends EntityBoat
         }
 
         this.doBlockCollisions();
-        List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().expand(0.20000000298023224D, -0.009999999776482582D, 0.20000000298023224D), EntitySelectors.<Entity>getTeamCollisionPredicate(this));
+        List<Entity> list = this.worldObj.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().expand(0.20000000298023224D, -0.009999999776482582D, 0.20000000298023224D), EntitySelectors.<Entity>getTeamCollisionPredicate(this));
 
         if (!list.isEmpty())
         {
-            boolean flag = !this.world.isRemote && !(this.getControllingPassenger() instanceof EntityPlayer);
+            boolean flag = !this.worldObj.isRemote && !(this.getControllingPassenger() instanceof EntityPlayer);
 
             for (int j = 0; j < list.size(); ++j)
             {
                 Entity entity = (Entity)list.get(j);
+                
                 if (!entity.isPassenger(this))
                 {
                     if (flag && this.getPassengers().size() < 2 && !entity.isRiding() && entity.width < this.width && entity instanceof EntityLivingBase && !(entity instanceof EntityWaterMob) && !(entity instanceof EntityPlayer))
@@ -409,7 +409,7 @@ public class EntityRaft extends EntityBoat
     @SideOnly(Side.CLIENT)
     public float getRowingTime(int side, float limbSwing)
     {
-        return this.getPaddleState(side) ? (float)MathHelper.clampedLerp((double)this.paddlePositions[side] - 0.39269909262657166D, (double)this.paddlePositions[side], (double)limbSwing) : 0.0F;
+        return this.getPaddleState(side) ? (float)MathHelper.denormalizeClamp((double)this.paddlePositions[side] - 0.01D, (double)this.paddlePositions[side], (double)limbSwing) : 0.0F;
     }
 
     /**
@@ -447,17 +447,17 @@ public class EntityRaft extends EntityBoat
     public float getWaterLevelAbove()
     {
         AxisAlignedBB axisalignedbb = this.getEntityBoundingBox();
-        int i = MathHelper.floor(axisalignedbb.minX);
-        int j = MathHelper.ceil(axisalignedbb.maxX);
-        int k = MathHelper.floor(axisalignedbb.maxY);
-        int l = MathHelper.ceil(axisalignedbb.maxY - this.lastYd);
-        int i1 = MathHelper.floor(axisalignedbb.minZ);
-        int j1 = MathHelper.ceil(axisalignedbb.maxZ);
+        int i = MathHelper.floor_double(axisalignedbb.minX);
+        int j = MathHelper.ceiling_double_int(axisalignedbb.maxX);
+        int k = MathHelper.floor_double(axisalignedbb.maxY);
+        int l = MathHelper.ceiling_double_int(axisalignedbb.maxY - this.lastYd);
+        int i1 = MathHelper.floor_double(axisalignedbb.minZ);
+        int j1 = MathHelper.ceiling_double_int(axisalignedbb.maxZ);
         BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos = BlockPos.PooledMutableBlockPos.retain();
 
         try
         {
-            label108:
+        	label78:
 
             for (int k1 = k; k1 < l; ++k1)
             {
@@ -480,16 +480,16 @@ public class EntityRaft extends EntityBoat
                     for (int i2 = i1; i2 < j1; ++i2)
                     {
                         blockpos$pooledmutableblockpos.setPos(l1, k1, i2);
-                        IBlockState iblockstate = this.world.getBlockState(blockpos$pooledmutableblockpos);
+                        IBlockState iblockstate = this.worldObj.getBlockState(blockpos$pooledmutableblockpos);
 
                         if (iblockstate.getMaterial() == Material.WATER)
                         {
-                            f = Math.max(f, BlockLiquid.getBlockLiquidHeight(iblockstate, this.world, blockpos$pooledmutableblockpos));
+                            f = Math.max(f, getBlockLiquidHeight(iblockstate, this.worldObj, blockpos$pooledmutableblockpos));
                         }
 
                         if (f >= 1.0F)
                         {
-                            continue label108;
+                            continue label78;
                         }
                     }
 
@@ -513,12 +513,12 @@ public class EntityRaft extends EntityBoat
     {	
     	AxisAlignedBB axisalignedbb = this.getEntityBoundingBox();
         AxisAlignedBB axisalignedbb1 = new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY - 0.001D, axisalignedbb.minZ, axisalignedbb.maxX, axisalignedbb.minY, axisalignedbb.maxZ);
-        int i = MathHelper.floor(axisalignedbb1.minX) - 1;
-        int j = MathHelper.ceil(axisalignedbb1.maxX) + 1;
-        int k = MathHelper.floor(axisalignedbb1.minY) - 1;
-        int l = MathHelper.ceil(axisalignedbb1.maxY) + 1;
-        int i1 = MathHelper.floor(axisalignedbb1.minZ) - 1;
-        int j1 = MathHelper.ceil(axisalignedbb1.maxZ) + 1;
+        int i = MathHelper.floor_double(axisalignedbb1.minX) - 1;
+        int j = MathHelper.ceiling_double_int(axisalignedbb1.maxX) + 1;
+        int k = MathHelper.floor_double(axisalignedbb1.minY) - 1;
+        int l = MathHelper.ceiling_double_int(axisalignedbb1.maxY) + 1;
+        int i1 = MathHelper.floor_double(axisalignedbb1.minZ) - 1;
+        int j1 = MathHelper.ceiling_double_int(axisalignedbb1.maxZ) + 1;
         List<AxisAlignedBB> list = Lists.<AxisAlignedBB>newArrayList();
         float f = 0.0F;
         int k1 = 0;
@@ -539,8 +539,8 @@ public class EntityRaft extends EntityBoat
                             if (j2 <= 0 || k2 != k && k2 != l - 1)
                             {
                                 blockpos$pooledmutableblockpos.setPos(l1, k2, i2);
-                                IBlockState iblockstate = this.world.getBlockState(blockpos$pooledmutableblockpos);
-                                iblockstate.addCollisionBoxToList(this.world, blockpos$pooledmutableblockpos, axisalignedbb1, list, this, false);
+                                IBlockState iblockstate = this.worldObj.getBlockState(blockpos$pooledmutableblockpos);
+                                iblockstate.addCollisionBoxToList(this.worldObj, blockpos$pooledmutableblockpos, axisalignedbb1, list, this);
 
                                 if (!list.isEmpty())
                                 {
@@ -566,12 +566,12 @@ public class EntityRaft extends EntityBoat
     private boolean checkInWater()
     {
         AxisAlignedBB axisalignedbb = this.getEntityBoundingBox();
-        int i = MathHelper.floor(axisalignedbb.minX);
-        int j = MathHelper.ceil(axisalignedbb.maxX);
-        int k = MathHelper.floor(axisalignedbb.minY);
-        int l = MathHelper.ceil(axisalignedbb.minY + 0.001D);
-        int i1 = MathHelper.floor(axisalignedbb.minZ);
-        int j1 = MathHelper.ceil(axisalignedbb.maxZ);
+        int i = MathHelper.floor_double(axisalignedbb.minX);
+        int j = MathHelper.ceiling_double_int(axisalignedbb.maxX);
+        int k = MathHelper.floor_double(axisalignedbb.minY);
+        int l = MathHelper.ceiling_double_int(axisalignedbb.minY + 0.001D);
+        int i1 = MathHelper.floor_double(axisalignedbb.minZ);
+        int j1 = MathHelper.ceiling_double_int(axisalignedbb.maxZ);
         boolean flag = false;
         this.waterLevel = Double.MIN_VALUE;
         BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos = BlockPos.PooledMutableBlockPos.retain();
@@ -585,11 +585,11 @@ public class EntityRaft extends EntityBoat
                     for (int i2 = i1; i2 < j1; ++i2)
                     {
                         blockpos$pooledmutableblockpos.setPos(k1, l1, i2);
-                        IBlockState iblockstate = this.world.getBlockState(blockpos$pooledmutableblockpos);
+                        IBlockState iblockstate = this.worldObj.getBlockState(blockpos$pooledmutableblockpos);
 
                         if (iblockstate.getMaterial() == Material.WATER)
                         {
-                            float f = BlockLiquid.getLiquidHeight(iblockstate, this.world, blockpos$pooledmutableblockpos);
+                            float f = getLiquidHeight(iblockstate, this.worldObj, blockpos$pooledmutableblockpos);
                             this.waterLevel = Math.max((double)f, this.waterLevel);
                             flag |= axisalignedbb.minY < (double)f;
                         }
@@ -613,12 +613,12 @@ public class EntityRaft extends EntityBoat
     {
         AxisAlignedBB axisalignedbb = this.getEntityBoundingBox();
         double d0 = axisalignedbb.maxY + 0.001D;
-        int i = MathHelper.floor(axisalignedbb.minX);
-        int j = MathHelper.ceil(axisalignedbb.maxX);
-        int k = MathHelper.floor(axisalignedbb.maxY);
-        int l = MathHelper.ceil(d0);
-        int i1 = MathHelper.floor(axisalignedbb.minZ);
-        int j1 = MathHelper.ceil(axisalignedbb.maxZ);
+        int i = MathHelper.floor_double(axisalignedbb.minX);
+        int j = MathHelper.ceiling_double_int(axisalignedbb.maxX);
+        int k = MathHelper.floor_double(axisalignedbb.maxY);
+        int l = MathHelper.ceiling_double_int(d0);
+        int i1 = MathHelper.floor_double(axisalignedbb.minZ);
+        int j1 = MathHelper.ceiling_double_int(axisalignedbb.maxZ);
         boolean flag = false;
         BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos = BlockPos.PooledMutableBlockPos.retain();
 
@@ -631,9 +631,9 @@ public class EntityRaft extends EntityBoat
                     for (int i2 = i1; i2 < j1; ++i2)
                     {
                         blockpos$pooledmutableblockpos.setPos(k1, l1, i2);
-                        IBlockState iblockstate = this.world.getBlockState(blockpos$pooledmutableblockpos);
+                        IBlockState iblockstate = this.worldObj.getBlockState(blockpos$pooledmutableblockpos);
 
-                        if (iblockstate.getMaterial() == Material.WATER && d0 < (double)BlockLiquid.getLiquidHeight(iblockstate, this.world, blockpos$pooledmutableblockpos))
+                        if (iblockstate.getMaterial() == Material.WATER && d0 < (double)getLiquidHeight(iblockstate, this.worldObj, blockpos$pooledmutableblockpos))
                         {
                             if (((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() != 0)
                             {
@@ -815,7 +815,7 @@ public class EntityRaft extends EntityBoat
     {
         entityToUpdate.setRenderYawOffset(this.rotationYaw);
         float f = MathHelper.wrapDegrees(entityToUpdate.rotationYaw - this.rotationYaw);
-        float f1 = MathHelper.clamp(f, -105.0F, 105.0F);
+        float f1 = MathHelper.clamp_float(f, -105.0F, 105.0F);
         entityToUpdate.prevRotationYaw += f1 - f;
         entityToUpdate.rotationYaw += f1 - f;
         entityToUpdate.setRotationYawHead(entityToUpdate.rotationYaw);
@@ -857,7 +857,7 @@ public class EntityRaft extends EntityBoat
         }
         else
         {
-            if (!this.world.isRemote && this.outOfControlTicks < 60.0F)
+            if (!this.worldObj.isRemote && this.outOfControlTicks < 60.0F)
             {
                 player.startRiding(this);
             }
@@ -884,11 +884,11 @@ public class EntityRaft extends EntityBoat
 
                     this.fall(this.fallDistance, 1.0F);
 
-                    if (!this.world.isRemote && !this.isDead)
+                    if (!this.worldObj.isRemote && !this.isDead)
                     {
                         this.setDead();
 
-                        if (this.world.getGameRules().getBoolean("doEntityDrops"))
+                        if (this.worldObj.getGameRules().getBoolean("doEntityDrops"))
                         {
                             for (int i = 0; i < 3; ++i)
                             {
@@ -905,7 +905,7 @@ public class EntityRaft extends EntityBoat
 
                 this.fallDistance = 0.0F;
             }
-            else if (this.world.getBlockState((new BlockPos(this)).down()).getMaterial() != Material.WATER && y < 0.0D)
+            else if (this.worldObj.getBlockState((new BlockPos(this)).down()).getMaterial() != Material.WATER && y < 0.0D)
             {
                 this.fallDistance = (float)((double)this.fallDistance - y);
             }

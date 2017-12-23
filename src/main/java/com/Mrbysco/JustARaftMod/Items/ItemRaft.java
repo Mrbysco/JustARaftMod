@@ -39,9 +39,8 @@ public class ItemRaft extends Item{
     /**
      * Called when the equipped item is right clicked.
      */
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
+    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand handIn)
     {
-        ItemStack itemstack = playerIn.getHeldItem(handIn);
         float f = 1.0F;
         float f1 = playerIn.prevRotationPitch + (playerIn.rotationPitch - playerIn.prevRotationPitch) * 1.0F;
         float f2 = playerIn.prevRotationYaw + (playerIn.rotationYaw - playerIn.prevRotationYaw) * 1.0F;
@@ -61,7 +60,7 @@ public class ItemRaft extends Item{
 
         if (raytraceresult == null)
         {
-            return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
+            return new ActionResult(EnumActionResult.PASS, itemStackIn);
         }
         else
         {
@@ -71,7 +70,7 @@ public class ItemRaft extends Item{
 
             for (int i = 0; i < list.size(); ++i)
             {
-                Entity entity = list.get(i);
+                Entity entity = (Entity)list.get(i);
 
                 if (entity.canBeCollidedWith())
                 {
@@ -86,11 +85,11 @@ public class ItemRaft extends Item{
 
             if (flag)
             {
-                return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
+                return new ActionResult(EnumActionResult.PASS, itemStackIn);
             }
             else if (raytraceresult.typeOfHit != RayTraceResult.Type.BLOCK)
             {
-                return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
+                return new ActionResult(EnumActionResult.PASS, itemStackIn);
             }
             else
             {
@@ -102,22 +101,22 @@ public class ItemRaft extends Item{
 
                 if (!worldIn.getCollisionBoxes(entityraft, entityraft.getEntityBoundingBox().expandXyz(-0.1D)).isEmpty())
                 {
-                    return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemstack);
+                    return new ActionResult(EnumActionResult.FAIL, itemStackIn);
                 }
                 else
                 {
                     if (!worldIn.isRemote)
                     {
-                        worldIn.spawnEntity(entityraft);
+                        worldIn.spawnEntityInWorld(entityraft);
                     }
 
                     if (!playerIn.capabilities.isCreativeMode)
                     {
-                        itemstack.shrink(1);
+                        --itemStackIn.stackSize;
                     }
 
                     playerIn.addStat(StatList.getObjectUseStats(this));
-                    return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
+                    return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
                 }
             }
         }

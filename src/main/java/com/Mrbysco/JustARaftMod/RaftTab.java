@@ -3,7 +3,7 @@ package com.Mrbysco.JustARaftMod;
 import com.Mrbysco.JustARaftMod.init.ModItems;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item;
 
 public class RaftTab extends CreativeTabs{
 
@@ -12,7 +12,7 @@ public class RaftTab extends CreativeTabs{
 	}
 	
 	@Override
-	public ItemStack getTabIconItem() {
-		return new ItemStack(ModItems.raft);
+	public Item getTabIconItem() {
+		return ModItems.raft;
 	}
 }
