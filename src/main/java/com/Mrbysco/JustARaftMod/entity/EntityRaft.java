@@ -21,7 +21,6 @@ import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -34,7 +33,6 @@ import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -166,7 +164,7 @@ public class EntityRaft extends EntityBoat
         }
         else if (!this.world.isRemote && !this.isDead)
         {
-            if (source instanceof EntityDamageSourceIndirect && source.getTrueSource() != null && this.isPassenger(source.getTrueSource()))
+            if (source instanceof EntityDamageSourceIndirect && source.getSourceOfDamage() != null && this.isPassenger(source.getSourceOfDamage()))
             {
                 return false;
             }
@@ -176,7 +174,7 @@ public class EntityRaft extends EntityBoat
                 this.setTimeSinceHit(10);
                 this.setDamageTaken(this.getDamageTaken() + amount * 10.0F);
                 this.setBeenAttacked();
-                boolean flag = source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer)source.getTrueSource()).capabilities.isCreativeMode;
+                boolean flag = source.getSourceOfDamage() instanceof EntityPlayer && ((EntityPlayer)source.getSourceOfDamage()).capabilities.isCreativeMode;
 
                 if (flag || this.getDamageTaken() > 40.0F)
                 {
@@ -319,7 +317,7 @@ public class EntityRaft extends EntityBoat
 
         if (this.canPassengerSteer())
         {
-            if (this.getPassengers().isEmpty() || !(this.getPassengers().get(0) instanceof EntityPlayer))
+            if (this.getPassengers().size() == 0 || !(this.getPassengers().get(0) instanceof EntityPlayer))
             {
                 this.setPaddleState(false, false);
             }
@@ -345,20 +343,7 @@ public class EntityRaft extends EntityBoat
         {
             if (this.getPaddleState(i))
             {
-                if (!this.isSilent() && (double)(this.paddlePositions[i] % ((float)Math.PI * 2F)) <= (Math.PI / 4D) && ((double)this.paddlePositions[i] + 0.39269909262657166D) % (Math.PI * 2D) >= (Math.PI / 4D))
-                {
-                    SoundEvent soundevent = this.getPaddleSound();
-
-                    if (soundevent != null)
-                    {
-                        Vec3d vec3d = this.getLook(1.0F);
-                        double d0 = i == 1 ? -vec3d.z : vec3d.z;
-                        double d1 = i == 1 ? vec3d.x : -vec3d.x;
-                        this.world.playSound((EntityPlayer)null, this.posX + d0, this.posY, this.posZ + d1, soundevent, this.getSoundCategory(), 1.0F, 0.8F + 0.4F * this.rand.nextFloat());
-                    }
-                }
-
-                this.paddlePositions[i] = (float)((double)this.paddlePositions[i] + 0.39269909262657166D);
+                this.paddlePositions[i] = (float)((double)this.paddlePositions[i] + 0.01D);
             }
             else
             {
@@ -367,8 +352,7 @@ public class EntityRaft extends EntityBoat
         }
 
         this.doBlockCollisions();
-
-        List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().grow(0.20000000298023224D, -0.009999999776482582D, 0.20000000298023224D), EntitySelectors.getTeamCollisionPredicate(this));
+        List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().expand(0.20000000298023224D, -0.009999999776482582D, 0.20000000298023224D), EntitySelectors.<Entity>getTeamCollisionPredicate(this));
 
         if (!list.isEmpty())
         {
@@ -376,7 +360,7 @@ public class EntityRaft extends EntityBoat
 
             for (int j = 0; j < list.size(); ++j)
             {
-                Entity entity = list.get(j);
+                Entity entity = (Entity)list.get(j);
                 if (!entity.isPassenger(this))
                 {
                     if (flag && this.getPassengers().size() < 2 && !entity.isRiding() && entity.width < this.width && entity instanceof EntityLivingBase && !(entity instanceof EntityWaterMob) && !(entity instanceof EntityPlayer))
@@ -397,23 +381,6 @@ public class EntityRaft extends EntityBoat
             {
             	this.motionY = this.motionY - 0.035;
             }
-        }
-    }
-    
-    @Nullable
-    protected SoundEvent getPaddleSound()
-    {
-        switch (this.getRaftStatus())
-        {
-            case IN_WATER:
-            case UNDER_WATER:
-            case UNDER_FLOWING_WATER:
-                return SoundEvents.ENTITY_BOAT_PADDLE_WATER;
-            case ON_LAND:
-                return SoundEvents.ENTITY_BOAT_PADDLE_LAND;
-            case IN_AIR:
-            default:
-                return null;
         }
     }
 
@@ -827,7 +794,7 @@ public class EntityRaft extends EntityBoat
             }
 
             Vec3d vec3d = (new Vec3d((double)f, 0.0D, 0.0D)).rotateYaw(-this.rotationYaw * 0.017453292F - ((float)Math.PI / 2F));
-            passenger.setPosition(this.posX + vec3d.x, this.posY + (double)f1, this.posZ + vec3d.z);
+            passenger.setPosition(this.posX + vec3d.xCoord, this.posY + (double)f1, this.posZ + vec3d.zCoord);
             passenger.rotationYaw += this.deltaRotation;
             passenger.setRotationYawHead(passenger.getRotationYawHead() + this.deltaRotation);
             this.applyYawToEntity(passenger);

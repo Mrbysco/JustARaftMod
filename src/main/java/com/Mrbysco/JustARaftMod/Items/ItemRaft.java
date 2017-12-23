@@ -67,7 +67,7 @@ public class ItemRaft extends Item{
         {
             Vec3d vec3d2 = playerIn.getLook(1.0F);
             boolean flag = false;
-            List<Entity> list = worldIn.getEntitiesWithinAABBExcludingEntity(playerIn, playerIn.getEntityBoundingBox().expand(vec3d2.x * 5.0D, vec3d2.y * 5.0D, vec3d2.z * 5.0D).grow(1.0D));
+            List<Entity> list = worldIn.getEntitiesWithinAABBExcludingEntity(playerIn, playerIn.getEntityBoundingBox().addCoord(vec3d2.xCoord * 5.0D, vec3d2.yCoord * 5.0D, vec3d2.zCoord * 5.0D).expandXyz(1.0D));
 
             for (int i = 0; i < list.size(); ++i)
             {
@@ -75,9 +75,9 @@ public class ItemRaft extends Item{
 
                 if (entity.canBeCollidedWith())
                 {
-                    AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().grow((double)entity.getCollisionBorderSize());
+                    AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().expandXyz((double)entity.getCollisionBorderSize());
 
-                    if (axisalignedbb.contains(vec3d))
+                    if (axisalignedbb.isVecInside(vec3d))
                     {
                         flag = true;
                     }
@@ -96,11 +96,11 @@ public class ItemRaft extends Item{
             {
                 Block block = worldIn.getBlockState(raytraceresult.getBlockPos()).getBlock();
                 boolean flag1 = block == Blocks.WATER || block == Blocks.FLOWING_WATER;
-                EntityRaft entityraft = new EntityRaft(worldIn, raytraceresult.hitVec.x, flag1 ? raytraceresult.hitVec.y - 0.12D : raytraceresult.hitVec.y, raytraceresult.hitVec.z);
+                EntityRaft entityraft = new EntityRaft(worldIn, raytraceresult.hitVec.xCoord, flag1 ? raytraceresult.hitVec.yCoord - 0.12D : raytraceresult.hitVec.yCoord, raytraceresult.hitVec.zCoord);
                 entityraft.setRaftType(this.type);
                 entityraft.rotationYaw = playerIn.rotationYaw;
 
-                if (!worldIn.getCollisionBoxes(entityraft, entityraft.getEntityBoundingBox().grow(-0.1D)).isEmpty())
+                if (!worldIn.getCollisionBoxes(entityraft, entityraft.getEntityBoundingBox().expandXyz(-0.1D)).isEmpty())
                 {
                     return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemstack);
                 }
