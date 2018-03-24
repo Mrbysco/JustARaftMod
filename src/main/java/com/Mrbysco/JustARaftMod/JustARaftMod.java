@@ -43,9 +43,6 @@ public class JustARaftMod {
 		logger.debug("Initializing Raft");
 		ModItems.init();
 		
-		logger.debug("Registering Raft Item");
-		ModItems.register();
-		
 		logger.debug("Registering Raft Entity");
 		ModEntities.register();
 		
