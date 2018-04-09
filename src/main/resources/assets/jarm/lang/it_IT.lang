@@ -1,0 +1,16 @@
+#item names
+item.oakraft.name=Zattera di Legno di Quercia
+item.spruceraft.name=Zattera di Legno di Abete
+item.birchraft.name=Zattera di Legno di Betulla
+item.jungleraft.name=Zattera di Legno della Giungla
+item.acaciaraft.name=Zattera di Legno di Acacia
+item.dark_oakraft.name=Zattera di Legno di Quercia Scura
+
+#Creative tab name
+itemGroup.jarm=Just A Raft Mod
+
+#Entity names
+entity.jarm.Raft.name=Zattera
+
+#Raft Config
+jarm.config.title=Configurazione di Just A Raft Mod
