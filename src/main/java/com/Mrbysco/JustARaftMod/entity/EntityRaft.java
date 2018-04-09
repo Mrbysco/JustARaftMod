@@ -703,7 +703,6 @@ public class EntityRaft extends EntityBoat
             	else
             	{
             		this.momentum = 0f;
-            		//System.out.println(this.momentum);
             	}
                 
 
