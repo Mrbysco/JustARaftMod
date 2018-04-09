@@ -33,15 +33,6 @@ public class ModItems {
         registry.registerAll(ITEMS.toArray(new Item[0]));
     }
 	
-	public static void init(){
-		raft = registerItem(new ItemRaft(EntityRaft.Type.OAK));
-		spruce_raft = registerItem(new ItemRaft(EntityRaft.Type.SPRUCE));
-		birch_raft = registerItem(new ItemRaft(EntityRaft.Type.BIRCH));
-		jungle_raft = registerItem(new ItemRaft(EntityRaft.Type.JUNGLE));
-		acacia_raft = registerItem(new ItemRaft(EntityRaft.Type.ACACIA));
-		dark_oak_raft = registerItem(new ItemRaft(EntityRaft.Type.DARK_OAK));
-	}
-	
 	public static <T extends Item> T registerItem(T item)
     {
         ITEMS.add(item);
