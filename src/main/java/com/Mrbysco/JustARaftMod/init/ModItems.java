@@ -1,41 +1,49 @@
 package com.Mrbysco.JustARaftMod.init;
 
-import java.util.ArrayList;
-
 import com.Mrbysco.JustARaftMod.Items.ItemRaft;
 import com.Mrbysco.JustARaftMod.entity.EntityRaft;
 
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.IForgeRegistry;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-@EventBusSubscriber
 public class ModItems {
 
 	public static Item raft, spruce_raft, birch_raft, jungle_raft, acacia_raft, dark_oak_raft;
 	
-	public static ArrayList<Item> ITEMS = new ArrayList<>();
+	public static void init(){
+		raft = new ItemRaft(EntityRaft.Type.OAK);
+		spruce_raft = new ItemRaft(EntityRaft.Type.SPRUCE);
+		birch_raft = new ItemRaft(EntityRaft.Type.BIRCH);
+		jungle_raft = new ItemRaft(EntityRaft.Type.JUNGLE);
+		acacia_raft = new ItemRaft(EntityRaft.Type.ACACIA);
+		dark_oak_raft = new ItemRaft(EntityRaft.Type.DARK_OAK);
+		}
 	
-	@SubscribeEvent
-    public static void registerItems(RegistryEvent.Register<Item> event)
-    {
-        IForgeRegistry<Item> registry = event.getRegistry();
-
-        raft = registerItem(new ItemRaft(EntityRaft.Type.OAK));
-		spruce_raft = registerItem(new ItemRaft(EntityRaft.Type.SPRUCE));
-		birch_raft = registerItem(new ItemRaft(EntityRaft.Type.BIRCH));
-		jungle_raft = registerItem(new ItemRaft(EntityRaft.Type.JUNGLE));
-		acacia_raft = registerItem(new ItemRaft(EntityRaft.Type.ACACIA));
-		dark_oak_raft = registerItem(new ItemRaft(EntityRaft.Type.DARK_OAK));
-
-        registry.registerAll(ITEMS.toArray(new Item[0]));
-    }
+	public static void register()
+	{
+		ForgeRegistries.ITEMS.register(raft);
+		ForgeRegistries.ITEMS.register(spruce_raft);
+		ForgeRegistries.ITEMS.register(birch_raft);
+		ForgeRegistries.ITEMS.register(jungle_raft);
+		ForgeRegistries.ITEMS.register(acacia_raft);
+		ForgeRegistries.ITEMS.register(dark_oak_raft);
+	}
 	
-	public static <T extends Item> T registerItem(T item)
-    {
-        ITEMS.add(item);
-        return item;
-    }
+	public static void registerRenders()
+	{
+		registerRender(raft);
+		registerRender(spruce_raft);
+		registerRender(birch_raft);
+		registerRender(jungle_raft);
+		registerRender(acacia_raft);
+		registerRender(dark_oak_raft);
+	}
+	
+	public static void registerRender(Item item)
+	{
+		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+	}
+	
 }

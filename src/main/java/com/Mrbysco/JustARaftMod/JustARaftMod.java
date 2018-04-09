@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.Mrbysco.JustARaftMod.config.RaftConfigGen;
 import com.Mrbysco.JustARaftMod.init.ModEntities;
+import com.Mrbysco.JustARaftMod.init.ModItems;
 import com.Mrbysco.JustARaftMod.proxy.CommonProxy;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -38,6 +39,12 @@ public class JustARaftMod {
 	{	
 		logger.debug("Registering Raft Config");
 		MinecraftForge.EVENT_BUS.register(new RaftConfigGen());
+		
+		logger.debug("Initializing Raft");
+		ModItems.init();
+		
+		logger.debug("Registering Raft Item");
+		ModItems.register();
 		
 		logger.debug("Registering Raft Entity");
 		ModEntities.register();
