@@ -47,7 +47,7 @@ public class EntityRaft extends EntityBoat
 {
     private static final DataParameter<Integer> TIME_SINCE_HIT = EntityDataManager.<Integer>createKey(EntityRaft.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> FORWARD_DIRECTION = EntityDataManager.<Integer>createKey(EntityRaft.class, DataSerializers.VARINT);
-    private static final DataParameter<Float> DAMAGE_TAKEN = EntityDataManager.<Float>createKey(EntityRaft.class, DataSerializers.FLOAT);
+    private static final DataParameter<Float> RAFT_DAMAGE_TAKEN = EntityDataManager.<Float>createKey(EntityRaft.class, DataSerializers.FLOAT);
     private static final DataParameter<Integer> RAFT_TYPE = EntityDataManager.<Integer>createKey(EntityRaft.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean>[] DATA_ID_PADDLE = new DataParameter[] {EntityDataManager.createKey(EntityRaft.class, DataSerializers.BOOLEAN), EntityDataManager.createKey(EntityRaft.class, DataSerializers.BOOLEAN)};
     private final float[] paddlePositions;
@@ -99,6 +99,7 @@ public class EntityRaft extends EntityBoat
      * returns if this entity triggers Block.onEntityWalking on the blocks they walk on. used for spiders and wolves to
      * prevent them from trampling crops
      */
+    @Override
     protected boolean canTriggerWalking()
     {
         return false;
@@ -109,7 +110,7 @@ public class EntityRaft extends EntityBoat
     {
         this.dataManager.register(TIME_SINCE_HIT, Integer.valueOf(0));
         this.dataManager.register(FORWARD_DIRECTION, Integer.valueOf(1));
-        this.dataManager.register(DAMAGE_TAKEN, Float.valueOf(0.0F));
+        this.dataManager.register(RAFT_DAMAGE_TAKEN, Float.valueOf(0.0F));
         this.dataManager.register(RAFT_TYPE, Integer.valueOf(EntityRaft.Type.OAK.ordinal()));
 
         for (DataParameter<Boolean> dataparameter : DATA_ID_PADDLE)
@@ -122,8 +123,8 @@ public class EntityRaft extends EntityBoat
      * Returns a boundingBox used to collide the entity with other entities and blocks. This enables the entity to be
      * pushable on contact, like rafts or minecarts.
      */
-    @Nullable
     @Override
+    @Nullable
     public AxisAlignedBB getCollisionBox(Entity entityIn)
     {
         return entityIn.canBePushed() ? entityIn.getEntityBoundingBox() : null;
@@ -132,6 +133,7 @@ public class EntityRaft extends EntityBoat
     /**
      * Returns the collision bounding box for this entity
      */
+    @Override
     @Nullable
     public AxisAlignedBB getCollisionBoundingBox()
     {
@@ -141,6 +143,7 @@ public class EntityRaft extends EntityBoat
     /**
      * Returns true if this entity should push and be pushed by other entities when colliding.
      */
+    @Override
     public boolean canBePushed()
     {
         return true;
@@ -149,6 +152,7 @@ public class EntityRaft extends EntityBoat
     /**
      * Returns the Y offset from the entity's position for any entity riding this one.
      */
+    @Override
     public double getMountedYOffset()
     {
         return -0.025D;
@@ -200,6 +204,7 @@ public class EntityRaft extends EntityBoat
     /**
      * Applies a velocity to the entities, to push them away from eachother.
      */
+    @Override
     public void applyEntityCollision(Entity entityIn)
     {
         if (entityIn instanceof EntityRaft)
@@ -221,7 +226,6 @@ public class EntityRaft extends EntityBoat
         switch (this.getRaftType())
         {
             case OAK:
-            default:
                 return ModItems.raft;
             case SPRUCE:
                 return ModItems.spruce_raft;
@@ -233,12 +237,16 @@ public class EntityRaft extends EntityBoat
                 return ModItems.acacia_raft;
             case DARK_OAK:
                 return ModItems.dark_oak_raft;
+                
+            default:
+            	return ModItems.raft;
         }
     }
 
     /**
      * Setups the entity to do the hurt animation. Only used by packets in multiplayer.
      */
+    @Override
     @SideOnly(Side.CLIENT)
     public void performHurtAnimation()
     {
@@ -250,6 +258,7 @@ public class EntityRaft extends EntityBoat
     /**
      * Returns true if other Entities should be prevented from moving through this Entity.
      */
+    @Override
     public boolean canBeCollidedWith()
     {
         return !this.isDead;
@@ -258,6 +267,7 @@ public class EntityRaft extends EntityBoat
     /**
      * Set the position and rotation values directly without any clamping.
      */
+    @Override
     @SideOnly(Side.CLIENT)
     public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport)
     {
@@ -273,6 +283,7 @@ public class EntityRaft extends EntityBoat
      * Gets the horizontal facing direction of this Entity, adjusted to take specially-treated entity types into
      * account.
      */
+    @Override
     public EnumFacing getAdjustedHorizontalFacing()
     {
         return this.getHorizontalFacing().rotateY();
@@ -399,7 +410,8 @@ public class EntityRaft extends EntityBoat
             }
         }
     }
-    
+
+    @Override
     @Nullable
     protected SoundEvent getPaddleSound()
     {
@@ -433,12 +445,14 @@ public class EntityRaft extends EntityBoat
         }
     }
 
+    @Override
     public void setPaddleState(boolean left, boolean right)
     {
         this.dataManager.set(DATA_ID_PADDLE[0], Boolean.valueOf(left));
         this.dataManager.set(DATA_ID_PADDLE[1], Boolean.valueOf(right));
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public float getRowingTime(int side, float limbSwing)
     {
@@ -477,6 +491,7 @@ public class EntityRaft extends EntityBoat
         }
     }
 
+    @Override
     public float getWaterLevelAbove()
     {
         AxisAlignedBB axisalignedbb = this.getEntityBoundingBox();
@@ -798,6 +813,7 @@ public class EntityRaft extends EntityBoat
         }
     }
 
+    @Override
     public void updatePassenger(Entity passenger)
     {
         if (this.isPassenger(passenger))
@@ -864,6 +880,7 @@ public class EntityRaft extends EntityBoat
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
+    @Override
     protected void writeEntityToNBT(NBTTagCompound compound)
     {
         compound.setString("Type", this.getRaftType().getName());
@@ -872,6 +889,7 @@ public class EntityRaft extends EntityBoat
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
+    @Override
     protected void readEntityFromNBT(NBTTagCompound compound)
     {
         if (compound.hasKey("Type", 8))
@@ -880,6 +898,7 @@ public class EntityRaft extends EntityBoat
         }
     }
 
+    @Override
     public boolean processInitialInteract(EntityPlayer player, EnumHand hand)
     {
         if (player.isSneaking())
@@ -897,6 +916,7 @@ public class EntityRaft extends EntityBoat
         }
     }
 
+    @Override
     protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos)
     {
         this.lastYd = this.motionY;
@@ -943,6 +963,7 @@ public class EntityRaft extends EntityBoat
         }
     }
 
+    @Override
     public boolean getPaddleState(int side)
     {
         return ((Boolean)this.dataManager.get(DATA_ID_PADDLE[side])).booleanValue() && this.getControllingPassenger() != null;
@@ -951,22 +972,25 @@ public class EntityRaft extends EntityBoat
     /**
      * Sets the damage taken from the last hit.
      */
+    @Override
     public void setDamageTaken(float damageTaken)
     {
-        this.dataManager.set(DAMAGE_TAKEN, Float.valueOf(damageTaken));
+        this.dataManager.set(RAFT_DAMAGE_TAKEN, Float.valueOf(damageTaken));
     }
 
     /**
      * Gets the damage taken from the last hit.
      */
+    @Override
     public float getDamageTaken()
     {
-        return ((Float)this.dataManager.get(DAMAGE_TAKEN)).floatValue();
+        return this.dataManager.get(RAFT_DAMAGE_TAKEN).floatValue();
     }
 
     /**
      * Sets the time to count down from since the last time entity was hit.
      */
+    @Override
     public void setTimeSinceHit(int timeSinceHit)
     {
         this.dataManager.set(TIME_SINCE_HIT, Integer.valueOf(timeSinceHit));
@@ -975,6 +999,7 @@ public class EntityRaft extends EntityBoat
     /**
      * Gets the time since the last hit.
      */
+    @Override
     public int getTimeSinceHit()
     {
         return ((Integer)this.dataManager.get(TIME_SINCE_HIT)).intValue();
@@ -983,6 +1008,7 @@ public class EntityRaft extends EntityBoat
     /**
      * Sets the forward direction of the entity.
      */
+    @Override
     public void setForwardDirection(int forwardDirection)
     {
         this.dataManager.set(FORWARD_DIRECTION, Integer.valueOf(forwardDirection));
@@ -991,6 +1017,7 @@ public class EntityRaft extends EntityBoat
     /**
      * Gets the forward direction of the entity.
      */
+    @Override
     public int getForwardDirection()
     {
         return ((Integer)this.dataManager.get(FORWARD_DIRECTION)).intValue();
@@ -1009,9 +1036,10 @@ public class EntityRaft extends EntityBoat
     @Override
     public EntityBoat.Type getBoatType()
     {
-        return EntityBoat.Type.byId(((Integer)this.dataManager.get(RAFT_TYPE)).intValue());
+        return null;
     }
-    
+
+    @Override
     protected boolean canFitPassenger(Entity passenger)
     {
         return this.getPassengers().size() < 2;
@@ -1021,13 +1049,15 @@ public class EntityRaft extends EntityBoat
      * For vehicles, the first passenger is generally considered the controller and "drives" the vehicle. For example,
      * Pigs, Horses, and Rafts are generally "steered" by the controlling passenger.
      */
+    @Override
     @Nullable
     public Entity getControllingPassenger()
     {
         List<Entity> list = this.getPassengers();
         return list.isEmpty() ? null : (Entity)list.get(0);
     }
-
+    
+    @Override
     @SideOnly(Side.CLIENT)
     public void updateInputs(boolean p_184442_1_, boolean p_184442_2_, boolean p_184442_3_, boolean p_184442_4_)
     {
