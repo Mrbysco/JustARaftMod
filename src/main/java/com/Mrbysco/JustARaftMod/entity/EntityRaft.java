@@ -481,7 +481,11 @@ public class EntityRaft extends EntityBoat
 
             if (f > 0.0F)
             {
-                this.raftGlide = f;
+            	if(RaftConfigGen.raftconfig.SlipperyFast)
+                    this.raftGlide = f;
+            	else
+            		this.raftGlide = 0;
+            	
                 return EntityRaft.Status.ON_LAND;
             }
             else
@@ -608,7 +612,7 @@ public class EntityRaft extends EntityBoat
             blockpos$pooledmutableblockpos.release();
         }
 
-        return f / (float)k1;
+    	return f / (float)k1;
     }
 
     private boolean checkInWater()
@@ -744,21 +748,14 @@ public class EntityRaft extends EntityBoat
             }
             else if (this.status == EntityRaft.Status.ON_LAND)
             {
-            	if(RaftConfigGen.raftconfig.SlipperyFast)
-            	{
-            		this.momentum = this.raftGlide;
-            	}
-            	else
-            	{
-            		this.momentum = 0f;
-            	}
+            	this.momentum = this.raftGlide;
 
                 if (this.getControllingPassenger() instanceof EntityPlayer)
                 {
-                    this.raftGlide /= 2.0F;
+                	this.raftGlide /= 2.0F;
                 }
             }
-
+            
             this.motionX *= (double)this.momentum;
             this.motionZ *= (double)this.momentum;
             this.deltaRotation *= this.momentum;
