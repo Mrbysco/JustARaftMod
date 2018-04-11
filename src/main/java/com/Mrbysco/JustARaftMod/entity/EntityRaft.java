@@ -984,7 +984,7 @@ public class EntityRaft extends EntityBoat
     @Override
     public float getDamageTaken()
     {
-        return this.dataManager.get(RAFT_DAMAGE_TAKEN).floatValue();
+        return ((Float)this.dataManager.get(RAFT_DAMAGE_TAKEN)).floatValue();
     }
 
     /**
