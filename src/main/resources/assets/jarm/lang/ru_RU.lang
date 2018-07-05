@@ -1,0 +1,16 @@
+#Item names
+item.oakraft.name=Плот из древесины дуба
+item.spruceraft.name=Плот из древесины ели
+item.birchraft.name=Плот из древесины берёзы
+item.jungleraft.name=Плот из древесины тропического дерева
+item.acaciaraft.name=Плот из древесины акации
+item.dark_oakraft.name=Плот из древесины тёмного дуба
+
+#Creative tab name
+itemGroup.jarm=Just A Raft Mod
+
+#Entity names
+entity.jarm:Raft.name=Плот
+
+#Raft Config
+jarm.config.title=Just Another Raft Config
