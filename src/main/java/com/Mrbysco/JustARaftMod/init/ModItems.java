@@ -1,9 +1,9 @@
-package com.Mrbysco.JustARaftMod.init;
+package com.mrbysco.justaraftmod.init;
 
 import java.util.ArrayList;
 
-import com.Mrbysco.JustARaftMod.Items.ItemRaft;
-import com.Mrbysco.JustARaftMod.entity.EntityRaft;
+import com.mrbysco.justaraftmod.Items.ItemRaft;
+import com.mrbysco.justaraftmod.entity.EntityRaft;
 
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;

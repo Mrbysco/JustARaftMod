@@ -1,4 +1,4 @@
-package com.Mrbysco.JustARaftMod.model;
+package com.mrbysco.justaraftmod.model;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;

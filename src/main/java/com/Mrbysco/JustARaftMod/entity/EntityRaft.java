@@ -1,12 +1,12 @@
-package com.Mrbysco.JustARaftMod.entity;
+package com.mrbysco.justaraftmod.entity;
 
 import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.Mrbysco.JustARaftMod.config.RaftConfigGen;
-import com.Mrbysco.JustARaftMod.init.ModItems;
 import com.google.common.collect.Lists;
+import com.mrbysco.justaraftmod.config.RaftConfigGen;
+import com.mrbysco.justaraftmod.init.ModItems;
 
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockPlanks;

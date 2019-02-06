@@ -1,6 +1,6 @@
-package com.Mrbysco.JustARaftMod.config;
+package com.mrbysco.justaraftmod.config;
 
-import com.Mrbysco.JustARaftMod.Reference;
+import com.mrbysco.justaraftmod.Reference;
 
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;

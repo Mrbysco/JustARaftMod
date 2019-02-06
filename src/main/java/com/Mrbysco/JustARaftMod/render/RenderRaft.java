@@ -1,7 +1,7 @@
-package com.Mrbysco.JustARaftMod.render;
+package com.mrbysco.justaraftmod.render;
 
-import com.Mrbysco.JustARaftMod.entity.EntityRaft;
-import com.Mrbysco.JustARaftMod.model.ModelRaft;
+import com.mrbysco.justaraftmod.entity.EntityRaft;
+import com.mrbysco.justaraftmod.model.ModelRaft;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;

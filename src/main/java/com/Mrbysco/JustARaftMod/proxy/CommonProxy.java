@@ -1,4 +1,4 @@
-package com.Mrbysco.JustARaftMod.proxy;
+package com.mrbysco.justaraftmod.proxy;
 
 public class CommonProxy {
 

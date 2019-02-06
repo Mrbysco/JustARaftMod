@@ -1,9 +1,9 @@
-package com.Mrbysco.JustARaftMod.Items;
+package com.mrbysco.justaraftmod.Items;
 
 import java.util.List;
 
-import com.Mrbysco.JustARaftMod.JustARaftMod;
-import com.Mrbysco.JustARaftMod.entity.EntityRaft;
+import com.mrbysco.justaraftmod.JustARaftMod;
+import com.mrbysco.justaraftmod.entity.EntityRaft;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;

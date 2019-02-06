@@ -1,11 +1,11 @@
-package com.Mrbysco.JustARaftMod;
+package com.mrbysco.justaraftmod;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.Mrbysco.JustARaftMod.config.RaftConfigGen;
-import com.Mrbysco.JustARaftMod.init.ModEntities;
-import com.Mrbysco.JustARaftMod.proxy.CommonProxy;
+import com.mrbysco.justaraftmod.config.RaftConfigGen;
+import com.mrbysco.justaraftmod.init.ModEntities;
+import com.mrbysco.justaraftmod.proxy.CommonProxy;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;

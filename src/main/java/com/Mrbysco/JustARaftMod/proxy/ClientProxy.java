@@ -1,7 +1,7 @@
-package com.Mrbysco.JustARaftMod.proxy;
+package com.mrbysco.justaraftmod.proxy;
 
-import com.Mrbysco.JustARaftMod.entity.EntityRaft;
-import com.Mrbysco.JustARaftMod.render.RenderRaft;
+import com.mrbysco.justaraftmod.entity.EntityRaft;
+import com.mrbysco.justaraftmod.render.RenderRaft;
 
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 

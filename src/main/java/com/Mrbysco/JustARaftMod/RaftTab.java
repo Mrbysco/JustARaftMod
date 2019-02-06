@@ -1,6 +1,6 @@
-package com.Mrbysco.JustARaftMod;
+package com.mrbysco.justaraftmod;
 
-import com.Mrbysco.JustARaftMod.init.ModItems;
+import com.mrbysco.justaraftmod.init.ModItems;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
