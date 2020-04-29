@@ -1,0 +1,13 @@
+modLoader="javafml"
+loaderVersion="[28,)"
+issueTrackerURL="https://github.com/Mrbysco/JustARaftMod"
+
+[[mods]]
+modId="justaraftmod"
+version="${file.jarVersion}"
+displayName="Just A Raft Mod"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/just-a-raft-mod"
+authors="Mrbysco, ShyNieke"
+description='''
+Adding rafts since 2017
+'''

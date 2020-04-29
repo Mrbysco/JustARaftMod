@@ -1,0 +1,19 @@
+{
+  "result": {
+    "item": "justaraftmod:jungle_raft"
+  },
+  "pattern": [
+    "S S",
+    "LLL",
+    "S S"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+	"L": {
+      "item": "minecraft:jungle_log"
+    },
+	"S": {
+      "tag": "forge:string"
+    }
+  }
+}
