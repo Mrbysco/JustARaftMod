@@ -55,13 +55,7 @@ public class RaftItem extends Item {
 
             if (raytraceresult.getType() == RayTraceResult.Type.BLOCK) {
                 RaftEntity raft = new RaftEntity(worldIn, raytraceresult.getHitVec().x, raytraceresult.getHitVec().y, raytraceresult.getHitVec().z);
-//                RaftEntity raft = RaftRegistry.RAFT.get().create(worldIn);
-//                raft.prevPosX = raytraceresult.getHitVec().x;
-//                raft.prevPosY = raytraceresult.getHitVec().y;
-//                raft.prevPosZ = raytraceresult.getHitVec().z;
-//                raft.setPosition(raytraceresult.getHitVec().x, raytraceresult.getHitVec().y, raytraceresult.getHitVec().z);
-//                raft.setMotion(Vec3d.ZERO);
-//                raft.setBoatType(this.type);
+                raft.setBoatType(this.type);
                 raft.rotationYaw = playerIn.rotationYaw;
                 if (!worldIn.isCollisionBoxesEmpty(raft, raft.getBoundingBox().grow(-0.1D))) {
                     return new ActionResult<>(ActionResultType.FAIL, itemstack);
