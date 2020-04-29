@@ -11,6 +11,7 @@ import org.apache.commons.lang3.tuple.Pair;
 public class RaftConfig {
     public static class Server {
         public final DoubleValue SpeedMultiplier;
+        public final DoubleValue TurnMultiplier;
         public final BooleanValue SlipperyFast;
         public final BooleanValue SinkTheRaft;
 
@@ -21,6 +22,10 @@ public class RaftConfig {
             SpeedMultiplier = builder
                     .comment("Adjusting this setting changes the speed of the raft. (Default: 1.0) [Lower than 1 = slower | higher than 1 = faster]")
                     .defineInRange("SpeedMultiplier", 1.0D, Double.MIN_VALUE, Double.MAX_VALUE);
+
+            TurnMultiplier = builder
+                    .comment("Adjusting this setting changes the speed of turning the raft. (Default: 1.0) [Lower than 1 = slower | higher than 1 = faster]")
+                    .defineInRange("TurnMultiplier", 1.0D, Double.MIN_VALUE, Double.MAX_VALUE);
 
             SlipperyFast = builder
                     .comment("Changing this to false makes rafts the same speed as on land while on a slippery block. (Default: true)")

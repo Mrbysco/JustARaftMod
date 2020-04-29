@@ -114,11 +114,11 @@ public class RaftEntity extends BoatEntity
         if (this.isBeingRidden()) {
             float f = 0.0F;
             if (this.leftInputDown) {
-                --this.deltaRotation;
+                this.deltaRotation -= 1F * RaftConfig.SERVER.TurnMultiplier.get();
             }
 
             if (this.rightInputDown) {
-                ++this.deltaRotation;
+                this.deltaRotation += 1F * RaftConfig.SERVER.TurnMultiplier.get();
             }
 
             if (this.rightInputDown != this.leftInputDown && !this.forwardInputDown && !this.backInputDown) {
