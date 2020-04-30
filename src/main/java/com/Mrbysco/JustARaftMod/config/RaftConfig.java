@@ -54,7 +54,7 @@ public class RaftConfig {
     }
 
     @SubscribeEvent
-    public static void onFileChange(final ModConfig.ConfigReloading configEvent) {
+    public static void onFileChange(final ModConfig.Reloading configEvent) {
         JustARaftMod.LOGGER.debug("JustARaftMod's config just got changed on the file system!");
     }
 }

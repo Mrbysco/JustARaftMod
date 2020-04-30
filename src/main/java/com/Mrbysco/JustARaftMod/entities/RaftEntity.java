@@ -56,11 +56,7 @@ public class RaftEntity extends BoatEntity
         } else {
             float f = this.getBoatGlide();
             if (f > 0.0F) {
-                if(RaftConfig.SERVER.SlipperyFast.get())
-                    this.boatGlide = f;
-                else
-                    this.boatGlide = 0;
-
+                this.boatGlide = RaftConfig.SERVER.SlipperyFast.get() ? f : 0;
                 return BoatEntity.Status.ON_LAND;
             } else {
                 return BoatEntity.Status.IN_AIR;
@@ -77,7 +73,7 @@ public class RaftEntity extends BoatEntity
 
         if (this.previousStatus == BoatEntity.Status.IN_AIR && this.status != BoatEntity.Status.IN_AIR && this.status != BoatEntity.Status.ON_LAND) {
             this.waterLevel = this.getBoundingBox().minY + (double)this.getHeight();
-            this.setPosition(this.posX, (double)(this.getWaterLevelAbove() - this.getHeight()) + 0.101D, this.posZ);
+            this.setPosition(this.getPosX(), (double)(this.getWaterLevelAbove() - this.getHeight()) + 0.101D, this.getPosZ());
             this.setMotion(this.getMotion().mul(1.0D, 0.0D, 1.0D));
             this.lastYd = 0.0D;
             this.status = BoatEntity.Status.IN_WATER;

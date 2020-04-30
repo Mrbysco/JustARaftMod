@@ -9,7 +9,6 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -37,7 +36,7 @@ public class RaftItem extends Item {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
         RayTraceResult raytraceresult = rayTrace(worldIn, playerIn, RayTraceContext.FluidMode.ANY);
         if (raytraceresult.getType() == RayTraceResult.Type.MISS) {
-            return new ActionResult<>(ActionResultType.PASS, itemstack);
+            return ActionResult.resultPass(itemstack);
         } else {
             Vec3d vec3d = playerIn.getLook(1.0F);
             double d0 = 5.0D;
@@ -45,10 +44,10 @@ public class RaftItem extends Item {
             if (!list.isEmpty()) {
                 Vec3d vec3d1 = playerIn.getEyePosition(1.0F);
 
-                for(Entity entity : list) {
-                    AxisAlignedBB axisalignedbb = entity.getBoundingBox().grow((double)entity.getCollisionBorderSize());
+                for (Entity entity : list) {
+                    AxisAlignedBB axisalignedbb = entity.getBoundingBox().grow((double) entity.getCollisionBorderSize());
                     if (axisalignedbb.contains(vec3d1)) {
-                        return new ActionResult<>(ActionResultType.PASS, itemstack);
+                        return ActionResult.resultPass(itemstack);
                     }
                 }
             }
@@ -57,22 +56,21 @@ public class RaftItem extends Item {
                 RaftEntity raft = new RaftEntity(worldIn, raytraceresult.getHitVec().x, raytraceresult.getHitVec().y, raytraceresult.getHitVec().z);
                 raft.setBoatType(this.type);
                 raft.rotationYaw = playerIn.rotationYaw;
-                if (!worldIn.isCollisionBoxesEmpty(raft, raft.getBoundingBox().grow(-0.1D))) {
-                    return new ActionResult<>(ActionResultType.FAIL, itemstack);
+                if (!worldIn.hasNoCollisions(raft, raft.getBoundingBox().grow(-0.1D))) {
+                    return ActionResult.resultFail(itemstack);
                 } else {
                     if (!worldIn.isRemote) {
                         worldIn.addEntity(raft);
-                    }
-
-                    if (!playerIn.abilities.isCreativeMode) {
-                        itemstack.shrink(1);
+                        if (!playerIn.abilities.isCreativeMode) {
+                            itemstack.shrink(1);
+                        }
                     }
 
                     playerIn.addStat(Stats.ITEM_USED.get(this));
-                    return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
+                    return ActionResult.resultSuccess(itemstack);
                 }
             } else {
-                return new ActionResult<>(ActionResultType.PASS, itemstack);
+                return ActionResult.resultPass(itemstack);
             }
         }
     }

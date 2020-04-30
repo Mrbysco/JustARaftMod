@@ -10,7 +10,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
 	"L": {
-      "item": "minecraft:birch_raft"
+      "item": "minecraft:birch_log"
     },
 	"S": {
       "tag": "forge:string"
