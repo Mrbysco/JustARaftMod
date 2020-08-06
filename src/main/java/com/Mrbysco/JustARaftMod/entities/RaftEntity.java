@@ -8,7 +8,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -23,7 +23,7 @@ public class RaftEntity extends BoatEntity
     public RaftEntity(World worldIn, double x, double y, double z) {
         this(RaftRegistry.RAFT.get(), worldIn);
         this.setPosition(x, y, z);
-        this.setMotion(Vec3d.ZERO);
+        this.setMotion(Vector3d.ZERO);
         this.prevPosX = x;
         this.prevPosY = y;
         this.prevPosZ = z;
@@ -38,7 +38,7 @@ public class RaftEntity extends BoatEntity
         super.tick();
         if(RaftConfig.SERVER.SinkTheRaft.get()) {
             if(this.getPassengers().size() > 1) {
-                Vec3d motion = this.getMotion();
+                Vector3d motion = this.getMotion();
                 double newY = motion.y - 0.035D;
                 this.setMotion(motion.x, newY, motion.z);
             }
@@ -96,12 +96,12 @@ public class RaftEntity extends BoatEntity
                 }
             }
 
-            Vec3d vec3d = this.getMotion();
-            this.setMotion(vec3d.x * (double)this.momentum, vec3d.y + d1, vec3d.z * (double)this.momentum);
+            Vector3d Vector3d = this.getMotion();
+            this.setMotion(Vector3d.x * (double)this.momentum, Vector3d.y + d1, Vector3d.z * (double)this.momentum);
             this.deltaRotation *= this.momentum;
             if (d2 > 0.0D) {
-                Vec3d vec3d1 = this.getMotion();
-                this.setMotion(vec3d1.x, (vec3d1.y + d2 * 0.06153846016296973D) * 0.75D, vec3d1.z);
+                Vector3d Vector3d1 = this.getMotion();
+                this.setMotion(Vector3d1.x, (Vector3d1.y + d2 * 0.06153846016296973D) * 0.75D, Vector3d1.z);
             }
         }
     }
