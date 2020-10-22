@@ -23,7 +23,7 @@ public class RaftRenderer extends EntityRenderer<RaftEntity> {
             new ResourceLocation("justaraftmod:textures/entity/raft/jungle_raft.png"),
             new ResourceLocation("justaraftmod:textures/entity/raft/acacia_raft.png"),
             new ResourceLocation("justaraftmod:textures/entity/raft/dark_oak_raft.png")};
-    private final RaftModel model = new RaftModel();
+    private final RaftModel model = new RaftModel<>();
 
     public RaftRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn);

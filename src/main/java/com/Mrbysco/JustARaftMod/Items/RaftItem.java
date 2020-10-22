@@ -39,7 +39,6 @@ public class RaftItem extends Item {
             return ActionResult.resultPass(itemstack);
         } else {
             Vector3d Vector3d = playerIn.getLook(1.0F);
-            double d0 = 5.0D;
             List<Entity> list = worldIn.getEntitiesInAABBexcluding(playerIn, playerIn.getBoundingBox().expand(Vector3d.scale(5.0D)).grow(1.0D), field_219989_a);
             if (!list.isEmpty()) {
                 Vector3d Vector3d1 = playerIn.getEyePosition(1.0F);

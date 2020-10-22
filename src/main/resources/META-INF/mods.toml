@@ -1,6 +1,7 @@
 modLoader="javafml"
-loaderVersion="[32,)"
+loaderVersion="[33,)"
 issueTrackerURL="https://github.com/Mrbysco/JustARaftMod"
+license="MIT"
 
 [[mods]]
 modId="justaraftmod"
