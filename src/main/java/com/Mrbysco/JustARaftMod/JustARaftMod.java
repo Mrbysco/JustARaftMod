@@ -26,7 +26,8 @@ public class JustARaftMod {
         RaftRegistry.ENTITIES.register(eventBus);
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-            eventBus.addListener(ClientHandler::doClientStuff);
+            eventBus.addListener(ClientHandler::registerEntityRenders);
+            eventBus.addListener(ClientHandler::registerLayerDefinitions);
         });
     }
 }

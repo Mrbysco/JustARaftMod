@@ -2,20 +2,22 @@ package com.mrbysco.justaraftmod.items;
 
 import com.mrbysco.justaraftmod.entities.RaftEntity;
 import com.mrbysco.justaraftmod.init.RaftTab;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.core.BlockPos;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EntityPredicates;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,7 +25,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class RaftItem extends Item {
-    private static final Predicate<Entity> ENTITY_PREDICATE = EntityPredicates.NO_SPECTATORS.and(Entity::isPickable);
+    private static final Predicate<Entity> ENTITY_PREDICATE = EntitySelector.NO_SPECTATORS.and(Entity::isPickable);
     private final RaftEntity.Type type;
 
     public RaftItem(RaftEntity.Type typeIn, Item.Properties properties) {
@@ -32,50 +34,51 @@ public class RaftItem extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        ItemStack itemstack = playerIn.getItemInHand(handIn);
-        RayTraceResult raytraceresult = getPlayerPOVHitResult(worldIn, playerIn, RayTraceContext.FluidMode.ANY);
-        if (raytraceresult.getType() == RayTraceResult.Type.MISS) {
-            return ActionResult.pass(itemstack);
+    public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
+        ItemStack stack = playerIn.getItemInHand(handIn);
+        HitResult hitResult = getPlayerPOVHitResult(level, playerIn, ClipContext.Fluid.ANY);
+        if (hitResult.getType() == HitResult.Type.MISS) {
+            return InteractionResultHolder.pass(stack);
         } else {
-            Vector3d Vector3d = playerIn.getViewVector(1.0F);
-            List<Entity> list = worldIn.getEntities(playerIn, playerIn.getBoundingBox().expandTowards(Vector3d.scale(5.0D)).inflate(1.0D), ENTITY_PREDICATE);
+            Vec3 Vector3d = playerIn.getViewVector(1.0F);
+            List<Entity> list = level.getEntities(playerIn, playerIn.getBoundingBox().expandTowards(Vector3d.scale(5.0D)).inflate(1.0D), ENTITY_PREDICATE);
             if (!list.isEmpty()) {
-                Vector3d Vector3d1 = playerIn.getEyePosition(1.0F);
+                Vec3 eyePos = playerIn.getEyePosition(1.0F);
 
                 for (Entity entity : list) {
-                    AxisAlignedBB axisalignedbb = entity.getBoundingBox().inflate((double) entity.getPickRadius());
-                    if (axisalignedbb.contains(Vector3d1)) {
-                        return ActionResult.pass(itemstack);
+                    AABB axisalignedbb = entity.getBoundingBox().inflate((double) entity.getPickRadius());
+                    if (axisalignedbb.contains(eyePos)) {
+                        return InteractionResultHolder.pass(stack);
                     }
                 }
             }
 
-            if (raytraceresult.getType() == RayTraceResult.Type.BLOCK) {
-                RaftEntity raft = new RaftEntity(worldIn, raytraceresult.getLocation().x, raytraceresult.getLocation().y, raytraceresult.getLocation().z);
+            if (hitResult.getType() == HitResult.Type.BLOCK) {
+                RaftEntity raft = new RaftEntity(level, hitResult.getLocation().x, hitResult.getLocation().y, hitResult.getLocation().z);
                 raft.setType(this.type);
-                raft.yRot = playerIn.yRot;
-                if (!worldIn.noCollision(raft, raft.getBoundingBox().inflate(-0.1D))) {
-                    return ActionResult.fail(itemstack);
+                raft.setYRot(raft.getYRot());
+                if (!level.noCollision(raft, raft.getBoundingBox().inflate(-0.1D))) {
+                    return InteractionResultHolder.fail(stack);
                 } else {
-                    if (!worldIn.isClientSide) {
-                        worldIn.addFreshEntity(raft);
-                        if (!playerIn.abilities.instabuild) {
-                            itemstack.shrink(1);
+                    if (!level.isClientSide) {
+                        level.addFreshEntity(raft);
+                        level.gameEvent(playerIn, GameEvent.ENTITY_PLACE, new BlockPos(hitResult.getLocation()));
+                        if (!playerIn.getAbilities().instabuild) {
+                            stack.shrink(1);
                         }
                     }
 
                     playerIn.awardStat(Stats.ITEM_USED.get(this));
-                    return ActionResult.success(itemstack);
+                    return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
                 }
             } else {
-                return ActionResult.pass(itemstack);
+                return InteractionResultHolder.pass(stack);
             }
         }
     }
 
     @Override
-    public Collection<ItemGroup> getCreativeTabs() {
-        return Arrays.asList(ItemGroup.TAB_TRANSPORTATION, RaftTab.RAFT);
+    public Collection<CreativeModeTab> getCreativeTabs() {
+        return Arrays.asList(CreativeModeTab.TAB_TRANSPORTATION, RaftTab.RAFT);
     }
 }

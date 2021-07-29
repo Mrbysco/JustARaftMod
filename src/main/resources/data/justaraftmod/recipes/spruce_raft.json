@@ -10,7 +10,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
 	"L": {
-      "item": "minecraft:spruce_log"
+      "tag": "minecraft:spruce_logs"
     },
 	"S": {
       "tag": "forge:string"

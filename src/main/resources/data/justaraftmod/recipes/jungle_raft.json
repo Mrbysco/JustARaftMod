@@ -10,7 +10,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
 	"L": {
-      "item": "minecraft:jungle_log"
+      "tag": "minecraft:jungle_logs"
     },
 	"S": {
       "tag": "forge:string"

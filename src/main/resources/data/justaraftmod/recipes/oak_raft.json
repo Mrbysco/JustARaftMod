@@ -10,7 +10,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
 	"L": {
-      "item": "minecraft:oak_log"
+      "tag": "minecraft:oak_logs"
     },
 	"S": {
       "tag": "forge:string"

@@ -10,7 +10,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
 	"L": {
-      "item": "minecraft:acacia_log"
+      "tag": "minecraft:acacia_logs"
     },
 	"S": {
       "tag": "forge:string"

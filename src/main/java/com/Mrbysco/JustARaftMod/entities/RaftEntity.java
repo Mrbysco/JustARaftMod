@@ -2,36 +2,33 @@ package com.mrbysco.justaraftmod.entities;
 
 import com.mrbysco.justaraftmod.config.RaftConfig;
 import com.mrbysco.justaraftmod.init.RaftRegistry;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.item.BoatEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.FMLPlayMessages;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
-import net.minecraft.entity.item.BoatEntity.Status;
-
-public class RaftEntity extends BoatEntity
-{
-    public RaftEntity(EntityType<? extends RaftEntity> entityType, World worldIn)
+public class RaftEntity extends Boat {
+    public RaftEntity(EntityType<? extends RaftEntity> entityType, Level worldIn)
     {
         super(entityType, worldIn);
     }
 
-    public RaftEntity(World worldIn, double x, double y, double z) {
+    public RaftEntity(Level worldIn, double x, double y, double z) {
         this(RaftRegistry.RAFT.get(), worldIn);
         this.setPos(x, y, z);
-        this.setDeltaMovement(Vector3d.ZERO);
+        this.setDeltaMovement(Vec3.ZERO);
         this.xo = x;
         this.yo = y;
         this.zo = z;
     }
 
-    public RaftEntity(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
+    public RaftEntity(FMLPlayMessages.SpawnEntity spawnEntity, Level worldIn) {
         this(RaftRegistry.RAFT.get(), worldIn);
     }
 
@@ -40,7 +37,7 @@ public class RaftEntity extends BoatEntity
         super.tick();
         if(RaftConfig.SERVER.SinkTheRaft.get()) {
             if(this.getPassengers().size() > 1) {
-                Vector3d motion = this.getDeltaMovement();
+                Vec3 motion = this.getDeltaMovement();
                 double newY = motion.y - 0.035D;
                 this.setDeltaMovement(motion.x, newY, motion.z);
             }
@@ -49,19 +46,19 @@ public class RaftEntity extends BoatEntity
 
     @Override
     public Status getStatus() {
-        BoatEntity.Status boatentity$status = this.isUnderwater();
+        Boat.Status boatentity$status = this.isUnderwater();
         if (boatentity$status != null) {
             this.waterLevel = this.getBoundingBox().maxY;
             return boatentity$status;
         } else if (this.checkInWater()) {
-            return BoatEntity.Status.IN_WATER;
+            return Boat.Status.IN_WATER;
         } else {
             float f = this.getGroundFriction();
             if (f > 0.0F) {
                 this.landFriction = RaftConfig.SERVER.SlipperyFast.get() ? f : 0;
-                return BoatEntity.Status.ON_LAND;
+                return Boat.Status.ON_LAND;
             } else {
-                return BoatEntity.Status.IN_AIR;
+                return Boat.Status.IN_AIR;
             }
         }
     }
@@ -73,36 +70,36 @@ public class RaftEntity extends BoatEntity
         double d2 = 0.0D;
         this.invFriction = 0.05F;
 
-        if (this.oldStatus == BoatEntity.Status.IN_AIR && this.status != BoatEntity.Status.IN_AIR && this.status != BoatEntity.Status.ON_LAND) {
+        if (this.oldStatus == Boat.Status.IN_AIR && this.status != Boat.Status.IN_AIR && this.status != Boat.Status.ON_LAND) {
             this.waterLevel = this.getBoundingBox().minY + (double)this.getBbHeight();
             this.setPos(this.getX(), (double)(this.getWaterLevelAbove() - this.getBbHeight()) + 0.101D, this.getZ());
             this.setDeltaMovement(this.getDeltaMovement().multiply(1.0D, 0.0D, 1.0D));
             this.lastYd = 0.0D;
-            this.status = BoatEntity.Status.IN_WATER;
+            this.status = Boat.Status.IN_WATER;
         } else {
-            if (this.status == BoatEntity.Status.IN_WATER) {
+            if (this.status == Boat.Status.IN_WATER) {
                 d2 = (this.waterLevel - this.getBoundingBox().minY + 0.1D) / (double)this.getBbHeight();
                 this.invFriction = 0.9F;
-            } else if (this.status == BoatEntity.Status.UNDER_FLOWING_WATER) {
+            } else if (this.status == Boat.Status.UNDER_FLOWING_WATER) {
                 d1 = -7.0E-4D;
                 this.invFriction = 0.9F;
-            } else if (this.status == BoatEntity.Status.UNDER_WATER) {
+            } else if (this.status == Boat.Status.UNDER_WATER) {
                 d2 = 0.009999999776482582D;
                 this.invFriction = 0.45F;
-            } else if (this.status == BoatEntity.Status.IN_AIR) {
+            } else if (this.status == Boat.Status.IN_AIR) {
                 this.invFriction = 0.9F;
-            } else if (this.status == BoatEntity.Status.ON_LAND) {
+            } else if (this.status == Boat.Status.ON_LAND) {
                 this.invFriction = this.landFriction;
-                if (this.getControllingPassenger() instanceof PlayerEntity) {
+                if (this.getControllingPassenger() instanceof Player) {
                     this.landFriction /= 2.0F;
                 }
             }
 
-            Vector3d Vector3d = this.getDeltaMovement();
+            Vec3 Vector3d = this.getDeltaMovement();
             this.setDeltaMovement(Vector3d.x * (double)this.invFriction, Vector3d.y + d1, Vector3d.z * (double)this.invFriction);
             this.deltaRotation *= this.invFriction;
             if (d2 > 0.0D) {
-                Vector3d Vector3d1 = this.getDeltaMovement();
+                Vec3 Vector3d1 = this.getDeltaMovement();
                 this.setDeltaMovement(Vector3d1.x, (Vector3d1.y + d2 * 0.06153846016296973D) * 0.75D, Vector3d1.z);
             }
         }
@@ -123,7 +120,7 @@ public class RaftEntity extends BoatEntity
                 f += 0.005F;
             }
 
-            this.yRot += this.deltaRotation;
+            this.setYRot(this.getYRot() + this.deltaRotation);
             if (this.inputUp) {
                 f += 0.04F * RaftConfig.SERVER.SpeedMultiplier.get();
             }
@@ -132,7 +129,7 @@ public class RaftEntity extends BoatEntity
                 f -= 0.005F * RaftConfig.SERVER.SpeedMultiplier.get();
             }
 
-            this.setDeltaMovement(this.getDeltaMovement().add((double)(MathHelper.sin(-this.yRot * ((float)Math.PI / 180F)) * f), 0.0D, (double)(MathHelper.cos(this.yRot * ((float)Math.PI / 180F)) * f)));
+            this.setDeltaMovement(this.getDeltaMovement().add((double)(Mth.sin(-this.getYRot() * ((float)Math.PI / 180F)) * f), 0.0D, (double)(Mth.cos(this.getYRot() * ((float)Math.PI / 180F)) * f)));
             this.setPaddleState(this.inputRight && !this.inputLeft || this.inputUp, this.inputLeft && !this.inputRight || this.inputUp);
         }
     }
@@ -161,7 +158,7 @@ public class RaftEntity extends BoatEntity
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 }
