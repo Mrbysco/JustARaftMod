@@ -9,7 +9,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class RaftTab {
     public static final ItemGroup RAFT = new ItemGroup(Reference.MOD_ID + ".raft") {
         @OnlyIn(Dist.CLIENT)
-        public ItemStack createIcon() {
+        public ItemStack makeIcon() {
             return new ItemStack(RaftRegistry.OAK_RAFT.get());
         }
     };

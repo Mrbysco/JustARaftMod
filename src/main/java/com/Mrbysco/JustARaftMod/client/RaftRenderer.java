@@ -27,38 +27,38 @@ public class RaftRenderer extends EntityRenderer<RaftEntity> {
 
     public RaftRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn);
-        this.shadowSize = 0.5F;
+        this.shadowRadius = 0.5F;
     }
 
     public void render(RaftEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        matrixStackIn.push();
+        matrixStackIn.pushPose();
         matrixStackIn.translate(0.0D, 0.375D, 0.0D);
-        matrixStackIn.rotate(Vector3f.YP.rotationDegrees(180.0F - entityYaw));
-        float f = (float)entityIn.getTimeSinceHit() - partialTicks;
-        float f1 = entityIn.getDamageTaken() - partialTicks;
+        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180.0F - entityYaw));
+        float f = (float)entityIn.getHurtTime() - partialTicks;
+        float f1 = entityIn.getDamage() - partialTicks;
         if (f1 < 0.0F) {
             f1 = 0.0F;
         }
 
         if (f > 0.0F) {
-            matrixStackIn.rotate(Vector3f.XP.rotationDegrees(MathHelper.sin(f) * f * f1 / 10.0F * (float)entityIn.getForwardDirection()));
+            matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(MathHelper.sin(f) * f * f1 / 10.0F * (float)entityIn.getHurtDir()));
         }
 
-        float f2 = entityIn.getRockingAngle(partialTicks);
-        if (!MathHelper.epsilonEquals(f2, 0.0F)) {
-            matrixStackIn.rotate(new Quaternion(new Vector3f(1.0F, 0.0F, 1.0F), entityIn.getRockingAngle(partialTicks), true));
+        float f2 = entityIn.getBubbleAngle(partialTicks);
+        if (!MathHelper.equal(f2, 0.0F)) {
+            matrixStackIn.mulPose(new Quaternion(new Vector3f(1.0F, 0.0F, 1.0F), entityIn.getBubbleAngle(partialTicks), true));
         }
 
         matrixStackIn.scale(-1.0F, -1.0F, 1.0F);
-        matrixStackIn.rotate(Vector3f.YP.rotationDegrees(90.0F));
-        this.model.setRotationAngles(entityIn, partialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
-        IVertexBuilder ivertexbuilder = bufferIn.getBuffer(this.model.getRenderType(this.getEntityTexture(entityIn)));
-        this.model.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-        matrixStackIn.pop();
+        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(90.0F));
+        this.model.setupAnim(entityIn, partialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
+        IVertexBuilder ivertexbuilder = bufferIn.getBuffer(this.model.renderType(this.getTextureLocation(entityIn)));
+        this.model.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        matrixStackIn.popPose();
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 
-    public ResourceLocation getEntityTexture(RaftEntity entity) {
+    public ResourceLocation getTextureLocation(RaftEntity entity) {
         return RAFT_TEXTURES[entity.getBoatType().ordinal()];
     }
 }

@@ -13,6 +13,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
 
+import net.minecraft.entity.item.BoatEntity.Status;
+
 public class RaftEntity extends BoatEntity
 {
     public RaftEntity(EntityType<? extends RaftEntity> entityType, World worldIn)
@@ -22,11 +24,11 @@ public class RaftEntity extends BoatEntity
 
     public RaftEntity(World worldIn, double x, double y, double z) {
         this(RaftRegistry.RAFT.get(), worldIn);
-        this.setPosition(x, y, z);
-        this.setMotion(Vector3d.ZERO);
-        this.prevPosX = x;
-        this.prevPosY = y;
-        this.prevPosZ = z;
+        this.setPos(x, y, z);
+        this.setDeltaMovement(Vector3d.ZERO);
+        this.xo = x;
+        this.yo = y;
+        this.zo = z;
     }
 
     public RaftEntity(FMLPlayMessages.SpawnEntity spawnEntity, World worldIn) {
@@ -38,25 +40,25 @@ public class RaftEntity extends BoatEntity
         super.tick();
         if(RaftConfig.SERVER.SinkTheRaft.get()) {
             if(this.getPassengers().size() > 1) {
-                Vector3d motion = this.getMotion();
+                Vector3d motion = this.getDeltaMovement();
                 double newY = motion.y - 0.035D;
-                this.setMotion(motion.x, newY, motion.z);
+                this.setDeltaMovement(motion.x, newY, motion.z);
             }
         }
     }
 
     @Override
-    public Status getBoatStatus() {
-        BoatEntity.Status boatentity$status = this.getUnderwaterStatus();
+    public Status getStatus() {
+        BoatEntity.Status boatentity$status = this.isUnderwater();
         if (boatentity$status != null) {
             this.waterLevel = this.getBoundingBox().maxY;
             return boatentity$status;
         } else if (this.checkInWater()) {
             return BoatEntity.Status.IN_WATER;
         } else {
-            float f = this.getBoatGlide();
+            float f = this.getGroundFriction();
             if (f > 0.0F) {
-                this.boatGlide = RaftConfig.SERVER.SlipperyFast.get() ? f : 0;
+                this.landFriction = RaftConfig.SERVER.SlipperyFast.get() ? f : 0;
                 return BoatEntity.Status.ON_LAND;
             } else {
                 return BoatEntity.Status.IN_AIR;
@@ -65,83 +67,83 @@ public class RaftEntity extends BoatEntity
     }
 
     @Override
-    public void updateMotion() {
+    public void floatBoat() {
         double d0 = -0.03999999910593033D;
-        double d1 = this.hasNoGravity() ? 0.0D : d0;
+        double d1 = this.isNoGravity() ? 0.0D : d0;
         double d2 = 0.0D;
-        this.momentum = 0.05F;
+        this.invFriction = 0.05F;
 
-        if (this.previousStatus == BoatEntity.Status.IN_AIR && this.status != BoatEntity.Status.IN_AIR && this.status != BoatEntity.Status.ON_LAND) {
-            this.waterLevel = this.getBoundingBox().minY + (double)this.getHeight();
-            this.setPosition(this.getPosX(), (double)(this.getWaterLevelAbove() - this.getHeight()) + 0.101D, this.getPosZ());
-            this.setMotion(this.getMotion().mul(1.0D, 0.0D, 1.0D));
+        if (this.oldStatus == BoatEntity.Status.IN_AIR && this.status != BoatEntity.Status.IN_AIR && this.status != BoatEntity.Status.ON_LAND) {
+            this.waterLevel = this.getBoundingBox().minY + (double)this.getBbHeight();
+            this.setPos(this.getX(), (double)(this.getWaterLevelAbove() - this.getBbHeight()) + 0.101D, this.getZ());
+            this.setDeltaMovement(this.getDeltaMovement().multiply(1.0D, 0.0D, 1.0D));
             this.lastYd = 0.0D;
             this.status = BoatEntity.Status.IN_WATER;
         } else {
             if (this.status == BoatEntity.Status.IN_WATER) {
-                d2 = (this.waterLevel - this.getBoundingBox().minY + 0.1D) / (double)this.getHeight();
-                this.momentum = 0.9F;
+                d2 = (this.waterLevel - this.getBoundingBox().minY + 0.1D) / (double)this.getBbHeight();
+                this.invFriction = 0.9F;
             } else if (this.status == BoatEntity.Status.UNDER_FLOWING_WATER) {
                 d1 = -7.0E-4D;
-                this.momentum = 0.9F;
+                this.invFriction = 0.9F;
             } else if (this.status == BoatEntity.Status.UNDER_WATER) {
                 d2 = 0.009999999776482582D;
-                this.momentum = 0.45F;
+                this.invFriction = 0.45F;
             } else if (this.status == BoatEntity.Status.IN_AIR) {
-                this.momentum = 0.9F;
+                this.invFriction = 0.9F;
             } else if (this.status == BoatEntity.Status.ON_LAND) {
-                this.momentum = this.boatGlide;
+                this.invFriction = this.landFriction;
                 if (this.getControllingPassenger() instanceof PlayerEntity) {
-                    this.boatGlide /= 2.0F;
+                    this.landFriction /= 2.0F;
                 }
             }
 
-            Vector3d Vector3d = this.getMotion();
-            this.setMotion(Vector3d.x * (double)this.momentum, Vector3d.y + d1, Vector3d.z * (double)this.momentum);
-            this.deltaRotation *= this.momentum;
+            Vector3d Vector3d = this.getDeltaMovement();
+            this.setDeltaMovement(Vector3d.x * (double)this.invFriction, Vector3d.y + d1, Vector3d.z * (double)this.invFriction);
+            this.deltaRotation *= this.invFriction;
             if (d2 > 0.0D) {
-                Vector3d Vector3d1 = this.getMotion();
-                this.setMotion(Vector3d1.x, (Vector3d1.y + d2 * 0.06153846016296973D) * 0.75D, Vector3d1.z);
+                Vector3d Vector3d1 = this.getDeltaMovement();
+                this.setDeltaMovement(Vector3d1.x, (Vector3d1.y + d2 * 0.06153846016296973D) * 0.75D, Vector3d1.z);
             }
         }
     }
 
     public void controlBoat() {
-        if (this.isBeingRidden()) {
+        if (this.isVehicle()) {
             float f = 0.0F;
-            if (this.leftInputDown) {
+            if (this.inputLeft) {
                 this.deltaRotation -= 1F * RaftConfig.SERVER.TurnMultiplier.get();
             }
 
-            if (this.rightInputDown) {
+            if (this.inputRight) {
                 this.deltaRotation += 1F * RaftConfig.SERVER.TurnMultiplier.get();
             }
 
-            if (this.rightInputDown != this.leftInputDown && !this.forwardInputDown && !this.backInputDown) {
+            if (this.inputRight != this.inputLeft && !this.inputUp && !this.inputDown) {
                 f += 0.005F;
             }
 
-            this.rotationYaw += this.deltaRotation;
-            if (this.forwardInputDown) {
+            this.yRot += this.deltaRotation;
+            if (this.inputUp) {
                 f += 0.04F * RaftConfig.SERVER.SpeedMultiplier.get();
             }
 
-            if (this.backInputDown) {
+            if (this.inputDown) {
                 f -= 0.005F * RaftConfig.SERVER.SpeedMultiplier.get();
             }
 
-            this.setMotion(this.getMotion().add((double)(MathHelper.sin(-this.rotationYaw * ((float)Math.PI / 180F)) * f), 0.0D, (double)(MathHelper.cos(this.rotationYaw * ((float)Math.PI / 180F)) * f)));
-            this.setPaddleState(this.rightInputDown && !this.leftInputDown || this.forwardInputDown, this.leftInputDown && !this.rightInputDown || this.forwardInputDown);
+            this.setDeltaMovement(this.getDeltaMovement().add((double)(MathHelper.sin(-this.yRot * ((float)Math.PI / 180F)) * f), 0.0D, (double)(MathHelper.cos(this.yRot * ((float)Math.PI / 180F)) * f)));
+            this.setPaddleState(this.inputRight && !this.inputLeft || this.inputUp, this.inputLeft && !this.inputRight || this.inputUp);
         }
     }
 
     @Override
-    public double getMountedYOffset() {
+    public double getPassengersRidingOffset() {
         return 0D;
     }
 
     @Override
-    public Item getItemBoat() {
+    public Item getDropItem() {
         switch (this.getBoatType()) {
             default:
                 return RaftRegistry.OAK_RAFT.get();
@@ -159,7 +161,7 @@ public class RaftEntity extends BoatEntity
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

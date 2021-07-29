@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class RaftItem extends Item {
-    private static final Predicate<Entity> field_219989_a = EntityPredicates.NOT_SPECTATING.and(Entity::canBeCollidedWith);
+    private static final Predicate<Entity> ENTITY_PREDICATE = EntityPredicates.NO_SPECTATORS.and(Entity::isPickable);
     private final RaftEntity.Type type;
 
     public RaftItem(RaftEntity.Type typeIn, Item.Properties properties) {
@@ -32,50 +32,50 @@ public class RaftItem extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        ItemStack itemstack = playerIn.getHeldItem(handIn);
-        RayTraceResult raytraceresult = rayTrace(worldIn, playerIn, RayTraceContext.FluidMode.ANY);
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        ItemStack itemstack = playerIn.getItemInHand(handIn);
+        RayTraceResult raytraceresult = getPlayerPOVHitResult(worldIn, playerIn, RayTraceContext.FluidMode.ANY);
         if (raytraceresult.getType() == RayTraceResult.Type.MISS) {
-            return ActionResult.resultPass(itemstack);
+            return ActionResult.pass(itemstack);
         } else {
-            Vector3d Vector3d = playerIn.getLook(1.0F);
-            List<Entity> list = worldIn.getEntitiesInAABBexcluding(playerIn, playerIn.getBoundingBox().expand(Vector3d.scale(5.0D)).grow(1.0D), field_219989_a);
+            Vector3d Vector3d = playerIn.getViewVector(1.0F);
+            List<Entity> list = worldIn.getEntities(playerIn, playerIn.getBoundingBox().expandTowards(Vector3d.scale(5.0D)).inflate(1.0D), ENTITY_PREDICATE);
             if (!list.isEmpty()) {
                 Vector3d Vector3d1 = playerIn.getEyePosition(1.0F);
 
                 for (Entity entity : list) {
-                    AxisAlignedBB axisalignedbb = entity.getBoundingBox().grow((double) entity.getCollisionBorderSize());
+                    AxisAlignedBB axisalignedbb = entity.getBoundingBox().inflate((double) entity.getPickRadius());
                     if (axisalignedbb.contains(Vector3d1)) {
-                        return ActionResult.resultPass(itemstack);
+                        return ActionResult.pass(itemstack);
                     }
                 }
             }
 
             if (raytraceresult.getType() == RayTraceResult.Type.BLOCK) {
-                RaftEntity raft = new RaftEntity(worldIn, raytraceresult.getHitVec().x, raytraceresult.getHitVec().y, raytraceresult.getHitVec().z);
-                raft.setBoatType(this.type);
-                raft.rotationYaw = playerIn.rotationYaw;
-                if (!worldIn.hasNoCollisions(raft, raft.getBoundingBox().grow(-0.1D))) {
-                    return ActionResult.resultFail(itemstack);
+                RaftEntity raft = new RaftEntity(worldIn, raytraceresult.getLocation().x, raytraceresult.getLocation().y, raytraceresult.getLocation().z);
+                raft.setType(this.type);
+                raft.yRot = playerIn.yRot;
+                if (!worldIn.noCollision(raft, raft.getBoundingBox().inflate(-0.1D))) {
+                    return ActionResult.fail(itemstack);
                 } else {
-                    if (!worldIn.isRemote) {
-                        worldIn.addEntity(raft);
-                        if (!playerIn.abilities.isCreativeMode) {
+                    if (!worldIn.isClientSide) {
+                        worldIn.addFreshEntity(raft);
+                        if (!playerIn.abilities.instabuild) {
                             itemstack.shrink(1);
                         }
                     }
 
-                    playerIn.addStat(Stats.ITEM_USED.get(this));
-                    return ActionResult.resultSuccess(itemstack);
+                    playerIn.awardStat(Stats.ITEM_USED.get(this));
+                    return ActionResult.success(itemstack);
                 }
             } else {
-                return ActionResult.resultPass(itemstack);
+                return ActionResult.pass(itemstack);
             }
         }
     }
 
     @Override
     public Collection<ItemGroup> getCreativeTabs() {
-        return Arrays.asList(ItemGroup.TRANSPORTATION, RaftTab.RAFT);
+        return Arrays.asList(ItemGroup.TAB_TRANSPORTATION, RaftTab.RAFT);
     }
 }

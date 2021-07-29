@@ -22,8 +22,8 @@ public class RaftRegistry {
     public static final RegistryObject<Item> ACACIA_RAFT = ITEMS.register("acacia_raft", () -> new RaftItem(RaftEntity.Type.ACACIA, itemBuilder()));
     public static final RegistryObject<Item> DARK_OAK_RAFT = ITEMS.register("dark_oak_raft", () -> new RaftItem(RaftEntity.Type.DARK_OAK, itemBuilder()));
 
-    public static final RegistryObject<EntityType<RaftEntity>> RAFT = ENTITIES.register("raft", () -> register("raft", EntityType.Builder.<RaftEntity>create(RaftEntity::new, EntityClassification.MISC)
-            .size(1.375F, 0.3F)
+    public static final RegistryObject<EntityType<RaftEntity>> RAFT = ENTITIES.register("raft", () -> register("raft", EntityType.Builder.<RaftEntity>of(RaftEntity::new, EntityClassification.MISC)
+            .sized(1.375F, 0.3F)
             .setCustomClientFactory(RaftEntity::new)));
 
     public static <T extends Entity> EntityType<T> register(String id, EntityType.Builder<T> builder) {
