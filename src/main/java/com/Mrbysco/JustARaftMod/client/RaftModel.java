@@ -22,7 +22,7 @@ public class RaftModel extends HierarchicalModel<RaftEntity> {
 		stringBack = part.getChild("string_back");
 	}
 
-	public static LayerDefinition createRaftDefenition() {
+	public static LayerDefinition createRaftDefinition() {
 		MeshDefinition meshDefinition = new MeshDefinition();
 		PartDefinition definition = meshDefinition.getRoot();
 

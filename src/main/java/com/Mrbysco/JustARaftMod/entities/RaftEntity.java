@@ -10,8 +10,8 @@ import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PlayMessages.SpawnEntity;
 
 public class RaftEntity extends Boat {
     public RaftEntity(EntityType<? extends RaftEntity> entityType, Level worldIn)
@@ -28,7 +28,7 @@ public class RaftEntity extends Boat {
         this.zo = z;
     }
 
-    public RaftEntity(FMLPlayMessages.SpawnEntity spawnEntity, Level worldIn) {
+    public RaftEntity(SpawnEntity spawnEntity, Level worldIn) {
         this(RaftRegistry.RAFT.get(), worldIn);
     }
 
@@ -141,20 +141,14 @@ public class RaftEntity extends Boat {
 
     @Override
     public Item getDropItem() {
-        switch (this.getBoatType()) {
-            default:
-                return RaftRegistry.OAK_RAFT.get();
-            case SPRUCE:
-                return RaftRegistry.SPRUCE_RAFT.get();
-            case BIRCH:
-                return RaftRegistry.BIRCH_RAFT.get();
-            case JUNGLE:
-                return RaftRegistry.JUNGLE_RAFT.get();
-            case ACACIA:
-                return RaftRegistry.ACACIA_RAFT.get();
-            case DARK_OAK:
-                return RaftRegistry.DARK_OAK_RAFT.get();
-        }
+        return switch (this.getBoatType()) {
+            default -> RaftRegistry.OAK_RAFT.get();
+            case SPRUCE -> RaftRegistry.SPRUCE_RAFT.get();
+            case BIRCH -> RaftRegistry.BIRCH_RAFT.get();
+            case JUNGLE -> RaftRegistry.JUNGLE_RAFT.get();
+            case ACACIA -> RaftRegistry.ACACIA_RAFT.get();
+            case DARK_OAK -> RaftRegistry.DARK_OAK_RAFT.get();
+        };
     }
 
     @Override

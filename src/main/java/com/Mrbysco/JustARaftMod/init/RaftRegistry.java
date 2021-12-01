@@ -7,9 +7,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public class RaftRegistry {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Reference.MOD_ID);
@@ -17,9 +17,9 @@ public class RaftRegistry {
 
     public static final RegistryObject<Item> OAK_RAFT = ITEMS.register("oak_raft", () -> new RaftItem(RaftEntity.Type.OAK, itemBuilder()));
     public static final RegistryObject<Item> SPRUCE_RAFT = ITEMS.register("spruce_raft", () -> new RaftItem(RaftEntity.Type.SPRUCE, itemBuilder()));
-    public static final RegistryObject<Item> BIRCH_RAFT = ITEMS.register("birch_raft", () -> new RaftItem(RaftEntity.Type.BIRCH, itemBuilder()));
+    public static final net.minecraftforge.registries.RegistryObject<Item> BIRCH_RAFT = ITEMS.register("birch_raft", () -> new RaftItem(RaftEntity.Type.BIRCH, itemBuilder()));
     public static final RegistryObject<Item> JUNGLE_RAFT = ITEMS.register("jungle_raft", () -> new RaftItem(RaftEntity.Type.JUNGLE, itemBuilder()));
-    public static final RegistryObject<Item> ACACIA_RAFT = ITEMS.register("acacia_raft", () -> new RaftItem(RaftEntity.Type.ACACIA, itemBuilder()));
+    public static final net.minecraftforge.registries.RegistryObject<Item> ACACIA_RAFT = ITEMS.register("acacia_raft", () -> new RaftItem(RaftEntity.Type.ACACIA, itemBuilder()));
     public static final RegistryObject<Item> DARK_OAK_RAFT = ITEMS.register("dark_oak_raft", () -> new RaftItem(RaftEntity.Type.DARK_OAK, itemBuilder()));
 
     public static final RegistryObject<EntityType<RaftEntity>> RAFT = ENTITIES.register("raft", () -> register("raft", EntityType.Builder.<RaftEntity>of(RaftEntity::new, MobCategory.MISC)

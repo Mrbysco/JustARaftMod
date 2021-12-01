@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[37,)"
+loaderVersion="[38,)"
 issueTrackerURL="https://github.com/Mrbysco/JustARaftMod"
 license="MIT"
 
@@ -12,3 +12,9 @@ authors="Mrbysco, ShyNieke"
 description='''
 Adding rafts since 2017
 '''
+[[dependencies.justaraftmod]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.18,1.19)"
+ordering="NONE"
+side="BOTH"

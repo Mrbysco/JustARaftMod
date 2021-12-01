@@ -14,6 +14,6 @@ public class ClientHandler {
     }
 
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        event.registerLayerDefinition(RAFT, () -> RaftModel.createRaftDefenition());
+        event.registerLayerDefinition(RAFT, RaftModel::createRaftDefinition);
     }
 }
