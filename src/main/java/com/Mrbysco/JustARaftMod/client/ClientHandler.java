@@ -7,13 +7,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 
 public class ClientHandler {
-    public static final ModelLayerLocation RAFT = new ModelLayerLocation(new ResourceLocation(Reference.MOD_ID, "raft"), "raft");
+	public static final ModelLayerLocation RAFT = new ModelLayerLocation(new ResourceLocation(Reference.MOD_ID, "raft"), "raft");
 
-    public static void registerEntityRenders(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerEntityRenderer(RaftRegistry.RAFT.get(), RaftRenderer::new);
-    }
+	public static void registerEntityRenders(EntityRenderersEvent.RegisterRenderers event) {
+		event.registerEntityRenderer(RaftRegistry.RAFT.get(), RaftRenderer::new);
+	}
 
-    public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        event.registerLayerDefinition(RAFT, RaftModel::createRaftDefinition);
-    }
+	public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+		event.registerLayerDefinition(RAFT, RaftModel::createRaftDefinition);
+	}
 }

@@ -7,10 +7,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class RaftTab {
-    public static final CreativeModeTab RAFT = new CreativeModeTab(Reference.MOD_ID + ".raft") {
-        @OnlyIn(Dist.CLIENT)
-        public ItemStack makeIcon() {
-            return new ItemStack(RaftRegistry.OAK_RAFT.get());
-        }
-    };
+	public static final CreativeModeTab RAFT = new CreativeModeTab(Reference.MOD_ID + ".raft") {
+		@OnlyIn(Dist.CLIENT)
+		public ItemStack makeIcon() {
+			return new ItemStack(RaftRegistry.OAK_RAFT.get());
+		}
+	};
 }

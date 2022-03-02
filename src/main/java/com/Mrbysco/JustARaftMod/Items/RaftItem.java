@@ -25,60 +25,60 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class RaftItem extends Item {
-    private static final Predicate<Entity> ENTITY_PREDICATE = EntitySelector.NO_SPECTATORS.and(Entity::isPickable);
-    private final RaftEntity.Type type;
+	private static final Predicate<Entity> ENTITY_PREDICATE = EntitySelector.NO_SPECTATORS.and(Entity::isPickable);
+	private final RaftEntity.Type type;
 
-    public RaftItem(RaftEntity.Type typeIn, Item.Properties properties) {
-        super(properties);
-        this.type = typeIn;
-    }
+	public RaftItem(RaftEntity.Type typeIn, Item.Properties properties) {
+		super(properties);
+		this.type = typeIn;
+	}
 
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
-        ItemStack stack = playerIn.getItemInHand(handIn);
-        HitResult hitResult = getPlayerPOVHitResult(level, playerIn, ClipContext.Fluid.ANY);
-        if (hitResult.getType() == HitResult.Type.MISS) {
-            return InteractionResultHolder.pass(stack);
-        } else {
-            Vec3 Vector3d = playerIn.getViewVector(1.0F);
-            List<Entity> list = level.getEntities(playerIn, playerIn.getBoundingBox().expandTowards(Vector3d.scale(5.0D)).inflate(1.0D), ENTITY_PREDICATE);
-            if (!list.isEmpty()) {
-                Vec3 eyePos = playerIn.getEyePosition(1.0F);
+	@Override
+	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
+		ItemStack stack = playerIn.getItemInHand(handIn);
+		HitResult hitResult = getPlayerPOVHitResult(level, playerIn, ClipContext.Fluid.ANY);
+		if (hitResult.getType() == HitResult.Type.MISS) {
+			return InteractionResultHolder.pass(stack);
+		} else {
+			Vec3 Vector3d = playerIn.getViewVector(1.0F);
+			List<Entity> list = level.getEntities(playerIn, playerIn.getBoundingBox().expandTowards(Vector3d.scale(5.0D)).inflate(1.0D), ENTITY_PREDICATE);
+			if (!list.isEmpty()) {
+				Vec3 eyePos = playerIn.getEyePosition(1.0F);
 
-                for (Entity entity : list) {
-                    AABB axisalignedbb = entity.getBoundingBox().inflate((double) entity.getPickRadius());
-                    if (axisalignedbb.contains(eyePos)) {
-                        return InteractionResultHolder.pass(stack);
-                    }
-                }
-            }
+				for (Entity entity : list) {
+					AABB axisalignedbb = entity.getBoundingBox().inflate((double) entity.getPickRadius());
+					if (axisalignedbb.contains(eyePos)) {
+						return InteractionResultHolder.pass(stack);
+					}
+				}
+			}
 
-            if (hitResult.getType() == HitResult.Type.BLOCK) {
-                RaftEntity raft = new RaftEntity(level, hitResult.getLocation().x, hitResult.getLocation().y, hitResult.getLocation().z);
-                raft.setType(this.type);
-                raft.setYRot(raft.getYRot());
-                if (!level.noCollision(raft, raft.getBoundingBox().inflate(-0.1D))) {
-                    return InteractionResultHolder.fail(stack);
-                } else {
-                    if (!level.isClientSide) {
-                        level.addFreshEntity(raft);
-                        level.gameEvent(playerIn, GameEvent.ENTITY_PLACE, new BlockPos(hitResult.getLocation()));
-                        if (!playerIn.getAbilities().instabuild) {
-                            stack.shrink(1);
-                        }
-                    }
+			if (hitResult.getType() == HitResult.Type.BLOCK) {
+				RaftEntity raft = new RaftEntity(level, hitResult.getLocation().x, hitResult.getLocation().y, hitResult.getLocation().z);
+				raft.setType(this.type);
+				raft.setYRot(raft.getYRot());
+				if (!level.noCollision(raft, raft.getBoundingBox().inflate(-0.1D))) {
+					return InteractionResultHolder.fail(stack);
+				} else {
+					if (!level.isClientSide) {
+						level.addFreshEntity(raft);
+						level.gameEvent(playerIn, GameEvent.ENTITY_PLACE, new BlockPos(hitResult.getLocation()));
+						if (!playerIn.getAbilities().instabuild) {
+							stack.shrink(1);
+						}
+					}
 
-                    playerIn.awardStat(Stats.ITEM_USED.get(this));
-                    return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
-                }
-            } else {
-                return InteractionResultHolder.pass(stack);
-            }
-        }
-    }
+					playerIn.awardStat(Stats.ITEM_USED.get(this));
+					return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+				}
+			} else {
+				return InteractionResultHolder.pass(stack);
+			}
+		}
+	}
 
-    @Override
-    public Collection<CreativeModeTab> getCreativeTabs() {
-        return Arrays.asList(CreativeModeTab.TAB_TRANSPORTATION, RaftTab.RAFT);
-    }
+	@Override
+	public Collection<CreativeModeTab> getCreativeTabs() {
+		return Arrays.asList(CreativeModeTab.TAB_TRANSPORTATION, RaftTab.RAFT);
+	}
 }
