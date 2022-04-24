@@ -1,19 +1,19 @@
 {
   "result": {
-    "item": "justaraftmod:spruce_raft"
+	"item": "justaraftmod:spruce_raft"
   },
   "pattern": [
-    "S S",
-    "LLL",
-    "S S"
+	"S S",
+	"LLL",
+	"S S"
   ],
   "type": "minecraft:crafting_shaped",
   "key": {
 	"L": {
-      "tag": "minecraft:spruce_logs"
-    },
+	  "tag": "minecraft:spruce_logs"
+	},
 	"S": {
-      "tag": "forge:string"
-    }
+	  "tag": "forge:string"
+	}
   }
 }

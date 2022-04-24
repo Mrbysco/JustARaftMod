@@ -1,6 +1,6 @@
 package com.mrbysco.justaraftmod.items;
 
-import com.mrbysco.justaraftmod.entities.RaftEntity;
+import com.mrbysco.justaraftmod.entities.Raft;
 import com.mrbysco.justaraftmod.init.RaftTab;
 import net.minecraft.core.BlockPos;
 import net.minecraft.stats.Stats;
@@ -26,9 +26,9 @@ import java.util.function.Predicate;
 
 public class RaftItem extends Item {
 	private static final Predicate<Entity> ENTITY_PREDICATE = EntitySelector.NO_SPECTATORS.and(Entity::isPickable);
-	private final RaftEntity.Type type;
+	private final Raft.Type type;
 
-	public RaftItem(RaftEntity.Type typeIn, Item.Properties properties) {
+	public RaftItem(Raft.Type typeIn, Item.Properties properties) {
 		super(properties);
 		this.type = typeIn;
 	}
@@ -54,8 +54,8 @@ public class RaftItem extends Item {
 			}
 
 			if (hitResult.getType() == HitResult.Type.BLOCK) {
-				RaftEntity raft = new RaftEntity(level, hitResult.getLocation().x, hitResult.getLocation().y, hitResult.getLocation().z);
-				raft.setType(this.type);
+				Raft raft = new Raft(level, hitResult.getLocation().x, hitResult.getLocation().y, hitResult.getLocation().z);
+				raft.setRaftType(this.type);
 				raft.setYRot(raft.getYRot());
 				if (!level.noCollision(raft, raft.getBoundingBox().inflate(-0.1D))) {
 					return InteractionResultHolder.fail(stack);

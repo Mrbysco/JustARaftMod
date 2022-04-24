@@ -1,6 +1,6 @@
 {
   "result": {
-	"item": "justaraftmod:acacia_raft"
+	"item": "justaraftmod:bamboo_raft"
   },
   "pattern": [
 	"S S",
@@ -10,7 +10,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
 	"L": {
-	  "tag": "minecraft:acacia_logs"
+	  "item": "minecraft:bamboo"
 	},
 	"S": {
 	  "tag": "forge:string"
