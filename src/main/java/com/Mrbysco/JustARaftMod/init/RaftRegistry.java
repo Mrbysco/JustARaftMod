@@ -14,7 +14,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class RaftRegistry {
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Reference.MOD_ID);
-	public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, Reference.MOD_ID);
+	public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Reference.MOD_ID);
 
 	public static final RegistryObject<Item> OAK_RAFT = ITEMS.register("oak_raft", () -> new RaftItem(Raft.Type.OAK, itemBuilder()));
 	public static final RegistryObject<Item> SPRUCE_RAFT = ITEMS.register("spruce_raft", () -> new RaftItem(Raft.Type.SPRUCE, itemBuilder()));
@@ -24,6 +24,7 @@ public class RaftRegistry {
 	public static final RegistryObject<Item> DARK_OAK_RAFT = ITEMS.register("dark_oak_raft", () -> new RaftItem(Raft.Type.DARK_OAK, itemBuilder()));
 
 	public static final RegistryObject<Item> BAMBOO_RAFT = ITEMS.register("bamboo_raft", () -> new RaftItem(Type.BAMBOO, itemBuilder()));
+	public static final RegistryObject<Item> MANGROVE_RAFT = ITEMS.register("mangrove_raft", () -> new RaftItem(Type.MANGROVE, itemBuilder()));
 
 	public static final RegistryObject<EntityType<Raft>> RAFT = ENTITIES.register("raft", () -> register("raft", EntityType.Builder.<Raft>of(Raft::new, MobCategory.MISC)
 			.sized(1.375F, 0.3F)

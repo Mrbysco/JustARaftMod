@@ -1,5 +1,5 @@
 {
-    "_comment": "Item names",
+    "_comment": "Raft Config",
     "item.justaraftmod.oak_raft": "Плот из древесины дуба",
     "item.justaraftmod.spruce_raft": "Плот из древесины ели",
     "item.justaraftmod.birch_raft": "Плот из древесины берёзы",
@@ -7,13 +7,11 @@
     "item.justaraftmod.acacia_raft": "Плот из древесины акации",
     "item.justaraftmod.dark_oak_raft": "Плот из древесины тёмного дуба",
     "item.justaraftmod.bamboo_raft": "Bamboo Raft",
+    "item.justaraftmod.mangrove_raft": "Mangrove Raft",
 
-    "_comment": "Creative tab name",
     "itemGroup.justaraftmod.raft": "Just A Raft Mod",
 
-    "_comment": "Entity names",
     "entity.justaraftmod.raft": "Плот",
 
-    "_comment": "Raft Config",
     "justaraftmod.config.title": "Just Another Raft Config"
 }

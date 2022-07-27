@@ -23,7 +23,8 @@ public class RaftRenderer extends EntityRenderer<Raft> {
 			new ResourceLocation("justaraftmod:textures/entity/raft/jungle_raft.png"),
 			new ResourceLocation("justaraftmod:textures/entity/raft/acacia_raft.png"),
 			new ResourceLocation("justaraftmod:textures/entity/raft/dark_oak_raft.png"),
-			new ResourceLocation("justaraftmod:textures/entity/raft/bamboo_raft.png")};
+			new ResourceLocation("justaraftmod:textures/entity/raft/bamboo_raft.png"),
+			new ResourceLocation("justaraftmod:textures/entity/raft/mangrove_raft.png")};
 	private final RaftModel model;
 
 	public RaftRenderer(EntityRendererProvider.Context context) {

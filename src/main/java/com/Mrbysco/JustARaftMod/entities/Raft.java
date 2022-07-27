@@ -22,6 +22,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages.SpawnEntity;
 
+import java.util.Arrays;
+
 public class Raft extends Boat {
 	public Raft(EntityType<? extends Raft> entityType, Level worldIn) {
 		super(entityType, worldIn);
@@ -222,7 +224,8 @@ public class Raft extends Boat {
 		JUNGLE(Blocks.JUNGLE_PLANKS, "jungle"),
 		ACACIA(Blocks.ACACIA_PLANKS, "acacia"),
 		DARK_OAK(Blocks.DARK_OAK_PLANKS, "dark_oak"),
-		BAMBOO(Blocks.BAMBOO, "bamboo");
+		BAMBOO(Blocks.BAMBOO, "bamboo"),
+		MANGROVE(Blocks.MANGROVE_PLANKS, "mangrove");
 
 		private final String name;
 		private final Block planks;
@@ -253,16 +256,9 @@ public class Raft extends Boat {
 			return values[p_38431_];
 		}
 
-		public static Raft.Type byName(String p_38433_) {
+		public static Raft.Type byName(String name) {
 			Raft.Type[] values = values();
-
-			for (int i = 0; i < values.length; ++i) {
-				if (values[i].getName().equals(p_38433_)) {
-					return values[i];
-				}
-			}
-
-			return values[0];
+			return Arrays.stream(values).filter(type -> type.getName().equals(name)).findFirst().orElse(values[0]);
 		}
 	}
 }
