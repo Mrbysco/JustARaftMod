@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.mrbysco.justaraftmod.client.ClientHandler;
 import com.mrbysco.justaraftmod.config.RaftConfig;
 import com.mrbysco.justaraftmod.init.RaftRegistry;
+import com.mrbysco.justaraftmod.init.RaftTab;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
@@ -21,6 +22,8 @@ public class JustARaftMod {
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, RaftConfig.serverSpec);
 		eventBus.register(RaftConfig.class);
+
+		eventBus.register(new RaftTab());
 
 		RaftRegistry.ITEMS.register(eventBus);
 		RaftRegistry.ENTITIES.register(eventBus);

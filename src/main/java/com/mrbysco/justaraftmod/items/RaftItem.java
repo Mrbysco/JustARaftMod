@@ -76,9 +76,4 @@ public class RaftItem extends Item {
 			}
 		}
 	}
-
-	@Override
-	public Collection<CreativeModeTab> getCreativeTabs() {
-		return Arrays.asList(CreativeModeTab.TAB_TRANSPORTATION, RaftTab.RAFT);
-	}
 }
