@@ -28,10 +28,8 @@ public class RaftTab {
 	@SubscribeEvent
 	public void addTabContents(final CreativeModeTabEvent.BuildContents event) {
 		if (event.getTab() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-			event.register(event.getTab(), (features, output, hasPermissions) -> {
-				List<ItemStack> stacks = RaftRegistry.ITEMS.getEntries().stream().map(reg -> new ItemStack(reg.get())).toList();
-				output.acceptAll(stacks);
-			});
+			List<ItemStack> stacks = RaftRegistry.ITEMS.getEntries().stream().map(reg -> new ItemStack(reg.get())).toList();
+			event.acceptAll(stacks);
 		}
 	}
 }
