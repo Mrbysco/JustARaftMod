@@ -13,8 +13,9 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
-@Mod(Reference.MOD_ID)
+@Mod(JustARaftMod.MOD_ID)
 public class JustARaftMod {
+	public static final String MOD_ID = "justaraftmod";
 	public static final Logger LOGGER = LogUtils.getLogger();
 
 	public JustARaftMod() {

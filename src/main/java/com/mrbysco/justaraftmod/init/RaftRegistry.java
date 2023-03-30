@@ -1,6 +1,6 @@
 package com.mrbysco.justaraftmod.init;
 
-import com.mrbysco.justaraftmod.Reference;
+import com.mrbysco.justaraftmod.JustARaftMod;
 import com.mrbysco.justaraftmod.entities.Raft;
 import com.mrbysco.justaraftmod.entities.Raft.Type;
 import com.mrbysco.justaraftmod.items.RaftItem;
@@ -13,8 +13,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class RaftRegistry {
-	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Reference.MOD_ID);
-	public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, Reference.MOD_ID);
+	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, JustARaftMod.MOD_ID);
+	public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, JustARaftMod.MOD_ID);
 
 	public static final RegistryObject<Item> OAK_RAFT = ITEMS.register("oak_raft", () -> new RaftItem(Raft.Type.OAK, itemBuilder()));
 	public static final RegistryObject<Item> SPRUCE_RAFT = ITEMS.register("spruce_raft", () -> new RaftItem(Raft.Type.SPRUCE, itemBuilder()));

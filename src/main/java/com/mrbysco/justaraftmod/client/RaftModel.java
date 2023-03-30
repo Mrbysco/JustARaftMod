@@ -11,15 +11,9 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 
 public class RaftModel extends HierarchicalModel<Raft> {
 	private final ModelPart raft;
-	private final ModelPart logs;
-	private final ModelPart stringFront;
-	private final ModelPart stringBack;
 
 	public RaftModel(ModelPart part) {
 		raft = part;
-		logs = part.getChild("logs");
-		stringFront = part.getChild("string_front");
-		stringBack = part.getChild("string_back");
 	}
 
 	public static LayerDefinition createRaftDefinition() {

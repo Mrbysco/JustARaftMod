@@ -215,7 +215,7 @@ public class Raft extends Boat {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
-	public static enum Type {
+	public enum Type {
 		OAK(Blocks.OAK_PLANKS, "oak"),
 		SPRUCE(Blocks.SPRUCE_PLANKS, "spruce"),
 		BIRCH(Blocks.BIRCH_PLANKS, "birch"),
@@ -253,12 +253,12 @@ public class Raft extends Boat {
 			return values[p_38431_];
 		}
 
-		public static Raft.Type byName(String p_38433_) {
+		public static Raft.Type byName(String name) {
 			Raft.Type[] values = values();
 
-			for (int i = 0; i < values.length; ++i) {
-				if (values[i].getName().equals(p_38433_)) {
-					return values[i];
+			for (Type value : values) {
+				if (value.getName().equals(name)) {
+					return value;
 				}
 			}
 
