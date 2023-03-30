@@ -19,7 +19,7 @@ public class RaftTab {
 		RAFT = event.registerCreativeModeTab(new ResourceLocation(Reference.MOD_ID, "raft"), builder ->
 				builder.icon(() -> new ItemStack(RaftRegistry.OAK_RAFT.get()))
 						.title(Component.translatable("itemGroup.justaraftmod.raft"))
-						.displayItems((features, output, hasPermissions) -> {
+						.displayItems((displayParameters, output) -> {
 							List<ItemStack> stacks = RaftRegistry.ITEMS.getEntries().stream().map(reg -> new ItemStack(reg.get())).toList();
 							output.acceptAll(stacks);
 						}));

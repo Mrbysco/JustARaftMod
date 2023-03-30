@@ -8,7 +8,6 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
@@ -63,7 +62,7 @@ public class Raft extends Boat {
 						return;
 					}
 
-					this.causeFallDamage(this.fallDistance, 1.0F, DamageSource.FALL);
+					this.causeFallDamage(this.fallDistance, 1.0F, this.damageSources().fall());
 					if (!this.level.isClientSide && !this.isRemoved()) {
 						this.kill();
 						if (this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
@@ -215,10 +214,10 @@ public class Raft extends Boat {
 
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return (Packet<ClientGamePacketListener>) NetworkHooks.getEntitySpawningPacket(this);
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
-	public static enum Type {
+	public enum Type {
 		OAK(Blocks.OAK_PLANKS, "oak"),
 		SPRUCE(Blocks.SPRUCE_PLANKS, "spruce"),
 		BIRCH(Blocks.BIRCH_PLANKS, "birch"),
