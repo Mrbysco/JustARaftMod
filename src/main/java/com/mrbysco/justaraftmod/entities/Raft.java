@@ -63,9 +63,9 @@ public class Raft extends Boat {
 					}
 
 					this.causeFallDamage(this.fallDistance, 1.0F, this.damageSources().fall());
-					if (!this.level.isClientSide && !this.isRemoved()) {
+					if (!this.level().isClientSide && !this.isRemoved()) {
 						this.kill();
-						if (this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+						if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
 							for (int i = 0; i < 3; ++i) {
 								this.spawnAtLocation(this.getRaftType().getPlanks());
 							}
@@ -78,7 +78,7 @@ public class Raft extends Boat {
 				}
 
 				this.resetFallDistance();
-			} else if (!this.level.getFluidState(this.blockPosition().below()).is(FluidTags.WATER) && y < 0.0D) {
+			} else if (!this.level().getFluidState(this.blockPosition().below()).is(FluidTags.WATER) && y < 0.0D) {
 				this.fallDistance -= (float) y;
 			}
 
@@ -118,11 +118,9 @@ public class Raft extends Boat {
 
 	@Override
 	public void floatBoat() {
-		double d0 = -0.03999999910593033D;
-		double d1 = this.isNoGravity() ? 0.0D : d0;
+		double d1 = this.isNoGravity() ? 0.0D : (double) -0.04F;
 		double d2 = 0.0D;
 		this.invFriction = 0.05F;
-
 		if (this.oldStatus == Boat.Status.IN_AIR && this.status != Boat.Status.IN_AIR && this.status != Boat.Status.ON_LAND) {
 			this.waterLevel = this.getBoundingBox().minY + (double) this.getBbHeight();
 			this.setPos(this.getX(), (double) (this.getWaterLevelAbove() - this.getBbHeight()) + 0.101D, this.getZ());
@@ -137,7 +135,7 @@ public class Raft extends Boat {
 				d1 = -7.0E-4D;
 				this.invFriction = 0.9F;
 			} else if (this.status == Boat.Status.UNDER_WATER) {
-				d2 = 0.009999999776482582D;
+				d2 = (double) 0.01F;
 				this.invFriction = 0.45F;
 			} else if (this.status == Boat.Status.IN_AIR) {
 				this.invFriction = 0.9F;

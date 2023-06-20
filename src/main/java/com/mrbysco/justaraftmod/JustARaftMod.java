@@ -26,6 +26,7 @@ public class JustARaftMod {
 		eventBus.register(new RaftTab());
 
 		RaftRegistry.ITEMS.register(eventBus);
+		RaftRegistry.CREATIVE_MODE_TABS.register(eventBus);
 		RaftRegistry.ENTITIES.register(eventBus);
 
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
