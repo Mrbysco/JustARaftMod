@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "L": {
+      "tag": "minecraft:spruce_logs"
+    },
+    "S": {
+      "tag": "forge:string"
+    }
+  },
+  "pattern": [
+    "S S",
+    "LLL",
+    "S S"
+  ],
+  "result": {
+    "item": "justaraftmod:spruce_raft"
+  },
+  "show_notification": true
+}

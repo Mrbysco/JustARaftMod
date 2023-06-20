@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "L": {
+      "tag": "minecraft:dark_oak_logs"
+    },
+    "S": {
+      "tag": "forge:string"
+    }
+  },
+  "pattern": [
+    "S S",
+    "LLL",
+    "S S"
+  ],
+  "result": {
+    "item": "justaraftmod:dark_oak_raft"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "L": {
+      "item": "minecraft:bamboo"
+    },
+    "S": {
+      "tag": "forge:string"
+    }
+  },
+  "pattern": [
+    "S S",
+    "LLL",
+    "S S"
+  ],
+  "result": {
+    "item": "justaraftmod:bamboo_raft"
+  },
+  "show_notification": true
+}

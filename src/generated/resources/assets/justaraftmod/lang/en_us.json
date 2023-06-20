@@ -1,0 +1,13 @@
+{
+  "entity.justaraftmod.raft": "Raft",
+  "item.justaraftmod.acacia_raft": "Acacia Log Raft",
+  "item.justaraftmod.bamboo_raft": "Bamboo Raft",
+  "item.justaraftmod.birch_raft": "Birch Log Raft",
+  "item.justaraftmod.dark_oak_raft": "Dark Oak Log Raft",
+  "item.justaraftmod.jungle_raft": "Jungle Log Raft",
+  "item.justaraftmod.mangrove_raft": "Mangrove Raft",
+  "item.justaraftmod.oak_raft": "Oak Log Raft",
+  "item.justaraftmod.spruce_raft": "Spruce Log Raft",
+  "itemGroup.justaraftmod.raft": "Just A Raft Mod",
+  "justaraftmod.config.title": "Just Another Raft Config"
+}
