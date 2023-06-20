@@ -223,7 +223,8 @@ public class Raft extends Boat {
 		ACACIA(Blocks.ACACIA_PLANKS, "acacia"),
 		DARK_OAK(Blocks.DARK_OAK_PLANKS, "dark_oak"),
 		BAMBOO(Blocks.BAMBOO, "bamboo"),
-		MANGROVE(Blocks.MANGROVE_PLANKS, "mangrove");
+		MANGROVE(Blocks.MANGROVE_PLANKS, "mangrove"),
+		CHERRY(Blocks.CHERRY_PLANKS, "cherry");
 
 		private final String name;
 		private final Block planks;

@@ -32,6 +32,7 @@ public class RaftRegistry {
 
 	public static final RegistryObject<Item> BAMBOO_RAFT = ITEMS.register("bamboo_raft", () -> new RaftItem(Type.BAMBOO, itemBuilder()));
 	public static final RegistryObject<Item> MANGROVE_RAFT = ITEMS.register("mangrove_raft", () -> new RaftItem(Type.MANGROVE, itemBuilder()));
+	public static final RegistryObject<Item> CHERRY_RAFT = ITEMS.register("cherry_raft", () -> new RaftItem(Raft.Type.CHERRY, itemBuilder()));
 
 	public static final RegistryObject<CreativeModeTab> RAFT_TAB = CREATIVE_MODE_TABS.register("tab", () -> CreativeModeTab.builder()
 			.icon(() -> new ItemStack(RaftRegistry.OAK_RAFT.get()))

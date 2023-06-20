@@ -52,6 +52,7 @@ public class RaftDatagen {
 			generateRaftRecipe(RaftRegistry.ACACIA_RAFT, ItemTags.ACACIA_LOGS).save(consumer);
 			generateRaftRecipe(RaftRegistry.BAMBOO_RAFT, Items.BAMBOO).save(consumer);
 			generateRaftRecipe(RaftRegistry.BIRCH_RAFT, ItemTags.BIRCH_LOGS).save(consumer);
+			generateRaftRecipe(RaftRegistry.CHERRY_RAFT, ItemTags.CHERRY_LOGS).save(consumer);
 			generateRaftRecipe(RaftRegistry.DARK_OAK_RAFT, ItemTags.DARK_OAK_LOGS).save(consumer);
 			generateRaftRecipe(RaftRegistry.JUNGLE_RAFT, ItemTags.JUNGLE_LOGS).save(consumer);
 			generateRaftRecipe(RaftRegistry.MANGROVE_RAFT, ItemTags.MANGROVE_LOGS).save(consumer);
@@ -93,6 +94,7 @@ public class RaftDatagen {
 			addItem(RaftRegistry.OAK_RAFT, "Oak Log Raft");
 			addItem(RaftRegistry.SPRUCE_RAFT, "Spruce Log Raft");
 			addItem(RaftRegistry.BIRCH_RAFT, "Birch Log Raft");
+			addItem(RaftRegistry.CHERRY_RAFT, "Cherry Log Raft");
 			addItem(RaftRegistry.JUNGLE_RAFT, "Jungle Log Raft");
 			addItem(RaftRegistry.ACACIA_RAFT, "Acacia Log Raft");
 			addItem(RaftRegistry.DARK_OAK_RAFT, "Dark Oak Log Raft");
@@ -122,6 +124,10 @@ public class RaftDatagen {
 					.texture("particle", mcLoc(BLOCK_FOLDER + "/" + "birch_log"))
 					.texture("log_side", mcLoc(BLOCK_FOLDER + "/" + "birch_log"))
 					.texture("log_top", mcLoc(BLOCK_FOLDER + "/" + "birch_log_top"));
+			withExistingParent(RaftRegistry.CHERRY_RAFT.getId().getPath(), modLoc("item/raft_base"))
+					.texture("particle", mcLoc(BLOCK_FOLDER + "/" + "cherry_log"))
+					.texture("log_side", mcLoc(BLOCK_FOLDER + "/" + "cherry_log"))
+					.texture("log_top", mcLoc(BLOCK_FOLDER + "/" + "cherry_log_top"));
 			withExistingParent(RaftRegistry.DARK_OAK_RAFT.getId().getPath(), modLoc("item/raft_base"))
 					.texture("particle", mcLoc(BLOCK_FOLDER + "/" + "dark_oak_log"))
 					.texture("log_side", mcLoc(BLOCK_FOLDER + "/" + "dark_oak_log"))
