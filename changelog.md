@@ -1,1 +1,1 @@
-* Fix creative tab ordering
+* Fix raft not being rotated correctly when placed
