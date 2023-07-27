@@ -1,0 +1,1 @@
+* Fix raft not being rotated correctly when placed
