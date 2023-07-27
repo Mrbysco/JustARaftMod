@@ -56,7 +56,7 @@ public class RaftItem extends Item {
 			if (hitResult.getType() == HitResult.Type.BLOCK) {
 				Raft raft = new Raft(level, hitResult.getLocation().x, hitResult.getLocation().y, hitResult.getLocation().z);
 				raft.setRaftType(this.type);
-				raft.setYRot(raft.getYRot());
+				raft.setYRot(playerIn.getYRot());
 				if (!level.noCollision(raft, raft.getBoundingBox().inflate(-0.1D))) {
 					return InteractionResultHolder.fail(stack);
 				} else {
