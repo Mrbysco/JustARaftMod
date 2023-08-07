@@ -1,1 +1,1 @@
-* Fix raft not being rotated correctly when placed
+* Fix bamboo, mangrove and cherry rafts dropping an oak raft when destroyed
