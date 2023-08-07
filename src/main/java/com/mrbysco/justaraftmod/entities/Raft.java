@@ -202,6 +202,8 @@ public class Raft extends Boat {
 			case JUNGLE -> RaftRegistry.JUNGLE_RAFT.get();
 			case ACACIA -> RaftRegistry.ACACIA_RAFT.get();
 			case DARK_OAK -> RaftRegistry.DARK_OAK_RAFT.get();
+			case BAMBOO -> RaftRegistry.BAMBOO_RAFT.get();
+			case MANGROVE -> RaftRegistry.MANGROVE_RAFT.get();
 		};
 	}
 
