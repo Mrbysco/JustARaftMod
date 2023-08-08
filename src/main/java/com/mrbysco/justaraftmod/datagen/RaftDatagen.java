@@ -2,6 +2,7 @@ package com.mrbysco.justaraftmod.datagen;
 
 import com.mrbysco.justaraftmod.Reference;
 import com.mrbysco.justaraftmod.init.RaftRegistry;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -9,11 +10,14 @@ import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -23,6 +27,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
 
+import javax.annotation.Nullable;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -31,10 +37,14 @@ public class RaftDatagen {
 	public static void gatherData(GatherDataEvent event) {
 		DataGenerator generator = event.getGenerator();
 		PackOutput packOutput = generator.getPackOutput();
+		CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
 		ExistingFileHelper helper = event.getExistingFileHelper();
 
 		if (event.includeServer()) {
 			generator.addProvider(true, new Recipes(packOutput));
+			RaftBlockTags blockTags = new RaftBlockTags(packOutput, lookupProvider, helper);
+			generator.addProvider(event.includeServer(), blockTags);
+			generator.addProvider(event.includeServer(), new RaftItemTags(packOutput, lookupProvider, blockTags, helper));
 		}
 		if (event.includeClient()) {
 			generator.addProvider(true, new Language(packOutput));
@@ -150,4 +160,33 @@ public class RaftDatagen {
 					.texture("log_top", mcLoc(BLOCK_FOLDER + "/" + "spruce_log_top"));
 		}
 	}
+
+	public static class RaftBlockTags extends net.minecraftforge.common.data.BlockTagsProvider {
+		public RaftBlockTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
+			super(output, lookupProvider, Reference.MOD_ID, existingFileHelper);
+		}
+
+		@Override
+		protected void addTags(HolderLookup.Provider provider) {
+
+		}
+	}
+
+	public static class RaftItemTags extends net.minecraft.data.tags.ItemTagsProvider {
+
+		public RaftItemTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider,
+							TagsProvider<Block> blockTagProvider, ExistingFileHelper existingFileHelper) {
+			super(output, lookupProvider, blockTagProvider.contentsGetter(), Reference.MOD_ID, existingFileHelper);
+		}
+
+		public static final TagKey<Item> RAFTS = net.minecraft.tags.ItemTags.create(new ResourceLocation(Reference.MOD_ID, "rafts"));
+
+		@Override
+		public void addTags(HolderLookup.Provider lookupProvider) {
+			this.tag(RAFTS).add(RaftRegistry.OAK_RAFT.get(), RaftRegistry.SPRUCE_RAFT.get(), RaftRegistry.BIRCH_RAFT.get(),
+					RaftRegistry.JUNGLE_RAFT.get(), RaftRegistry.ACACIA_RAFT.get(), RaftRegistry.DARK_OAK_RAFT.get(),
+					RaftRegistry.BAMBOO_RAFT.get(), RaftRegistry.MANGROVE_RAFT.get(), RaftRegistry.CHERRY_RAFT.get());
+		}
+	}
+
 }
