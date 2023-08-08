@@ -1,1 +1,1 @@
-* Fix bamboo, mangrove and cherry rafts dropping an oak raft when destroyed
+* Add rafts tag
