@@ -1,0 +1,14 @@
+{
+  "entity.justaraftmod.raft": "Пліт",
+  "item.justaraftmod.acacia_raft": "Пліт з акацієвих колод",
+  "item.justaraftmod.bamboo_raft": "Бамбуковий пліт",
+  "item.justaraftmod.birch_raft": "Пліт з березових колод",
+  "item.justaraftmod.cherry_raft": "Пліт з вишневих колод",
+  "item.justaraftmod.dark_oak_raft": "Пліт з темно-дубових колод",
+  "item.justaraftmod.jungle_raft": "Пліт з тропічних колод",
+  "item.justaraftmod.mangrove_raft": "Пліт з мангрових колод",
+  "item.justaraftmod.oak_raft": "Пліт з дубових колод",
+  "item.justaraftmod.spruce_raft": "Пліт зі смерекових колод",
+  "itemGroup.justaraftmod.raft": "Just A Raft Mod",
+  "justaraftmod.config.title": "Конфігурація Just Another Raft"
+}
