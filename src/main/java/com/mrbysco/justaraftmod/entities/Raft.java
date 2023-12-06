@@ -160,11 +160,11 @@ public class Raft extends Boat {
 		if (this.isVehicle()) {
 			float f = 0.0F;
 			if (this.inputLeft) {
-				this.deltaRotation -= 1F * RaftConfig.SERVER.TurnMultiplier.get();
+				this.deltaRotation -= RaftConfig.SERVER.TurnMultiplier.get().floatValue();
 			}
 
 			if (this.inputRight) {
-				this.deltaRotation += 1F * RaftConfig.SERVER.TurnMultiplier.get();
+				this.deltaRotation += RaftConfig.SERVER.TurnMultiplier.get().floatValue();
 			}
 
 			if (this.inputRight != this.inputLeft && !this.inputUp && !this.inputDown) {
@@ -173,11 +173,11 @@ public class Raft extends Boat {
 
 			this.setYRot(this.getYRot() + this.deltaRotation);
 			if (this.inputUp) {
-				f += 0.04F * RaftConfig.SERVER.SpeedMultiplier.get();
+				f += 0.04F * RaftConfig.SERVER.SpeedMultiplier.get().floatValue();
 			}
 
 			if (this.inputDown) {
-				f -= 0.005F * RaftConfig.SERVER.SpeedMultiplier.get();
+				f -= 0.005F * RaftConfig.SERVER.SpeedMultiplier.get().floatValue();
 			}
 
 			this.setDeltaMovement(this.getDeltaMovement().add((double) (Mth.sin(-this.getYRot() * ((float) Math.PI / 180F)) * f), 0.0D, (double) (Mth.cos(this.getYRot() * ((float) Math.PI / 180F)) * f)));
