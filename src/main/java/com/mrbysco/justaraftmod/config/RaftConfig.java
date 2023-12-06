@@ -1,21 +1,19 @@
 package com.mrbysco.justaraftmod.config;
 
 import com.mrbysco.justaraftmod.JustARaftMod;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
-import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class RaftConfig {
 	public static class Server {
-		public final DoubleValue SpeedMultiplier;
-		public final DoubleValue TurnMultiplier;
-		public final BooleanValue SlipperyFast;
-		public final BooleanValue SinkTheRaft;
+		public final ModConfigSpec.DoubleValue SpeedMultiplier;
+		public final ModConfigSpec.DoubleValue TurnMultiplier;
+		public final ModConfigSpec.BooleanValue SlipperyFast;
+		public final ModConfigSpec.BooleanValue SinkTheRaft;
 
-		Server(ForgeConfigSpec.Builder builder) {
+		Server(ModConfigSpec.Builder builder) {
 			builder.comment("Server settings")
 					.push("Server");
 
@@ -39,11 +37,11 @@ public class RaftConfig {
 		}
 	}
 
-	public static final ForgeConfigSpec serverSpec;
+	public static final ModConfigSpec serverSpec;
 	public static final RaftConfig.Server SERVER;
 
 	static {
-		final Pair<Server, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(RaftConfig.Server::new);
+		final Pair<Server, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(RaftConfig.Server::new);
 		serverSpec = specPair.getRight();
 		SERVER = specPair.getLeft();
 	}

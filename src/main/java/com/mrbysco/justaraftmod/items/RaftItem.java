@@ -29,20 +29,20 @@ public class RaftItem extends Item {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
-		ItemStack stack = playerIn.getItemInHand(handIn);
-		HitResult hitResult = getPlayerPOVHitResult(level, playerIn, ClipContext.Fluid.ANY);
+	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+		ItemStack stack = player.getItemInHand(hand);
+		HitResult hitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY);
 		if (hitResult.getType() == HitResult.Type.MISS) {
 			return InteractionResultHolder.pass(stack);
 		} else {
-			Vec3 Vector3d = playerIn.getViewVector(1.0F);
-			List<Entity> list = level.getEntities(playerIn, playerIn.getBoundingBox().expandTowards(Vector3d.scale(5.0D)).inflate(1.0D), ENTITY_PREDICATE);
+			Vec3 Vector3d = player.getViewVector(1.0F);
+			List<Entity> list = level.getEntities(player, player.getBoundingBox().expandTowards(Vector3d.scale(5.0D)).inflate(1.0D), ENTITY_PREDICATE);
 			if (!list.isEmpty()) {
-				Vec3 eyePos = playerIn.getEyePosition(1.0F);
+				Vec3 eyePos = player.getEyePosition(1.0F);
 
 				for (Entity entity : list) {
-					AABB axisalignedbb = entity.getBoundingBox().inflate((double) entity.getPickRadius());
-					if (axisalignedbb.contains(eyePos)) {
+					AABB aabb = entity.getBoundingBox().inflate((double) entity.getPickRadius());
+					if (aabb.contains(eyePos)) {
 						return InteractionResultHolder.pass(stack);
 					}
 				}
@@ -51,19 +51,19 @@ public class RaftItem extends Item {
 			if (hitResult.getType() == HitResult.Type.BLOCK) {
 				Raft raft = new Raft(level, hitResult.getLocation().x, hitResult.getLocation().y, hitResult.getLocation().z);
 				raft.setRaftType(this.type);
-				raft.setYRot(playerIn.getYRot());
+				raft.setYRot(player.getYRot());
 				if (!level.noCollision(raft, raft.getBoundingBox().inflate(-0.1D))) {
 					return InteractionResultHolder.fail(stack);
 				} else {
 					if (!level.isClientSide) {
 						level.addFreshEntity(raft);
-						level.gameEvent(playerIn, GameEvent.ENTITY_PLACE, hitResult.getLocation());
-						if (!playerIn.getAbilities().instabuild) {
+						level.gameEvent(player, GameEvent.ENTITY_PLACE, hitResult.getLocation());
+						if (!player.getAbilities().instabuild) {
 							stack.shrink(1);
 						}
 					}
 
-					playerIn.awardStat(Stats.ITEM_USED.get(this));
+					player.awardStat(Stats.ITEM_USED.get(this));
 					return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
 				}
 			} else {

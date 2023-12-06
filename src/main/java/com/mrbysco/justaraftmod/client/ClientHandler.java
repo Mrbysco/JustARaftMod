@@ -4,7 +4,7 @@ import com.mrbysco.justaraftmod.Reference;
 import com.mrbysco.justaraftmod.init.RaftRegistry;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
 public class ClientHandler {
 	public static final ModelLayerLocation RAFT = new ModelLayerLocation(new ResourceLocation(Reference.MOD_ID, "raft"), "raft");

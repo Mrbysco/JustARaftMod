@@ -19,18 +19,18 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages.SpawnEntity;
+import net.neoforged.neoforge.network.NetworkHooks;
+import net.neoforged.neoforge.network.PlayMessages;
 
 import java.util.Arrays;
 
 public class Raft extends Boat {
-	public Raft(EntityType<? extends Raft> entityType, Level worldIn) {
-		super(entityType, worldIn);
+	public Raft(EntityType<? extends Raft> entityType, Level level) {
+		super(entityType, level);
 	}
 
-	public Raft(Level worldIn, double x, double y, double z) {
-		this(RaftRegistry.RAFT.get(), worldIn);
+	public Raft(Level level, double x, double y, double z) {
+		this(RaftRegistry.RAFT.get(), level);
 		this.setPos(x, y, z);
 		this.setDeltaMovement(Vec3.ZERO);
 		this.xo = x;
@@ -38,8 +38,8 @@ public class Raft extends Boat {
 		this.zo = z;
 	}
 
-	public Raft(SpawnEntity spawnEntity, Level worldIn) {
-		this(RaftRegistry.RAFT.get(), worldIn);
+	public Raft(PlayMessages.SpawnEntity spawnEntity, Level level) {
+		this(RaftRegistry.RAFT.get(), level);
 	}
 
 	protected void addAdditionalSaveData(CompoundTag tag) {
@@ -98,11 +98,11 @@ public class Raft extends Boat {
 	}
 
 	@Override
-	public Status getStatus() {
-		Boat.Status boatentity$status = this.isUnderwater();
-		if (boatentity$status != null) {
+	public Boat.Status getStatus() {
+		Boat.Status boatStatus = this.isUnderwater();
+		if (boatStatus != null) {
 			this.waterLevel = this.getBoundingBox().maxY;
-			return boatentity$status;
+			return boatStatus;
 		} else if (this.checkInWater()) {
 			return Boat.Status.IN_WATER;
 		} else {
@@ -186,8 +186,8 @@ public class Raft extends Boat {
 	}
 
 	@Override
-	public double getPassengersRidingOffset() {
-		return 0D;
+	public float getSinglePassengerXOffset() {
+		return 0.0F;
 	}
 
 	@Override
