@@ -30,6 +30,5 @@
     "recipes": [
       "justaraftmod:bamboo_raft"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

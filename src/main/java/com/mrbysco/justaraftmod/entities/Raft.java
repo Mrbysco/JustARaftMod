@@ -4,8 +4,6 @@ import com.mrbysco.justaraftmod.config.RaftConfig;
 import com.mrbysco.justaraftmod.init.RaftRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
@@ -19,8 +17,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.NetworkHooks;
-import net.neoforged.neoforge.network.PlayMessages;
 
 import java.util.Arrays;
 
@@ -36,10 +32,6 @@ public class Raft extends Boat {
 		this.xo = x;
 		this.yo = y;
 		this.zo = z;
-	}
-
-	public Raft(PlayMessages.SpawnEntity spawnEntity, Level level) {
-		this(RaftRegistry.RAFT.get(), level);
 	}
 
 	protected void addAdditionalSaveData(CompoundTag tag) {
@@ -211,11 +203,6 @@ public class Raft extends Boat {
 
 	public Raft.Type getRaftType() {
 		return Raft.Type.byId(this.entityData.get(DATA_ID_TYPE));
-	}
-
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 	public enum Type {

@@ -28,6 +28,5 @@
     "recipes": [
       "justaraftmod:acacia_raft"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

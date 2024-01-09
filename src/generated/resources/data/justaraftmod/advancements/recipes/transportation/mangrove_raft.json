@@ -28,6 +28,5 @@
     "recipes": [
       "justaraftmod:mangrove_raft"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

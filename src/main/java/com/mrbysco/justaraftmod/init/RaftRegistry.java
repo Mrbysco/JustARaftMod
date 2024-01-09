@@ -43,9 +43,9 @@ public class RaftRegistry {
 				List<ItemStack> stacks = RaftRegistry.ITEMS.getEntries().stream().map(reg -> new ItemStack(reg.get())).toList();
 				output.acceptAll(stacks);
 			}).build());
-	public static final Supplier<EntityType<Raft>> RAFT = ENTITIES.register("raft", () -> register("raft", EntityType.Builder.<Raft>of(Raft::new, MobCategory.MISC)
-			.sized(1.375F, 0.3F)
-			.setCustomClientFactory(Raft::new)));
+	public static final Supplier<EntityType<Raft>> RAFT = ENTITIES.register("raft", () -> register("raft",
+			EntityType.Builder.<Raft>of(Raft::new, MobCategory.MISC)
+			.sized(1.375F, 0.3F)));
 
 	public static <T extends Entity> EntityType<T> register(String id, EntityType.Builder<T> builder) {
 		return builder.setTrackingRange(80).setUpdateInterval(3).setShouldReceiveVelocityUpdates(true).build(id);
