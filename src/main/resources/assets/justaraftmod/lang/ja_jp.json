@@ -1,0 +1,14 @@
+{
+  "entity.justaraftmod.raft": "イカダ",
+  "item.justaraftmod.acacia_raft": "アカシアの原木のイカダ",
+  "item.justaraftmod.bamboo_raft": "竹のイカダ",
+  "item.justaraftmod.birch_raft": "シラカバの原木のイカダ",
+  "item.justaraftmod.cherry_raft": "サクラの原木のイカダ",
+  "item.justaraftmod.dark_oak_raft": "ダークオークの原木のイカダ",
+  "item.justaraftmod.jungle_raft": "ジャングルの原木のイカダ",
+  "item.justaraftmod.mangrove_raft": "マングローブの原木のイカダ",
+  "item.justaraftmod.oak_raft": "オークの原木のイカダ",
+  "item.justaraftmod.spruce_raft": "トウヒの原木のイカダ",
+  "itemGroup.justaraftmod.raft": "Just A Raft Mod",
+  "justaraftmod.config.title": "Just Another Raftの設定"
+}
