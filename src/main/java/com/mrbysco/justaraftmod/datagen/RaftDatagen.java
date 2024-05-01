@@ -24,7 +24,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
@@ -36,7 +36,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import javax.annotation.Nullable;
 import java.util.concurrent.CompletableFuture;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 public class RaftDatagen {
 	@SubscribeEvent
 	public static void gatherData(GatherDataEvent event) {
@@ -77,11 +77,11 @@ public class RaftDatagen {
 		}
 
 		private RecipeBuilder generateRaftRecipe(DeferredHolder<Item, RaftItem> raft, TagKey<Item> logTag) {
-			return ShapedRecipeBuilder.shaped(RecipeCategory.TRANSPORTATION, raft.get()).pattern("S S").pattern("LLL").pattern("S S").define('L', logTag).define('S', Tags.Items.STRING).unlockedBy("has_log", has(logTag));
+			return ShapedRecipeBuilder.shaped(RecipeCategory.TRANSPORTATION, raft.get()).pattern("S S").pattern("LLL").pattern("S S").define('L', logTag).define('S', Tags.Items.STRINGS).unlockedBy("has_log", has(logTag));
 		}
 
 		private RecipeBuilder generateRaftRecipe(DeferredHolder<Item, RaftItem> raft, ItemLike log) {
-			return ShapedRecipeBuilder.shaped(RecipeCategory.TRANSPORTATION, raft.get()).pattern("S S").pattern("LLL").pattern("S S").define('L', log).define('S', Tags.Items.STRING).unlockedBy("has_log", has(log));
+			return ShapedRecipeBuilder.shaped(RecipeCategory.TRANSPORTATION, raft.get()).pattern("S S").pattern("LLL").pattern("S S").define('L', log).define('S', Tags.Items.STRINGS).unlockedBy("has_log", has(log));
 		}
 	}
 

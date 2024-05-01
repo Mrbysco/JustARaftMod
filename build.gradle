@@ -3,27 +3,26 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.80'
-    id 'net.darkhax.curseforgegradle' version '1.1.17'
+    id 'net.neoforged.gradle.userdev' version '7.0.118'
+    id 'net.darkhax.curseforgegradle' version '1.1.18'
     id 'com.modrinth.minotaur' version "2.+"
 }
 
 version = "${version}"
 group = "${mod_group}"
-
 base {
     archivesName = "${mod_archive_name}-${mc_version}"
 }
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/accesstransformer.cfg')
 //minecraft.accessTransformers.entry public net.minecraft.client.Minecraft textureManager # textureManager
 
 runs {
     // applies to all the run configs below
-    configureEach {
+    configureEach { net.neoforged.gradle.dsl.common.runs.run.Run run ->
         // Recommended logging data for a userdev environment
         systemProperty 'forge.logging.markers', 'REGISTRIES'
 
@@ -33,16 +32,20 @@ runs {
         //Limit ram usage for the dev environment to 4GB
         jvmArgument '-Xmx4G'
 
+        if (run.project.javaToolchains.launcherFor(java.toolchain).map { it.metadata.vendor }.getOrElse("").contains("JetBrains")) {
+            run.jvmArgument("-XX:+AllowEnhancedClassRedefinition")
+        }
+
         modSource project.sourceSets.main
     }
 
     client {
         // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-        systemProperty 'forge.enabledGameTestNamespaces', "${mod_id}"
+        systemProperty 'neoforge.enabledGameTestNamespaces', "${mod_id}"
     }
 
     server {
-        systemProperty 'forge.enabledGameTestNamespaces', "${mod_id}"
+        systemProperty 'neoforge.enabledGameTestNamespaces', "${mod_id}"
         programArgument '--nogui'
     }
 
@@ -68,9 +71,9 @@ dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
 
 //    compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
-//    compileOnly "mezz.jei:jei-${mc_version}-forge-api:${jei_version}"
-//
-//    runtimeOnly "mezz.jei:jei-${mc_version}-forge:${jei_version}"
+//    compileOnly "mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}"
+
+//    runtimeOnly "mezz.jei:jei-${mc_version}-neoforge:${jei_version}"
 }
 
 jar {
@@ -117,7 +120,8 @@ if (System.getenv().CURSEFORGE_KEY) {
         mainFile.releaseType = 'beta'
         mainFile.addGameVersion "NeoForge"
         mainFile.addGameVersion "${mc_version}"
-        mainFile.addGameVersion "Java 17"
+        mainFile.addGameVersion "Java 21"
+        mainFile.addGameVersion('Server', 'Client')
 
         mainFile.changelog = file("$project.rootDir/changelog.md")
         mainFile.changelogType = 'markdown'
@@ -141,6 +145,10 @@ if (System.getenv().MODRINTH_KEY) {
     }
 }
 
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+// IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
 }
