@@ -5,7 +5,17 @@
       "conditions": {
         "items": [
           {
-            "items": "#minecraft:dark_oak_logs"
+            "items": "#minecraft:mangrove_logs"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_string": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:strings"
           }
         ]
       },
@@ -13,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "justaraftmod:dark_oak_raft"
+        "recipe": "justaraftmod:mangrove_raft"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +31,13 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_log"
+      "has_log",
+      "has_string"
     ]
   ],
   "rewards": {
     "recipes": [
-      "justaraftmod:dark_oak_raft"
+      "justaraftmod:mangrove_raft"
     ]
   }
 }

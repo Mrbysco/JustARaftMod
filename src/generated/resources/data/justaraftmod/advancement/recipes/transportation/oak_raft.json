@@ -5,7 +5,17 @@
       "conditions": {
         "items": [
           {
-            "items": "#minecraft:birch_logs"
+            "items": "#minecraft:oak_logs"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_string": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:strings"
           }
         ]
       },
@@ -13,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "justaraftmod:birch_raft"
+        "recipe": "justaraftmod:oak_raft"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +31,13 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_log"
+      "has_log",
+      "has_string"
     ]
   ],
   "rewards": {
     "recipes": [
-      "justaraftmod:birch_raft"
+      "justaraftmod:oak_raft"
     ]
   }
 }

@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
 public class ClientHandler {
-	public static final ModelLayerLocation RAFT = new ModelLayerLocation(new ResourceLocation(Reference.MOD_ID, "raft"), "raft");
+	public static final ModelLayerLocation RAFT = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "raft"), "main");
 
 	public static void registerEntityRenders(EntityRenderersEvent.RegisterRenderers event) {
 		event.registerEntityRenderer(RaftRegistry.RAFT.get(), RaftRenderer::new);

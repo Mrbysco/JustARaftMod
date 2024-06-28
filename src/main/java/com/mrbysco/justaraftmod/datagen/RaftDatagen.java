@@ -4,7 +4,6 @@ import com.mrbysco.justaraftmod.Reference;
 import com.mrbysco.justaraftmod.init.RaftRegistry;
 import com.mrbysco.justaraftmod.items.RaftItem;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeBuilder;
@@ -18,7 +17,6 @@ import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
@@ -64,24 +62,38 @@ public class RaftDatagen {
 		}
 
 		@Override
-		protected void buildRecipes(RecipeOutput recipeOutput) {
-			generateRaftRecipe(RaftRegistry.ACACIA_RAFT, ItemTags.ACACIA_LOGS).save(recipeOutput);
-			generateRaftRecipe(RaftRegistry.BAMBOO_RAFT, Items.BAMBOO).save(recipeOutput);
-			generateRaftRecipe(RaftRegistry.BIRCH_RAFT, ItemTags.BIRCH_LOGS).save(recipeOutput);
-			generateRaftRecipe(RaftRegistry.CHERRY_RAFT, ItemTags.CHERRY_LOGS).save(recipeOutput);
-			generateRaftRecipe(RaftRegistry.DARK_OAK_RAFT, ItemTags.DARK_OAK_LOGS).save(recipeOutput);
-			generateRaftRecipe(RaftRegistry.JUNGLE_RAFT, ItemTags.JUNGLE_LOGS).save(recipeOutput);
-			generateRaftRecipe(RaftRegistry.MANGROVE_RAFT, ItemTags.MANGROVE_LOGS).save(recipeOutput);
-			generateRaftRecipe(RaftRegistry.OAK_RAFT, ItemTags.OAK_LOGS).save(recipeOutput);
-			generateRaftRecipe(RaftRegistry.SPRUCE_RAFT, ItemTags.SPRUCE_LOGS).save(recipeOutput);
+		protected void buildRecipes(RecipeOutput output) {
+			generateRaftRecipe(RaftRegistry.ACACIA_RAFT, ItemTags.ACACIA_LOGS).save(output);
+			generateRaftRecipe(RaftRegistry.BAMBOO_RAFT, Items.BAMBOO).save(output);
+			generateRaftRecipe(RaftRegistry.BIRCH_RAFT, ItemTags.BIRCH_LOGS).save(output);
+			generateRaftRecipe(RaftRegistry.CHERRY_RAFT, ItemTags.CHERRY_LOGS).save(output);
+			generateRaftRecipe(RaftRegistry.DARK_OAK_RAFT, ItemTags.DARK_OAK_LOGS).save(output);
+			generateRaftRecipe(RaftRegistry.JUNGLE_RAFT, ItemTags.JUNGLE_LOGS).save(output);
+			generateRaftRecipe(RaftRegistry.MANGROVE_RAFT, ItemTags.MANGROVE_LOGS).save(output);
+			generateRaftRecipe(RaftRegistry.OAK_RAFT, ItemTags.OAK_LOGS).save(output);
+			generateRaftRecipe(RaftRegistry.SPRUCE_RAFT, ItemTags.SPRUCE_LOGS).save(output);
 		}
 
 		private RecipeBuilder generateRaftRecipe(DeferredHolder<Item, RaftItem> raft, TagKey<Item> logTag) {
-			return ShapedRecipeBuilder.shaped(RecipeCategory.TRANSPORTATION, raft.get()).pattern("S S").pattern("LLL").pattern("S S").define('L', logTag).define('S', Tags.Items.STRINGS).unlockedBy("has_log", has(logTag));
+			return ShapedRecipeBuilder.shaped(RecipeCategory.TRANSPORTATION, raft.get())
+					.pattern("S S")
+					.pattern("LLL")
+					.pattern("S S")
+					.define('L', logTag)
+					.define('S', Tags.Items.STRINGS)
+					.unlockedBy("has_log", has(logTag))
+					.unlockedBy("has_string", has(Tags.Items.STRINGS));
 		}
 
 		private RecipeBuilder generateRaftRecipe(DeferredHolder<Item, RaftItem> raft, ItemLike log) {
-			return ShapedRecipeBuilder.shaped(RecipeCategory.TRANSPORTATION, raft.get()).pattern("S S").pattern("LLL").pattern("S S").define('L', log).define('S', Tags.Items.STRINGS).unlockedBy("has_log", has(log));
+			return ShapedRecipeBuilder.shaped(RecipeCategory.TRANSPORTATION, raft.get())
+					.pattern("S S")
+					.pattern("LLL")
+					.pattern("S S")
+					.define('L', log)
+					.define('S', Tags.Items.STRINGS)
+					.unlockedBy("has_log", has(log))
+					.unlockedBy("has_string", has(Tags.Items.STRINGS));
 		}
 	}
 
@@ -145,10 +157,10 @@ public class RaftDatagen {
 			super(output, lookupProvider, blockTagProvider.contentsGetter(), Reference.MOD_ID, existingFileHelper);
 		}
 
-		public static final TagKey<Item> RAFTS = net.minecraft.tags.ItemTags.create(new ResourceLocation(Reference.MOD_ID, "rafts"));
+		public static final TagKey<Item> RAFTS = net.minecraft.tags.ItemTags.create(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "rafts"));
 
 		@Override
-		public void addTags(HolderLookup.Provider lookupProvider) {
+		public void addTags(HolderLookup.Provider provider) {
 			this.tag(RAFTS).add(RaftRegistry.OAK_RAFT.get(), RaftRegistry.SPRUCE_RAFT.get(), RaftRegistry.BIRCH_RAFT.get(), RaftRegistry.JUNGLE_RAFT.get(), RaftRegistry.ACACIA_RAFT.get(), RaftRegistry.DARK_OAK_RAFT.get(), RaftRegistry.BAMBOO_RAFT.get(), RaftRegistry.MANGROVE_RAFT.get(), RaftRegistry.CHERRY_RAFT.get());
 		}
 	}
@@ -159,11 +171,9 @@ public class RaftDatagen {
 			super(output, lookupProvider);
 		}
 
-		public static final TagKey<EntityType<?>> BOATS = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("forge", "boats"));
-
 		@Override
-		public void addTags(HolderLookup.Provider lookupProvider) {
-			this.tag(BOATS).add(RaftRegistry.RAFT.get());
+		public void addTags(HolderLookup.Provider provider) {
+			this.tag(Tags.EntityTypes.BOATS).add(RaftRegistry.RAFT.get());
 		}
 	}
 

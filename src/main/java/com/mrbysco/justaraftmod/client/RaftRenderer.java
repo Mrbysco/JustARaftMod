@@ -3,6 +3,7 @@ package com.mrbysco.justaraftmod.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import com.mrbysco.justaraftmod.Reference;
 import com.mrbysco.justaraftmod.entities.Raft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -17,15 +18,15 @@ import org.joml.Quaternionf;
 @OnlyIn(Dist.CLIENT)
 public class RaftRenderer extends EntityRenderer<Raft> {
 	private static final ResourceLocation[] RAFT_TEXTURES = new ResourceLocation[]{
-			new ResourceLocation("justaraftmod:textures/entity/raft/oak_raft.png"),
-			new ResourceLocation("justaraftmod:textures/entity/raft/spruce_raft.png"),
-			new ResourceLocation("justaraftmod:textures/entity/raft/birch_raft.png"),
-			new ResourceLocation("justaraftmod:textures/entity/raft/jungle_raft.png"),
-			new ResourceLocation("justaraftmod:textures/entity/raft/acacia_raft.png"),
-			new ResourceLocation("justaraftmod:textures/entity/raft/dark_oak_raft.png"),
-			new ResourceLocation("justaraftmod:textures/entity/raft/bamboo_raft.png"),
-			new ResourceLocation("justaraftmod:textures/entity/raft/mangrove_raft.png"),
-			new ResourceLocation("justaraftmod:textures/entity/raft/cherry_raft.png")};
+			ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/entity/raft/oak_raft.png"),
+			ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/entity/raft/spruce_raft.png"),
+			ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/entity/raft/birch_raft.png"),
+			ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/entity/raft/jungle_raft.png"),
+			ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/entity/raft/acacia_raft.png"),
+			ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/entity/raft/dark_oak_raft.png"),
+			ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/entity/raft/bamboo_raft.png"),
+			ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/entity/raft/mangrove_raft.png"),
+			ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/entity/raft/cherry_raft.png")};
 	private final RaftModel model;
 
 	public RaftRenderer(EntityRendererProvider.Context context) {
@@ -57,7 +58,7 @@ public class RaftRenderer extends EntityRenderer<Raft> {
 		poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
 		this.model.setupAnim(raft, partialTicks, 0.0F, -0.1F, 0.0F, 0.0F);
 		VertexConsumer vertexConsumer = bufferSource.getBuffer(this.model.renderType(this.getTextureLocation(raft)));
-		this.model.renderToBuffer(poseStack, vertexConsumer, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+		this.model.renderToBuffer(poseStack, vertexConsumer, packedLightIn, OverlayTexture.NO_OVERLAY, -1);
 		poseStack.popPose();
 		super.render(raft, entityYaw, partialTicks, poseStack, bufferSource, packedLightIn);
 	}

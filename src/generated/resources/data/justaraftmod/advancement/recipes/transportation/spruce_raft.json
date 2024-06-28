@@ -5,7 +5,17 @@
       "conditions": {
         "items": [
           {
-            "items": "#minecraft:mangrove_logs"
+            "items": "#minecraft:spruce_logs"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_string": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:strings"
           }
         ]
       },
@@ -13,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "justaraftmod:mangrove_raft"
+        "recipe": "justaraftmod:spruce_raft"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +31,13 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_log"
+      "has_log",
+      "has_string"
     ]
   ],
   "rewards": {
     "recipes": [
-      "justaraftmod:mangrove_raft"
+      "justaraftmod:spruce_raft"
     ]
   }
 }
