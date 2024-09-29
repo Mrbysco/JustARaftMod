@@ -181,9 +181,9 @@ public class Raft extends Boat {
 	@Override
 	public Item getDropItem() {
 		if (this.getRaftType() == null) {
-			return Items.OAK_PLANKS;
+			return Items.STICK;
 		}
-		return this.getRaftType().getPlanks().asItem();
+		return this.getRaftType().getRaft().value();
 	}
 
 	public void setRaftType(RaftType type) {

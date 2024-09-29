@@ -1,5 +1,7 @@
 package com.mrbysco.justaraftmod.entities;
 
+import net.minecraft.core.Holder;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
 import java.util.HashMap;
@@ -13,11 +15,13 @@ public class RaftType {
 	private final int id;
 	private final String name;
 	private final Block planks;
+	private final Holder<Item> raft;
 
-	public RaftType(Block planks, String name) {
+	public RaftType(Block planks, Holder<Item> raft, String name) {
 		this.id = nextId++;
 		this.name = name;
 		this.planks = planks;
+		this.raft = raft;
 	}
 
 	public int getId() {
@@ -30,6 +34,10 @@ public class RaftType {
 
 	public Block getPlanks() {
 		return planks;
+	}
+
+	public Holder<Item> getRaft() {
+		return raft;
 	}
 
 	public String toString() {
