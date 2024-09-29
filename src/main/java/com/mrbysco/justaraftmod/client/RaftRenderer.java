@@ -63,6 +63,6 @@ public class RaftRenderer extends EntityRenderer<Raft> {
 	}
 
 	public ResourceLocation getTextureLocation(Raft entity) {
-		return RAFT_TEXTURES[entity.getRaftType().ordinal()];
+		return RAFT_TEXTURES[entity.getRaftType().getId()];
 	}
 }

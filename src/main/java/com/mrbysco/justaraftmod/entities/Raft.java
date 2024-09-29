@@ -15,14 +15,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages.SpawnEntity;
-
-import java.util.Arrays;
 
 public class Raft extends Boat {
 	public Raft(EntityType<? extends Raft> entityType, Level worldIn) {
@@ -48,7 +44,7 @@ public class Raft extends Boat {
 
 	protected void readAdditionalSaveData(CompoundTag tag) {
 		if (tag.contains("Type", 8)) {
-			this.setRaftType(Raft.Type.byName(tag.getString("Type")));
+			this.setRaftType(RaftType.byName(tag.getString("Type")));
 		}
 	}
 
@@ -192,75 +188,19 @@ public class Raft extends Boat {
 
 	@Override
 	public Item getDropItem() {
-		return switch (this.getRaftType()) {
-			default -> RaftRegistry.OAK_RAFT.get();
-			case SPRUCE -> RaftRegistry.SPRUCE_RAFT.get();
-			case BIRCH -> RaftRegistry.BIRCH_RAFT.get();
-			case JUNGLE -> RaftRegistry.JUNGLE_RAFT.get();
-			case ACACIA -> RaftRegistry.ACACIA_RAFT.get();
-			case DARK_OAK -> RaftRegistry.DARK_OAK_RAFT.get();
-			case BAMBOO -> RaftRegistry.BAMBOO_RAFT.get();
-			case MANGROVE -> RaftRegistry.MANGROVE_RAFT.get();
-			case CHERRY -> RaftRegistry.CHERRY_RAFT.get();
-		};
+		return this.getRaftType().getRaft().get();
 	}
 
-	public void setRaftType(Raft.Type type) {
-		this.entityData.set(DATA_ID_TYPE, type.ordinal());
+	public void setRaftType(RaftType type) {
+		this.entityData.set(DATA_ID_TYPE, type.getId());
 	}
 
-	public Raft.Type getRaftType() {
-		return Raft.Type.byId(this.entityData.get(DATA_ID_TYPE));
+	public RaftType getRaftType() {
+		return RaftType.byId(this.entityData.get(DATA_ID_TYPE));
 	}
 
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
-	}
-
-	public enum Type {
-		OAK(Blocks.OAK_PLANKS, "oak"),
-		SPRUCE(Blocks.SPRUCE_PLANKS, "spruce"),
-		BIRCH(Blocks.BIRCH_PLANKS, "birch"),
-		JUNGLE(Blocks.JUNGLE_PLANKS, "jungle"),
-		ACACIA(Blocks.ACACIA_PLANKS, "acacia"),
-		DARK_OAK(Blocks.DARK_OAK_PLANKS, "dark_oak"),
-		BAMBOO(Blocks.BAMBOO, "bamboo"),
-		MANGROVE(Blocks.MANGROVE_PLANKS, "mangrove"),
-		CHERRY(Blocks.CHERRY_PLANKS, "cherry");
-
-		private final String name;
-		private final Block planks;
-
-		Type(Block planks, String name) {
-			this.name = name;
-			this.planks = planks;
-		}
-
-		public String getName() {
-			return this.name;
-		}
-
-		public Block getPlanks() {
-			return this.planks;
-		}
-
-		public String toString() {
-			return this.name;
-		}
-
-		public static Raft.Type byId(int p_38431_) {
-			Raft.Type[] values = values();
-			if (p_38431_ < 0 || p_38431_ >= values.length) {
-				p_38431_ = 0;
-			}
-
-			return values[p_38431_];
-		}
-
-		public static Raft.Type byName(String name) {
-			Raft.Type[] values = values();
-			return Arrays.stream(values).filter(type -> type.getName().equals(name)).findFirst().orElse(values[0]);
-		}
 	}
 }
