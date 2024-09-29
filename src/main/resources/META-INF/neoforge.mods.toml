@@ -21,6 +21,6 @@ side="BOTH"
 [[dependencies.justaraftmod]]
 modId="neoforge"
 type="REQUIRED"
-versionRange="[21.0.31-beta,)"
+versionRange="[21.1.1,)"
 ordering="NONE"
 side="BOTH"

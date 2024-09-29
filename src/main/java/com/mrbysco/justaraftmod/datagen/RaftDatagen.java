@@ -48,7 +48,7 @@ public class RaftDatagen {
 			RaftBlockTags blockTags = new RaftBlockTags(packOutput, lookupProvider, helper);
 			generator.addProvider(true, blockTags);
 			generator.addProvider(true, new RaftItemTags(packOutput, lookupProvider, blockTags, helper));
-			generator.addProvider(true, new RaftEntityTags(packOutput, lookupProvider));
+			generator.addProvider(true, new RaftEntityTags(packOutput, lookupProvider, helper));
 		}
 		if (event.includeClient()) {
 			generator.addProvider(true, new Language(packOutput));
@@ -167,8 +167,8 @@ public class RaftDatagen {
 
 	public static class RaftEntityTags extends EntityTypeTagsProvider {
 
-		public RaftEntityTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
-			super(output, lookupProvider);
+		public RaftEntityTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper fileHelper) {
+			super(output, lookupProvider, Reference.MOD_ID, fileHelper);
 		}
 
 		@Override

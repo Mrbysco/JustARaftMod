@@ -1,6 +1,7 @@
 package com.mrbysco.justaraftmod.items;
 
 import com.mrbysco.justaraftmod.entities.Raft;
+import com.mrbysco.justaraftmod.entities.RaftType;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -21,9 +22,9 @@ import java.util.function.Predicate;
 
 public class RaftItem extends Item {
 	private static final Predicate<Entity> ENTITY_PREDICATE = EntitySelector.NO_SPECTATORS.and(Entity::isPickable);
-	private final Raft.Type type;
+	private final RaftType type;
 
-	public RaftItem(Raft.Type typeIn, Item.Properties properties) {
+	public RaftItem(RaftType typeIn, Item.Properties properties) {
 		super(properties);
 		this.type = typeIn;
 	}
@@ -41,7 +42,7 @@ public class RaftItem extends Item {
 				Vec3 eyePos = player.getEyePosition(1.0F);
 
 				for (Entity entity : list) {
-					AABB aabb = entity.getBoundingBox().inflate((double) entity.getPickRadius());
+					AABB aabb = entity.getBoundingBox().inflate(entity.getPickRadius());
 					if (aabb.contains(eyePos)) {
 						return InteractionResultHolder.pass(stack);
 					}
