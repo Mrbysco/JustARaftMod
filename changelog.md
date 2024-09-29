@@ -1,1 +1,1 @@
-* Stop using an enum for the RaftType allowing for external mods to register their own
+* Fix raft drop item
