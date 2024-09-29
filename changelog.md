@@ -1,1 +1,1 @@
-* Initial update to 1.21
+* Stop using an enum for the RaftType allowing for external mods to register their own
