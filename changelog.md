@@ -1,1 +1,1 @@
-* Fix raft drop item
+* Change the way the texture for the raft is selected, the RaftType can now specify a texture to use (In case a mod wants to register a raft)
