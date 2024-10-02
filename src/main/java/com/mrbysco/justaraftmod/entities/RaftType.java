@@ -1,5 +1,7 @@
 package com.mrbysco.justaraftmod.entities;
 
+import com.mrbysco.justaraftmod.Reference;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
@@ -16,12 +18,18 @@ public class RaftType {
 	private final String name;
 	private final Block planks;
 	private final Supplier<Item> raft;
+	private final ResourceLocation textureLocation;
 
-	public RaftType(Block planks, Supplier<Item> raft, String name) {
+	public RaftType(Block planks, Supplier<Item> raft, String name, ResourceLocation textureLocation) {
 		this.id = nextId++;
 		this.name = name;
 		this.planks = planks;
 		this.raft = raft;
+		this.textureLocation = textureLocation;
+	}
+
+	public RaftType(Block planks, Supplier<Item> raft, String name) {
+		this(planks, raft, name, Reference.modLoc("textures/entity/raft/" + name + "_raft.png"));
 	}
 
 	public int getId() {
@@ -38,6 +46,10 @@ public class RaftType {
 
 	public Supplier<Item> getRaft() {
 		return raft;
+	}
+
+	public ResourceLocation getTextureLocation() {
+		return textureLocation;
 	}
 
 	public String toString() {
