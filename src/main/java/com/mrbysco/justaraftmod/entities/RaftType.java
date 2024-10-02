@@ -5,6 +5,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +21,7 @@ public class RaftType {
 	private final Holder<Item> raft;
 	private final ResourceLocation textureLocation;
 
-	public RaftType(Block planks, Holder<Item> raft, String name, ResourceLocation textureLocation) {
+	public RaftType(@NotNull Block planks, @NotNull Holder<Item> raft, @NotNull String name, @NotNull ResourceLocation textureLocation) {
 		this.id = nextId++;
 		this.name = name;
 		this.planks = planks;
@@ -28,7 +29,7 @@ public class RaftType {
 		this.textureLocation = textureLocation;
 	}
 
-	public RaftType(Block planks, Holder<Item> raft, String name) {
+	public RaftType(@NotNull Block planks, @NotNull Holder<Item> raft, @NotNull String name) {
 		this(planks, raft, name, Reference.modLoc("textures/entity/raft/" + name + "_raft.png"));
 	}
 
