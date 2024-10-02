@@ -17,16 +17,7 @@ import org.joml.Quaternionf;
 
 @OnlyIn(Dist.CLIENT)
 public class RaftRenderer extends EntityRenderer<Raft> {
-	private static final ResourceLocation[] RAFT_TEXTURES = new ResourceLocation[]{
-			ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/entity/raft/oak_raft.png"),
-			ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/entity/raft/spruce_raft.png"),
-			ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/entity/raft/birch_raft.png"),
-			ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/entity/raft/jungle_raft.png"),
-			ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/entity/raft/acacia_raft.png"),
-			ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/entity/raft/dark_oak_raft.png"),
-			ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/entity/raft/bamboo_raft.png"),
-			ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/entity/raft/mangrove_raft.png"),
-			ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/entity/raft/cherry_raft.png")};
+	private static final ResourceLocation DEFAULT_TEXTURE = Reference.modLoc("textures/entity/raft/oak_raft.png");
 	private final RaftModel model;
 
 	public RaftRenderer(EntityRendererProvider.Context context) {
@@ -64,6 +55,9 @@ public class RaftRenderer extends EntityRenderer<Raft> {
 	}
 
 	public ResourceLocation getTextureLocation(Raft entity) {
-		return RAFT_TEXTURES[entity.getRaftType().getId()];
+		if (entity.getRaftType().getTextureLocation() == null) {
+			return DEFAULT_TEXTURE;
+		}
+		return entity.getRaftType().getTextureLocation();
 	}
 }
