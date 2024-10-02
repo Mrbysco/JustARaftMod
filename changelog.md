@@ -1,1 +1,1 @@
-* Stop using an enum for the RaftType allowing for external mods to register their own
+* Change the way the texture for the raft is selected, the RaftType can now specify a texture to use (In case a mod wants to register a raft)
