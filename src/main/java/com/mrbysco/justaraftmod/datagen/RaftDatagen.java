@@ -118,6 +118,25 @@ public class RaftDatagen {
 			addItem(RaftRegistry.MANGROVE_RAFT, "Mangrove Raft");
 
 			this.addEntityType(RaftRegistry.RAFT, "Raft");
+
+			this.addConfig("Server", "Server", "Server settings");
+			this.addConfig("SpeedMultiplier", "Speed Multiplier", "Adjusting this setting changes the speed of the raft. (Default: 1.0) [Lower than 1 = slower | higher than 1 = faster]");
+			this.addConfig("TurnMultiplier", "Turn Multiplier", "Adjusting this setting changes the speed of turning the raft. (Default: 1.0) [Lower than 1 = slower | higher than 1 = faster]");
+			this.addConfig("SlipperyFast", "Slippery Fast", "Changing this to false makes rafts the same speed as on land while on a slippery block. (Default: true)");
+			this.addConfig("SinkTheRaft", "Sink The Raft", "Changing this to true makes the raft sink if there's 2 entities on it. (Default: false)");
+		}
+
+		/**
+		 * Add the translation for a config entry
+		 *
+		 * @param path        The path of the config entry
+		 * @param name        The name of the config entry
+		 * @param description The description of the config entry (optional in case of targeting "title" or similar entries that have no tooltip)
+		 */
+		private void addConfig(String path, String name, @org.jetbrains.annotations.Nullable String description) {
+			this.add(Reference.MOD_ID + ".configuration." + path, name);
+			if (description != null && !description.isEmpty())
+				this.add(Reference.MOD_ID + ".configuration." + path + ".tooltip", description);
 		}
 	}
 
