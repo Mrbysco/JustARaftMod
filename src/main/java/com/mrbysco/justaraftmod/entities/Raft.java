@@ -22,8 +22,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-public class Raft extends Boat {
+public class Raft extends AbstractBoat {
 	private static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(Raft.class, EntityDataSerializers.INT);
+
 	public Raft(EntityType<? extends Raft> entityType, Level level) {
 		super(entityType, level, () -> Items.STICK);
 		this.dropItem = this::getDrop;
@@ -51,8 +52,8 @@ public class Raft extends Boat {
 
 	@Override
 	protected void readAdditionalSaveData(CompoundTag tag) {
-		if (tag.contains("Type", 8)) {
-			this.setRaftType(RaftType.byName(tag.getString("Type")));
+		if (tag.contains("Type")) {
+			this.setRaftType(RaftType.byName(tag.getStringOr("Type", "")));
 		}
 	}
 
@@ -125,7 +126,7 @@ public class Raft extends Boat {
 	public void floatBoat() {
 		double d1 = this.isNoGravity() ? 0.0D : (double) -0.04F;
 		double d2 = 0.0D;
-		this.invFriction = 0.05F;
+		float f = 0.05F;
 		if (this.oldStatus == Boat.Status.IN_AIR && this.status != Boat.Status.IN_AIR && this.status != Boat.Status.ON_LAND) {
 			this.waterLevel = this.getBoundingBox().minY + (double) this.getBbHeight();
 			this.setPos(this.getX(), (double) (this.getWaterLevelAbove() - this.getBbHeight()) + 0.101D, this.getZ());
@@ -135,25 +136,25 @@ public class Raft extends Boat {
 		} else {
 			if (this.status == Boat.Status.IN_WATER) {
 				d2 = (this.waterLevel - this.getBoundingBox().minY + 0.1D) / (double) this.getBbHeight();
-				this.invFriction = 0.9F;
+				f = 0.9F;
 			} else if (this.status == Boat.Status.UNDER_FLOWING_WATER) {
 				d1 = -7.0E-4D;
-				this.invFriction = 0.9F;
+				f = 0.9F;
 			} else if (this.status == Boat.Status.UNDER_WATER) {
 				d2 = 0.01F;
-				this.invFriction = 0.45F;
+				f = 0.45F;
 			} else if (this.status == Boat.Status.IN_AIR) {
-				this.invFriction = 0.9F;
+				f = 0.9F;
 			} else if (this.status == Boat.Status.ON_LAND) {
-				this.invFriction = this.landFriction;
+				f = this.landFriction;
 				if (this.getControllingPassenger() instanceof Player) {
 					this.landFriction /= 2.0F;
 				}
 			}
 
 			Vec3 Vector3d = this.getDeltaMovement();
-			this.setDeltaMovement(Vector3d.x * (double) this.invFriction, Vector3d.y + d1, Vector3d.z * (double) this.invFriction);
-			this.deltaRotation *= this.invFriction;
+			this.setDeltaMovement(Vector3d.x * (double) f, Vector3d.y + d1, Vector3d.z * (double) f);
+			this.deltaRotation *= f;
 			if (d2 > 0.0D) {
 				Vec3 Vector3d1 = this.getDeltaMovement();
 				this.setDeltaMovement(Vector3d1.x, (Vector3d1.y + d2 * 0.06153846016296973D) * 0.75D, Vector3d1.z);
@@ -213,6 +214,6 @@ public class Raft extends Boat {
 
 	@Override
 	protected double rideHeight(EntityDimensions dimensions) {
-		return (double)(dimensions.height() * 0.8888889F);
+		return (double) (dimensions.height() * 0.8888889F);
 	}
 }
