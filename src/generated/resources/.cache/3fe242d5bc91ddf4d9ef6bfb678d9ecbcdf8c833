@@ -1,4 +1,4 @@
-// 1.21.5	2025-08-30T21:36:32.5754716	Model Definitions - justaraftmod
+// 1.21.8	2025-08-30T21:45:56.602973	Model Definitions - justaraftmod
 853bc1de21fd43445255910e3f54ad1c6f0dd564 assets/justaraftmod/items/acacia_raft.json
 096ff717e9c08dc7d509db9b1111b29b6bad5945 assets/justaraftmod/items/bamboo_raft.json
 e834d54117960cd5e80300dffb3acde7c0bdc527 assets/justaraftmod/items/birch_raft.json
@@ -7,6 +7,7 @@ d3f30519646c586603361084438bb14a087231d2 assets/justaraftmod/items/dark_oak_raft
 fc60b751aa7cbb1758c119938302442842126e19 assets/justaraftmod/items/jungle_raft.json
 59a14fadb5d085322b114e7b5c5073f237be4c13 assets/justaraftmod/items/mangrove_raft.json
 90fcd8b9cae900ea4241df214ca269cbf2442e6a assets/justaraftmod/items/oak_raft.json
+269f1e098da52941acb1266611e7abac709a84f5 assets/justaraftmod/items/pale_oak_raft.json
 c6b30db840090159d0b1a814f3602617fe3045e6 assets/justaraftmod/items/spruce_raft.json
 1f0a53ac721f86838ac10f0d20242e58a99a2b67 assets/justaraftmod/models/item/acacia_raft.json
 66e8cd35e1d1e2d7bcbf54b1690ef1b9cbbe5ab7 assets/justaraftmod/models/item/bamboo_raft.json
@@ -16,4 +17,5 @@ b06f532aa7a93414595427d14d06c90fcec6c8a9 assets/justaraftmod/models/item/cherry_
 3556cad6abd2cf7733b8e4d02c3f578482201348 assets/justaraftmod/models/item/jungle_raft.json
 c4f5a765285efe6d7f249c168a7e959ea1b6ec00 assets/justaraftmod/models/item/mangrove_raft.json
 653a876da486f447dc92e0e40f11832cfe04ab7a assets/justaraftmod/models/item/oak_raft.json
+758c9898a46f1bbd788738b77d7a01e21ce9cf11 assets/justaraftmod/models/item/pale_oak_raft.json
 749fe49d0ab2566d0cb900d3f8d12fbbab70f868 assets/justaraftmod/models/item/spruce_raft.json

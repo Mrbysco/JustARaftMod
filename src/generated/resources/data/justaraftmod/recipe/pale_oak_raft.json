@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "L": "#minecraft:pale_oak_logs",
+    "S": "#c:strings"
+  },
+  "pattern": [
+    "S S",
+    "LLL",
+    "S S"
+  ],
+  "result": {
+    "count": 1,
+    "id": "justaraftmod:pale_oak_raft"
+  }
+}

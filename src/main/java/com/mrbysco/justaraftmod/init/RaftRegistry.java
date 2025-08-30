@@ -31,6 +31,7 @@ public class RaftRegistry {
 	public static final DeferredItem<RaftItem> BAMBOO_RAFT = ITEMS.registerItem("bamboo_raft", (properties) -> new RaftItem(RaftTypeRegistry.BAMBOO, properties));
 	public static final DeferredItem<RaftItem> MANGROVE_RAFT = ITEMS.registerItem("mangrove_raft", (properties) -> new RaftItem(RaftTypeRegistry.MANGROVE, properties));
 	public static final DeferredItem<RaftItem> CHERRY_RAFT = ITEMS.registerItem("cherry_raft", (properties) -> new RaftItem(RaftTypeRegistry.CHERRY, properties));
+	public static final DeferredItem<RaftItem> PALE_OAK_RAFT = ITEMS.registerItem("pale_oak_raft", (properties) -> new RaftItem(RaftTypeRegistry.PALE_OAK, properties));
 
 	public static final Supplier<CreativeModeTab> RAFT_TAB = CREATIVE_MODE_TABS.register("tab", () -> CreativeModeTab.builder()
 			.icon(() -> new ItemStack(RaftRegistry.OAK_RAFT.get()))

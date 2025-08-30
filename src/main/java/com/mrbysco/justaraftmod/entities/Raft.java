@@ -3,7 +3,6 @@ package com.mrbysco.justaraftmod.entities;
 import com.mrbysco.justaraftmod.config.RaftConfig;
 import com.mrbysco.justaraftmod.init.RaftRegistry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -14,12 +13,13 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractBoat;
-import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 
 public class Raft extends AbstractBoat {
@@ -46,15 +46,13 @@ public class Raft extends AbstractBoat {
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundTag tag) {
-		tag.putString("Type", this.getRaftType().getName());
+	protected void addAdditionalSaveData(ValueOutput output) {
+		output.putString("Type", this.getRaftType().getName());
 	}
 
 	@Override
-	protected void readAdditionalSaveData(CompoundTag tag) {
-		if (tag.contains("Type")) {
-			this.setRaftType(RaftType.byName(tag.getStringOr("Type", "")));
-		}
+	protected void readAdditionalSaveData(ValueInput input) {
+		this.setRaftType(RaftType.byName(input.getStringOr("Type", "")));
 	}
 
 	@Override
@@ -63,7 +61,7 @@ public class Raft extends AbstractBoat {
 		if (!this.isPassenger()) {
 			if (onGround) {
 				if (this.fallDistance > 3.0F) {
-					if (this.status != Boat.Status.ON_LAND) {
+					if (this.status != AbstractBoat.Status.ON_LAND) {
 						this.resetFallDistance();
 						return;
 					}
@@ -110,14 +108,14 @@ public class Raft extends AbstractBoat {
 			this.waterLevel = this.getBoundingBox().maxY;
 			return boatStatus;
 		} else if (this.checkInWater()) {
-			return Boat.Status.IN_WATER;
+			return AbstractBoat.Status.IN_WATER;
 		} else {
 			float f = this.getGroundFriction();
 			if (f > 0.0F) {
 				this.landFriction = RaftConfig.SERVER.SlipperyFast.get() ? f : 0;
-				return Boat.Status.ON_LAND;
+				return AbstractBoat.Status.ON_LAND;
 			} else {
-				return Boat.Status.IN_AIR;
+				return AbstractBoat.Status.IN_AIR;
 			}
 		}
 	}
@@ -127,25 +125,25 @@ public class Raft extends AbstractBoat {
 		double d1 = this.isNoGravity() ? 0.0D : (double) -0.04F;
 		double d2 = 0.0D;
 		float f = 0.05F;
-		if (this.oldStatus == Boat.Status.IN_AIR && this.status != Boat.Status.IN_AIR && this.status != Boat.Status.ON_LAND) {
+		if (this.oldStatus == AbstractBoat.Status.IN_AIR && this.status != AbstractBoat.Status.IN_AIR && this.status != AbstractBoat.Status.ON_LAND) {
 			this.waterLevel = this.getBoundingBox().minY + (double) this.getBbHeight();
 			this.setPos(this.getX(), (double) (this.getWaterLevelAbove() - this.getBbHeight()) + 0.101D, this.getZ());
 			this.setDeltaMovement(this.getDeltaMovement().multiply(1.0D, 0.0D, 1.0D));
 			this.lastYd = 0.0D;
-			this.status = Boat.Status.IN_WATER;
+			this.status = AbstractBoat.Status.IN_WATER;
 		} else {
-			if (this.status == Boat.Status.IN_WATER) {
+			if (this.status == AbstractBoat.Status.IN_WATER) {
 				d2 = (this.waterLevel - this.getBoundingBox().minY + 0.1D) / (double) this.getBbHeight();
 				f = 0.9F;
-			} else if (this.status == Boat.Status.UNDER_FLOWING_WATER) {
+			} else if (this.status == AbstractBoat.Status.UNDER_FLOWING_WATER) {
 				d1 = -7.0E-4D;
 				f = 0.9F;
-			} else if (this.status == Boat.Status.UNDER_WATER) {
+			} else if (this.status == AbstractBoat.Status.UNDER_WATER) {
 				d2 = 0.01F;
 				f = 0.45F;
-			} else if (this.status == Boat.Status.IN_AIR) {
+			} else if (this.status == AbstractBoat.Status.IN_AIR) {
 				f = 0.9F;
-			} else if (this.status == Boat.Status.ON_LAND) {
+			} else if (this.status == AbstractBoat.Status.ON_LAND) {
 				f = this.landFriction;
 				if (this.getControllingPassenger() instanceof Player) {
 					this.landFriction /= 2.0F;

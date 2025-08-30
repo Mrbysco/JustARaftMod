@@ -16,6 +16,7 @@ public class RaftTypeRegistry {
 	public static final RaftType BAMBOO = registerCustomRaftType(Blocks.BAMBOO, RaftRegistry.BAMBOO_RAFT, "bamboo");
 	public static final RaftType MANGROVE = registerCustomRaftType(Blocks.MANGROVE_PLANKS, RaftRegistry.MANGROVE_RAFT, "mangrove");
 	public static final RaftType CHERRY = registerCustomRaftType(Blocks.CHERRY_PLANKS, RaftRegistry.CHERRY_RAFT, "cherry");
+	public static final RaftType PALE_OAK = registerCustomRaftType(Blocks.PALE_OAK_PLANKS, RaftRegistry.PALE_OAK_RAFT, "pale_oak");
 
 	public static RaftType registerCustomRaftType(Block planks, Holder<Item> raft, String name) {
 		return RaftType.registerRaftType(new RaftType(planks, raft, name));

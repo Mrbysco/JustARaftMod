@@ -20,19 +20,16 @@ import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
-import net.minecraft.data.tags.ItemTagsProvider;
-import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.common.data.BlockTagsProvider;
+import net.neoforged.neoforge.common.data.ItemTagsProvider;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -41,7 +38,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber
 public class RaftDatagen {
 	@SubscribeEvent
 	public static void gatherData(GatherDataEvent.Client event) {
@@ -50,14 +47,11 @@ public class RaftDatagen {
 		CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
 
 		generator.addProvider(true, new Recipes.Runner(packOutput, lookupProvider));
-		RaftBlockTags blockTags = new RaftBlockTags(packOutput, lookupProvider);
-		generator.addProvider(true, blockTags);
-		generator.addProvider(true, new RaftItemTags(packOutput, lookupProvider, blockTags));
+		generator.addProvider(true, new RaftItemTags(packOutput, lookupProvider));
 		generator.addProvider(true, new RaftEntityTags(packOutput, lookupProvider));
 
 		generator.addProvider(true, new Language(packOutput));
 		generator.addProvider(true, new Models(packOutput));
-
 	}
 
 	private static class Recipes extends RecipeProvider {
@@ -76,6 +70,7 @@ public class RaftDatagen {
 			generateRaftRecipe(RaftRegistry.MANGROVE_RAFT, ItemTags.MANGROVE_LOGS).save(output);
 			generateRaftRecipe(RaftRegistry.OAK_RAFT, ItemTags.OAK_LOGS).save(output);
 			generateRaftRecipe(RaftRegistry.SPRUCE_RAFT, ItemTags.SPRUCE_LOGS).save(output);
+			generateRaftRecipe(RaftRegistry.PALE_OAK_RAFT, ItemTags.PALE_OAK_LOGS).save(output);
 		}
 
 		private RecipeBuilder generateRaftRecipe(DeferredHolder<Item, RaftItem> raft, TagKey<Item> logTag) {
@@ -136,6 +131,7 @@ public class RaftDatagen {
 			addItem(RaftRegistry.DARK_OAK_RAFT, "Dark Oak Log Raft");
 			addItem(RaftRegistry.BAMBOO_RAFT, "Bamboo Raft");
 			addItem(RaftRegistry.MANGROVE_RAFT, "Mangrove Raft");
+			addItem(RaftRegistry.PALE_OAK_RAFT, "Pale Oak Raft");
 
 			this.addEntityType(RaftRegistry.RAFT, "Raft");
 
@@ -180,6 +176,7 @@ public class RaftDatagen {
 			createRaft(itemModels, RaftRegistry.MANGROVE_RAFT, mcLocation("mangrove_log").withPrefix("block/"), mcLocation("mangrove_log_top").withPrefix("block/"));
 			createRaft(itemModels, RaftRegistry.OAK_RAFT, mcLocation("oak_log").withPrefix("block/"), mcLocation("oak_log_top").withPrefix("block/"));
 			createRaft(itemModels, RaftRegistry.SPRUCE_RAFT, mcLocation("spruce_log").withPrefix("block/"), mcLocation("spruce_log_top").withPrefix("block/"));
+			createRaft(itemModels, RaftRegistry.PALE_OAK_RAFT, mcLocation("pale_oak_log").withPrefix("block/"), mcLocation("pale_oak_log_top").withPrefix("block/"));
 		}
 
 		private void createRaft(ItemModelGenerators itemModels, DeferredItem<?> deferredItem, ResourceLocation side, ResourceLocation top) {
@@ -191,43 +188,24 @@ public class RaftDatagen {
 		private TextureMapping getRaftMapping(ResourceLocation side, ResourceLocation top) {
 			return new TextureMapping().put(LOG_SIDE, side).put(LOG_TOP, top);
 		}
-//
-//		@Override
-//		protected void registerModels() {
-//			withExistingParent(RaftRegistry.ACACIA_RAFT.getId().getPath(), modLoc("item/raft_base")).texture("particle", mcLoc(BLOCK_FOLDER + "/" + "acacia_log")).texture("log_side", mcLoc(BLOCK_FOLDER + "/" + "acacia_log")).texture("log_top", mcLoc(BLOCK_FOLDER + "/" + "acacia_log_top"));
-//			withExistingParent(RaftRegistry.BAMBOO_RAFT.getId().getPath(), modLoc("item/raft_base")).texture("particle", mcLoc(BLOCK_FOLDER + "/" + "bamboo_stalk")).texture("log_side", mcLoc(BLOCK_FOLDER + "/" + "bamboo_stalk")).texture("log_top", mcLoc(BLOCK_FOLDER + "/" + "bamboo_stalk"));
-//			withExistingParent(RaftRegistry.BIRCH_RAFT.getId().getPath(), modLoc("item/raft_base")).texture("particle", mcLoc(BLOCK_FOLDER + "/" + "birch_log")).texture("log_side", mcLoc(BLOCK_FOLDER + "/" + "birch_log")).texture("log_top", mcLoc(BLOCK_FOLDER + "/" + "birch_log_top"));
-//			withExistingParent(RaftRegistry.CHERRY_RAFT.getId().getPath(), modLoc("item/raft_base")).texture("particle", mcLoc(BLOCK_FOLDER + "/" + "cherry_log")).texture("log_side", mcLoc(BLOCK_FOLDER + "/" + "cherry_log")).texture("log_top", mcLoc(BLOCK_FOLDER + "/" + "cherry_log_top"));
-//			withExistingParent(RaftRegistry.DARK_OAK_RAFT.getId().getPath(), modLoc("item/raft_base")).texture("particle", mcLoc(BLOCK_FOLDER + "/" + "dark_oak_log")).texture("log_side", mcLoc(BLOCK_FOLDER + "/" + "dark_oak_log")).texture("log_top", mcLoc(BLOCK_FOLDER + "/" + "dark_oak_log_top"));
-//			withExistingParent(RaftRegistry.JUNGLE_RAFT.getId().getPath(), modLoc("item/raft_base")).texture("particle", mcLoc(BLOCK_FOLDER + "/" + "jungle_log")).texture("log_side", mcLoc(BLOCK_FOLDER + "/" + "jungle_log")).texture("log_top", mcLoc(BLOCK_FOLDER + "/" + "jungle_log_top"));
-//			withExistingParent(RaftRegistry.MANGROVE_RAFT.getId().getPath(), modLoc("item/raft_base")).texture("particle", mcLoc(BLOCK_FOLDER + "/" + "mangrove_log")).texture("log_side", mcLoc(BLOCK_FOLDER + "/" + "mangrove_log")).texture("log_top", mcLoc(BLOCK_FOLDER + "/" + "mangrove_log_top"));
-//			withExistingParent(RaftRegistry.OAK_RAFT.getId().getPath(), modLoc("item/raft_base")).texture("particle", mcLoc(BLOCK_FOLDER + "/" + "oak_log")).texture("log_side", mcLoc(BLOCK_FOLDER + "/" + "oak_log")).texture("log_top", mcLoc(BLOCK_FOLDER + "/" + "oak_log_top"));
-//			withExistingParent(RaftRegistry.SPRUCE_RAFT.getId().getPath(), modLoc("item/raft_base")).texture("particle", mcLoc(BLOCK_FOLDER + "/" + "spruce_log")).texture("log_side", mcLoc(BLOCK_FOLDER + "/" + "spruce_log")).texture("log_top", mcLoc(BLOCK_FOLDER + "/" + "spruce_log_top"));
-//		}
-	}
 
-	public static class RaftBlockTags extends BlockTagsProvider {
-		public RaftBlockTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
-			super(output, lookupProvider, Reference.MOD_ID);
-		}
-
-		@Override
-		protected void addTags(HolderLookup.Provider provider) {
-
-		}
 	}
 
 	public static class RaftItemTags extends ItemTagsProvider {
 
-		public RaftItemTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, TagsProvider<Block> blockTagProvider) {
-			super(output, lookupProvider, blockTagProvider.contentsGetter(), Reference.MOD_ID);
+		public RaftItemTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+			super(output, lookupProvider, Reference.MOD_ID);
 		}
 
 		public static final TagKey<Item> RAFTS = net.minecraft.tags.ItemTags.create(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "rafts"));
 
 		@Override
 		public void addTags(HolderLookup.Provider provider) {
-			this.tag(RAFTS).add(RaftRegistry.OAK_RAFT.get(), RaftRegistry.SPRUCE_RAFT.get(), RaftRegistry.BIRCH_RAFT.get(), RaftRegistry.JUNGLE_RAFT.get(), RaftRegistry.ACACIA_RAFT.get(), RaftRegistry.DARK_OAK_RAFT.get(), RaftRegistry.BAMBOO_RAFT.get(), RaftRegistry.MANGROVE_RAFT.get(), RaftRegistry.CHERRY_RAFT.get());
+			this.tag(RAFTS).add(RaftRegistry.OAK_RAFT.get(), RaftRegistry.SPRUCE_RAFT.get(),
+					RaftRegistry.BIRCH_RAFT.get(), RaftRegistry.JUNGLE_RAFT.get(), RaftRegistry.ACACIA_RAFT.get(),
+					RaftRegistry.DARK_OAK_RAFT.get(), RaftRegistry.BAMBOO_RAFT.get(), RaftRegistry.MANGROVE_RAFT.get(),
+					RaftRegistry.CHERRY_RAFT.get(), RaftRegistry.PALE_OAK_RAFT.get()
+			);
 		}
 	}
 

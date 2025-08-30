@@ -1,0 +1,7 @@
+{
+  "parent": "justaraftmod:item/raft_base",
+  "textures": {
+    "log_side": "minecraft:block/pale_oak_log",
+    "log_top": "minecraft:block/pale_oak_log_top"
+  }
+}
