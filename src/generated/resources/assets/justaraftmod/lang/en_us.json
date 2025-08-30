@@ -10,5 +10,15 @@
   "item.justaraftmod.oak_raft": "Oak Log Raft",
   "item.justaraftmod.spruce_raft": "Spruce Log Raft",
   "itemGroup.justaraftmod.raft": "Just A Raft Mod",
-  "justaraftmod.config.title": "Just Another Raft Config"
+  "justaraftmod.config.title": "Just Another Raft Config",
+  "justaraftmod.configuration.Server": "Server",
+  "justaraftmod.configuration.Server.tooltip": "Server settings",
+  "justaraftmod.configuration.SinkTheRaft": "Sink The Raft",
+  "justaraftmod.configuration.SinkTheRaft.tooltip": "Changing this to true makes the raft sink if there's 2 entities on it. (Default: false)",
+  "justaraftmod.configuration.SlipperyFast": "Slippery Fast",
+  "justaraftmod.configuration.SlipperyFast.tooltip": "Changing this to false makes rafts the same speed as on land while on a slippery block. (Default: true)",
+  "justaraftmod.configuration.SpeedMultiplier": "Speed Multiplier",
+  "justaraftmod.configuration.SpeedMultiplier.tooltip": "Adjusting this setting changes the speed of the raft. (Default: 1.0) [Lower than 1 = slower | higher than 1 = faster]",
+  "justaraftmod.configuration.TurnMultiplier": "Turn Multiplier",
+  "justaraftmod.configuration.TurnMultiplier.tooltip": "Adjusting this setting changes the speed of turning the raft. (Default: 1.0) [Lower than 1 = slower | higher than 1 = faster]"
 }
