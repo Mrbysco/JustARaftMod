@@ -1,7 +1,7 @@
-package com.mrbysco.justaraftmod.client;
+package com.mrbysco.justaraftmod.client.model;
 
-import com.mrbysco.justaraftmod.entities.Raft;
-import net.minecraft.client.model.HierarchicalModel;
+import com.mrbysco.justaraftmod.client.state.RaftRenderState;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
@@ -9,17 +9,10 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 
-public class RaftModel extends HierarchicalModel<Raft> {
-	private final ModelPart raft;
-	private final ModelPart logs;
-	private final ModelPart stringFront;
-	private final ModelPart stringBack;
+public class RaftModel extends EntityModel<RaftRenderState> {
 
 	public RaftModel(ModelPart part) {
-		raft = part;
-		logs = part.getChild("logs");
-		stringFront = part.getChild("string_front");
-		stringBack = part.getChild("string_back");
+		super(part);
 	}
 
 	public static LayerDefinition createRaftDefinition() {
@@ -69,12 +62,7 @@ public class RaftModel extends HierarchicalModel<Raft> {
 	}
 
 	@Override
-	public void setupAnim(Raft entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		//previously the render function, render code was moved to a method below
-	}
-
-	@Override
-	public ModelPart root() {
-		return raft;
+	public void setupAnim(RaftRenderState renderState) {
+		super.setupAnim(renderState);
 	}
 }

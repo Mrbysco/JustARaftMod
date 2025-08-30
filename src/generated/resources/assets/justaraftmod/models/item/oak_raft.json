@@ -2,7 +2,6 @@
   "parent": "justaraftmod:item/raft_base",
   "textures": {
     "log_side": "minecraft:block/oak_log",
-    "log_top": "minecraft:block/oak_log_top",
-    "particle": "minecraft:block/oak_log"
+    "log_top": "minecraft:block/oak_log_top"
   }
 }

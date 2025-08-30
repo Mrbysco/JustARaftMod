@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "L": {
-      "tag": "minecraft:mangrove_logs"
-    },
-    "S": {
-      "tag": "c:strings"
-    }
+    "L": "#minecraft:mangrove_logs",
+    "S": "#c:strings"
   },
   "pattern": [
     "S S",

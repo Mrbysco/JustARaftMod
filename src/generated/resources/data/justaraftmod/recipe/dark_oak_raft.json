@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "L": {
-      "tag": "minecraft:dark_oak_logs"
-    },
-    "S": {
-      "tag": "c:strings"
-    }
+    "L": "#minecraft:dark_oak_logs",
+    "S": "#c:strings"
   },
   "pattern": [
     "S S",

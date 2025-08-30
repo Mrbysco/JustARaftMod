@@ -1,7 +1,7 @@
 {
 	"__comment": "Designed by Mrbysco",
 	"textures": {
-		"particle": "block/oak_log",
+		"particle": "#log_side",
 		"log_side": "block/oak_log",
 		"log_top": "block/oak_log_top",
 		"String": "block/white_wool"

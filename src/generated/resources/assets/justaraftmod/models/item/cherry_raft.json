@@ -2,7 +2,6 @@
   "parent": "justaraftmod:item/raft_base",
   "textures": {
     "log_side": "minecraft:block/cherry_log",
-    "log_top": "minecraft:block/cherry_log_top",
-    "particle": "minecraft:block/cherry_log"
+    "log_top": "minecraft:block/cherry_log_top"
   }
 }

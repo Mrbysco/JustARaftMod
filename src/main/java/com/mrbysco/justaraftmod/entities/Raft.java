@@ -4,10 +4,16 @@ import com.mrbysco.justaraftmod.config.RaftConfig;
 import com.mrbysco.justaraftmod.init.RaftRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.AbstractBoat;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -17,8 +23,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 public class Raft extends Boat {
+	private static final EntityDataAccessor<Integer> DATA_ID_TYPE = SynchedEntityData.defineId(Raft.class, EntityDataSerializers.INT);
 	public Raft(EntityType<? extends Raft> entityType, Level level) {
-		super(entityType, level);
+		super(entityType, level, () -> Items.STICK);
+		this.dropItem = this::getDrop;
 	}
 
 	public Raft(Level level, double x, double y, double z) {
@@ -30,16 +38,25 @@ public class Raft extends Boat {
 		this.zo = z;
 	}
 
+	@Override
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(DATA_ID_TYPE, 0);
+	}
+
+	@Override
 	protected void addAdditionalSaveData(CompoundTag tag) {
 		tag.putString("Type", this.getRaftType().getName());
 	}
 
+	@Override
 	protected void readAdditionalSaveData(CompoundTag tag) {
 		if (tag.contains("Type", 8)) {
 			this.setRaftType(RaftType.byName(tag.getString("Type")));
 		}
 	}
 
+	@Override
 	protected void checkFallDamage(double y, boolean onGround, BlockState state, BlockPos pos) {
 		this.lastYd = this.getDeltaMovement().y;
 		if (!this.isPassenger()) {
@@ -51,15 +68,15 @@ public class Raft extends Boat {
 					}
 
 					this.causeFallDamage(this.fallDistance, 1.0F, this.damageSources().fall());
-					if (!this.level().isClientSide && !this.isRemoved()) {
-						this.kill();
-						if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+					if (this.level() instanceof ServerLevel serverLevel && !this.isRemoved()) {
+						this.kill(serverLevel);
+						if (serverLevel.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
 							for (int i = 0; i < 3; ++i) {
-								this.spawnAtLocation(this.getRaftType().getPlanks());
+								this.spawnAtLocation(serverLevel, this.getRaftType().getPlanks());
 							}
 
 							for (int j = 0; j < 2; ++j) {
-								this.spawnAtLocation(Items.STICK);
+								this.spawnAtLocation(serverLevel, Items.STICK);
 							}
 						}
 					}
@@ -86,8 +103,8 @@ public class Raft extends Boat {
 	}
 
 	@Override
-	public Boat.Status getStatus() {
-		Boat.Status boatStatus = this.isUnderwater();
+	public AbstractBoat.Status getStatus() {
+		AbstractBoat.Status boatStatus = this.isUnderwater();
 		if (boatStatus != null) {
 			this.waterLevel = this.getBoundingBox().maxY;
 			return boatStatus;
@@ -144,6 +161,7 @@ public class Raft extends Boat {
 		}
 	}
 
+	@Override
 	public void controlBoat() {
 		if (this.isVehicle()) {
 			float f = 0.0F;
@@ -178,8 +196,7 @@ public class Raft extends Boat {
 		return 0.0F;
 	}
 
-	@Override
-	public Item getDropItem() {
+	public Item getDrop() {
 		if (this.getRaftType() == null) {
 			return Items.STICK;
 		}
@@ -192,5 +209,10 @@ public class Raft extends Boat {
 
 	public RaftType getRaftType() {
 		return RaftType.byId(this.entityData.get(DATA_ID_TYPE));
+	}
+
+	@Override
+	protected double rideHeight(EntityDimensions dimensions) {
+		return (double)(dimensions.height() * 0.8888889F);
 	}
 }

@@ -2,7 +2,6 @@
   "parent": "justaraftmod:item/raft_base",
   "textures": {
     "log_side": "minecraft:block/jungle_log",
-    "log_top": "minecraft:block/jungle_log_top",
-    "particle": "minecraft:block/jungle_log"
+    "log_top": "minecraft:block/jungle_log_top"
   }
 }

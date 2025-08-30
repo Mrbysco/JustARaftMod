@@ -2,7 +2,6 @@
   "parent": "justaraftmod:item/raft_base",
   "textures": {
     "log_side": "minecraft:block/bamboo_stalk",
-    "log_top": "minecraft:block/bamboo_stalk",
-    "particle": "minecraft:block/bamboo_stalk"
+    "log_top": "minecraft:block/bamboo_stalk"
   }
 }

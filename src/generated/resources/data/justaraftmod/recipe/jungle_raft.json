@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "L": {
-      "tag": "minecraft:jungle_logs"
-    },
-    "S": {
-      "tag": "c:strings"
-    }
+    "L": "#minecraft:jungle_logs",
+    "S": "#c:strings"
   },
   "pattern": [
     "S S",

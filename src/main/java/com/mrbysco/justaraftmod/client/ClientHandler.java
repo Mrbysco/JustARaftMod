@@ -1,6 +1,8 @@
 package com.mrbysco.justaraftmod.client;
 
 import com.mrbysco.justaraftmod.Reference;
+import com.mrbysco.justaraftmod.client.model.RaftModel;
+import com.mrbysco.justaraftmod.client.renderer.RaftRenderer;
 import com.mrbysco.justaraftmod.init.RaftRegistry;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.ResourceLocation;

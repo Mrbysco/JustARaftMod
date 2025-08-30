@@ -5,12 +5,10 @@ import com.mrbysco.justaraftmod.entities.Raft;
 import com.mrbysco.justaraftmod.items.RaftItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -21,18 +19,18 @@ import java.util.function.Supplier;
 public class RaftRegistry {
 	public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Reference.MOD_ID);
 	public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Reference.MOD_ID);
-	public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(Registries.ENTITY_TYPE, Reference.MOD_ID);
+	public static final DeferredRegister.Entities ENTITIES = DeferredRegister.createEntities(Reference.MOD_ID);
 
-	public static final DeferredItem<RaftItem> OAK_RAFT = ITEMS.register("oak_raft", () -> new RaftItem(RaftTypeRegistry.OAK, itemBuilder()));
-	public static final DeferredItem<RaftItem> SPRUCE_RAFT = ITEMS.register("spruce_raft", () -> new RaftItem(RaftTypeRegistry.SPRUCE, itemBuilder()));
-	public static final DeferredItem<RaftItem> BIRCH_RAFT = ITEMS.register("birch_raft", () -> new RaftItem(RaftTypeRegistry.BIRCH, itemBuilder()));
-	public static final DeferredItem<RaftItem> JUNGLE_RAFT = ITEMS.register("jungle_raft", () -> new RaftItem(RaftTypeRegistry.JUNGLE, itemBuilder()));
-	public static final DeferredItem<RaftItem> ACACIA_RAFT = ITEMS.register("acacia_raft", () -> new RaftItem(RaftTypeRegistry.ACACIA, itemBuilder()));
-	public static final DeferredItem<RaftItem> DARK_OAK_RAFT = ITEMS.register("dark_oak_raft", () -> new RaftItem(RaftTypeRegistry.DARK_OAK, itemBuilder()));
+	public static final DeferredItem<RaftItem> OAK_RAFT = ITEMS.registerItem("oak_raft", (properties) -> new RaftItem(RaftTypeRegistry.OAK, properties));
+	public static final DeferredItem<RaftItem> SPRUCE_RAFT = ITEMS.registerItem("spruce_raft", (properties) -> new RaftItem(RaftTypeRegistry.SPRUCE, properties));
+	public static final DeferredItem<RaftItem> BIRCH_RAFT = ITEMS.registerItem("birch_raft", (properties) -> new RaftItem(RaftTypeRegistry.BIRCH, properties));
+	public static final DeferredItem<RaftItem> JUNGLE_RAFT = ITEMS.registerItem("jungle_raft", (properties) -> new RaftItem(RaftTypeRegistry.JUNGLE, properties));
+	public static final DeferredItem<RaftItem> ACACIA_RAFT = ITEMS.registerItem("acacia_raft", (properties) -> new RaftItem(RaftTypeRegistry.ACACIA, properties));
+	public static final DeferredItem<RaftItem> DARK_OAK_RAFT = ITEMS.registerItem("dark_oak_raft", (properties) -> new RaftItem(RaftTypeRegistry.DARK_OAK, properties));
 
-	public static final DeferredItem<RaftItem> BAMBOO_RAFT = ITEMS.register("bamboo_raft", () -> new RaftItem(RaftTypeRegistry.BAMBOO, itemBuilder()));
-	public static final DeferredItem<RaftItem> MANGROVE_RAFT = ITEMS.register("mangrove_raft", () -> new RaftItem(RaftTypeRegistry.MANGROVE, itemBuilder()));
-	public static final DeferredItem<RaftItem> CHERRY_RAFT = ITEMS.register("cherry_raft", () -> new RaftItem(RaftTypeRegistry.CHERRY, itemBuilder()));
+	public static final DeferredItem<RaftItem> BAMBOO_RAFT = ITEMS.registerItem("bamboo_raft", (properties) -> new RaftItem(RaftTypeRegistry.BAMBOO, properties));
+	public static final DeferredItem<RaftItem> MANGROVE_RAFT = ITEMS.registerItem("mangrove_raft", (properties) -> new RaftItem(RaftTypeRegistry.MANGROVE, properties));
+	public static final DeferredItem<RaftItem> CHERRY_RAFT = ITEMS.registerItem("cherry_raft", (properties) -> new RaftItem(RaftTypeRegistry.CHERRY, properties));
 
 	public static final Supplier<CreativeModeTab> RAFT_TAB = CREATIVE_MODE_TABS.register("tab", () -> CreativeModeTab.builder()
 			.icon(() -> new ItemStack(RaftRegistry.OAK_RAFT.get()))
@@ -42,15 +40,13 @@ public class RaftRegistry {
 				List<ItemStack> stacks = RaftRegistry.ITEMS.getEntries().stream().map(reg -> new ItemStack(reg.get())).toList();
 				output.acceptAll(stacks);
 			}).build());
-	public static final Supplier<EntityType<Raft>> RAFT = ENTITIES.register("raft", () -> register("raft",
-			EntityType.Builder.<Raft>of(Raft::new, MobCategory.MISC)
-					.sized(1.375F, 0.3F)));
 
-	public static <T extends Entity> EntityType<T> register(String id, EntityType.Builder<T> builder) {
-		return builder.setTrackingRange(80).setUpdateInterval(3).setShouldReceiveVelocityUpdates(true).build(id);
-	}
-
-	private static Item.Properties itemBuilder() {
-		return new Item.Properties();
-	}
+	public static final Supplier<EntityType<Raft>> RAFT = ENTITIES.registerEntityType("raft",
+			Raft::new,
+			MobCategory.MISC,
+			builder -> builder
+					.sized(1.375F, 0.3F)
+					.eyeHeight(0.5625F)
+					.clientTrackingRange(10)
+	);
 }

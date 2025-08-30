@@ -4,7 +4,7 @@ import com.mrbysco.justaraftmod.entities.Raft;
 import com.mrbysco.justaraftmod.entities.RaftType;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.player.Player;
@@ -18,10 +18,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
-import java.util.function.Predicate;
 
 public class RaftItem extends Item {
-	private static final Predicate<Entity> ENTITY_PREDICATE = EntitySelector.NO_SPECTATORS.and(Entity::isPickable);
 	private final RaftType type;
 
 	public RaftItem(RaftType typeIn, Item.Properties properties) {
@@ -30,21 +28,23 @@ public class RaftItem extends Item {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+	public InteractionResult use(Level level, Player player, InteractionHand hand) {
 		ItemStack stack = player.getItemInHand(hand);
 		HitResult hitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY);
 		if (hitResult.getType() == HitResult.Type.MISS) {
-			return InteractionResultHolder.pass(stack);
+			return InteractionResult.PASS;
 		} else {
-			Vec3 Vector3d = player.getViewVector(1.0F);
-			List<Entity> list = level.getEntities(player, player.getBoundingBox().expandTowards(Vector3d.scale(5.0D)).inflate(1.0D), ENTITY_PREDICATE);
+			Vec3 vec3 = player.getViewVector(1.0F);
+			List<Entity> list = level.getEntities(
+					player, player.getBoundingBox().expandTowards(vec3.scale(5.0)).inflate(1.0), EntitySelector.CAN_BE_PICKED
+			);
 			if (!list.isEmpty()) {
 				Vec3 eyePos = player.getEyePosition(1.0F);
 
 				for (Entity entity : list) {
 					AABB aabb = entity.getBoundingBox().inflate(entity.getPickRadius());
 					if (aabb.contains(eyePos)) {
-						return InteractionResultHolder.pass(stack);
+						return InteractionResult.PASS;
 					}
 				}
 			}
@@ -54,7 +54,7 @@ public class RaftItem extends Item {
 				raft.setRaftType(this.type);
 				raft.setYRot(player.getYRot());
 				if (!level.noCollision(raft, raft.getBoundingBox().inflate(-0.1D))) {
-					return InteractionResultHolder.fail(stack);
+					return InteractionResult.FAIL;
 				} else {
 					if (!level.isClientSide) {
 						level.addFreshEntity(raft);
@@ -65,10 +65,10 @@ public class RaftItem extends Item {
 					}
 
 					player.awardStat(Stats.ITEM_USED.get(this));
-					return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+					return InteractionResult.SUCCESS;
 				}
 			} else {
-				return InteractionResultHolder.pass(stack);
+				return InteractionResult.PASS;
 			}
 		}
 	}

@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "L": {
-      "tag": "minecraft:spruce_logs"
-    },
-    "S": {
-      "tag": "c:strings"
-    }
+    "L": "#minecraft:spruce_logs",
+    "S": "#c:strings"
   },
   "pattern": [
     "S S",
