@@ -1,16 +1,14 @@
 {
-    "item.justaraftmod.oak_raft": "Плот из древесины дуба",
-    "item.justaraftmod.spruce_raft": "Плот из древесины ели",
-    "item.justaraftmod.birch_raft": "Плот из древесины берёзы",
-    "item.justaraftmod.jungle_raft": "Плот из древесины тропического дерева",
-    "item.justaraftmod.acacia_raft": "Плот из древесины акации",
-    "item.justaraftmod.dark_oak_raft": "Плот из древесины тёмного дуба",
-    "item.justaraftmod.bamboo_raft": "Bamboo Raft",
-    "item.justaraftmod.mangrove_raft": "Mangrove Raft",
-
-    "itemGroup.justaraftmod.raft": "Just A Raft Mod",
-
-    "entity.justaraftmod.raft": "Плот",
-
-    "justaraftmod.config.title": "Just Another Raft Config"
+  "entity.justaraftmod.raft": "Плот",
+  "item.justaraftmod.acacia_raft": "Плот из акации",
+  "item.justaraftmod.bamboo_raft": "Бамбуковый плот",
+  "item.justaraftmod.birch_raft": "Плот из берёзы",
+  "item.justaraftmod.cherry_raft": "Плот из вишни",
+  "item.justaraftmod.dark_oak_raft": "Плот из тёмного дуба",
+  "item.justaraftmod.jungle_raft": "Плот из тропического дерева",
+  "item.justaraftmod.mangrove_raft": "Плот из мангрового дерева",
+  "item.justaraftmod.oak_raft": "Плот из дуба",
+  "item.justaraftmod.spruce_raft": "Плот из ели",
+  "itemGroup.justaraftmod.raft": "Мод Just A Raft",
+  "justaraftmod.config.title": "Конфигурация Just Another Raft"
 }
