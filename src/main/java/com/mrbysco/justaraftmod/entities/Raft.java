@@ -12,12 +12,12 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.vehicle.AbstractBoat;
+import net.minecraft.world.entity.vehicle.boat.AbstractBoat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
@@ -69,7 +69,7 @@ public class Raft extends AbstractBoat {
 					this.causeFallDamage(this.fallDistance, 1.0F, this.damageSources().fall());
 					if (this.level() instanceof ServerLevel serverLevel && !this.isRemoved()) {
 						this.kill(serverLevel);
-						if (serverLevel.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+						if (serverLevel.getGameRules().get(GameRules.ENTITY_DROPS)) {
 							for (int i = 0; i < 3; ++i) {
 								this.spawnAtLocation(serverLevel, this.getRaftType().getPlanks());
 							}

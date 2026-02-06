@@ -5,11 +5,11 @@ import com.mrbysco.justaraftmod.client.model.RaftModel;
 import com.mrbysco.justaraftmod.client.renderer.RaftRenderer;
 import com.mrbysco.justaraftmod.init.RaftRegistry;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
 public class ClientHandler {
-	public static final ModelLayerLocation RAFT = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "raft"), "main");
+	public static final ModelLayerLocation RAFT = new ModelLayerLocation(Identifier.fromNamespaceAndPath(Reference.MOD_ID, "raft"), "main");
 
 	public static void registerEntityRenders(EntityRenderersEvent.RegisterRenderers event) {
 		event.registerEntityRenderer(RaftRegistry.RAFT.get(), RaftRenderer::new);

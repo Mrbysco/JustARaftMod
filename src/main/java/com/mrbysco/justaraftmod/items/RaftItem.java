@@ -39,11 +39,11 @@ public class RaftItem extends Item {
 					player, player.getBoundingBox().expandTowards(vec3.scale(5.0)).inflate(1.0), EntitySelector.CAN_BE_PICKED
 			);
 			if (!list.isEmpty()) {
-				Vec3 eyePos = player.getEyePosition(1.0F);
+				Vec3 eyePosition = player.getEyePosition();
 
 				for (Entity entity : list) {
 					AABB aabb = entity.getBoundingBox().inflate(entity.getPickRadius());
-					if (aabb.contains(eyePos)) {
+					if (aabb.contains(eyePosition)) {
 						return InteractionResult.PASS;
 					}
 				}
@@ -56,7 +56,7 @@ public class RaftItem extends Item {
 				if (!level.noCollision(raft, raft.getBoundingBox().inflate(-0.1D))) {
 					return InteractionResult.FAIL;
 				} else {
-					if (!level.isClientSide) {
+					if (!level.isClientSide()) {
 						level.addFreshEntity(raft);
 						level.gameEvent(player, GameEvent.ENTITY_PLACE, hitResult.getLocation());
 						if (!player.getAbilities().instabuild) {

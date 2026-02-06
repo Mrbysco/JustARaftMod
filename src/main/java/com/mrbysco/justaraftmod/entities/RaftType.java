@@ -2,7 +2,7 @@ package com.mrbysco.justaraftmod.entities;
 
 import com.mrbysco.justaraftmod.Reference;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -19,9 +19,9 @@ public class RaftType {
 	private final String name;
 	private final Block planks;
 	private final Holder<Item> raft;
-	private final ResourceLocation textureLocation;
+	private final Identifier textureLocation;
 
-	public RaftType(@NotNull Block planks, @NotNull Holder<Item> raft, @NotNull String name, @NotNull ResourceLocation textureLocation) {
+	public RaftType(@NotNull Block planks, @NotNull Holder<Item> raft, @NotNull String name, @NotNull Identifier textureLocation) {
 		this.id = nextId++;
 		this.name = name;
 		this.planks = planks;
@@ -49,7 +49,7 @@ public class RaftType {
 		return raft;
 	}
 
-	public ResourceLocation getTextureLocation() {
+	public Identifier getTextureLocation() {
 		return textureLocation;
 	}
 

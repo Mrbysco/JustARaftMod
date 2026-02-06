@@ -20,7 +20,7 @@ import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -179,13 +179,13 @@ public class RaftDatagen {
 			createRaft(itemModels, RaftRegistry.PALE_OAK_RAFT, mcLocation("pale_oak_log").withPrefix("block/"), mcLocation("pale_oak_log_top").withPrefix("block/"));
 		}
 
-		private void createRaft(ItemModelGenerators itemModels, DeferredItem<?> deferredItem, ResourceLocation side, ResourceLocation top) {
-			ResourceLocation model = RAFT.create(ModelLocationUtils.getModelLocation(deferredItem.get()),
+		private void createRaft(ItemModelGenerators itemModels, DeferredItem<?> deferredItem, Identifier side, Identifier top) {
+			Identifier model = RAFT.create(ModelLocationUtils.getModelLocation(deferredItem.get()),
 					getRaftMapping(side, top), itemModels.modelOutput);
 			itemModels.itemModelOutput.accept(deferredItem.get(), ItemModelUtils.plainModel(model));
 		}
 
-		private TextureMapping getRaftMapping(ResourceLocation side, ResourceLocation top) {
+		private TextureMapping getRaftMapping(Identifier side, Identifier top) {
 			return new TextureMapping().put(LOG_SIDE, side).put(LOG_TOP, top);
 		}
 
@@ -197,7 +197,7 @@ public class RaftDatagen {
 			super(output, lookupProvider, Reference.MOD_ID);
 		}
 
-		public static final TagKey<Item> RAFTS = net.minecraft.tags.ItemTags.create(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "rafts"));
+		public static final TagKey<Item> RAFTS = net.minecraft.tags.ItemTags.create(Identifier.fromNamespaceAndPath(Reference.MOD_ID, "rafts"));
 
 		@Override
 		public void addTags(HolderLookup.Provider provider) {
