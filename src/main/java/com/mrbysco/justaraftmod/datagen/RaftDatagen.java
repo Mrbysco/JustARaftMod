@@ -12,6 +12,7 @@ import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
@@ -186,7 +187,7 @@ public class RaftDatagen {
 		}
 
 		private TextureMapping getRaftMapping(Identifier side, Identifier top) {
-			return new TextureMapping().put(LOG_SIDE, side).put(LOG_TOP, top);
+			return new TextureMapping().put(LOG_SIDE, new Material(side)).put(LOG_TOP, new Material(top));
 		}
 
 	}

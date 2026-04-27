@@ -15,12 +15,12 @@ Adding rafts since 2017
 [[dependencies.justaraftmod]]
 modId="minecraft"
 type="REQUIRED"
-versionRange="[1.21.11,1.22)"
+versionRange="[26.1.1,)"
 ordering="NONE"
 side="BOTH"
 [[dependencies.justaraftmod]]
 modId="neoforge"
 type="REQUIRED"
-versionRange="[21.11.0-beta,)"
+versionRange="[26.1.1.0-alpha,)"
 ordering="NONE"
 side="BOTH"

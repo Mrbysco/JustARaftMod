@@ -1,10 +1,8 @@
 package com.mrbysco.justaraftmod;
 
 import com.mojang.logging.LogUtils;
-import com.mrbysco.justaraftmod.client.ClientHandler;
 import com.mrbysco.justaraftmod.config.RaftConfig;
 import com.mrbysco.justaraftmod.init.RaftRegistry;
-import com.mrbysco.justaraftmod.init.RaftTab;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -22,16 +20,12 @@ public class JustARaftMod {
 		container.registerConfig(ModConfig.Type.SERVER, RaftConfig.serverSpec);
 		eventBus.register(RaftConfig.class);
 
-		eventBus.register(new RaftTab());
-
 		RaftRegistry.ITEMS.register(eventBus);
 		RaftRegistry.CREATIVE_MODE_TABS.register(eventBus);
 		RaftRegistry.ENTITIES.register(eventBus);
 
 		if (dist.isClient()) {
 			container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
-			eventBus.addListener(ClientHandler::registerEntityRenders);
-			eventBus.addListener(ClientHandler::registerLayerDefinitions);
 		}
 	}
 }
